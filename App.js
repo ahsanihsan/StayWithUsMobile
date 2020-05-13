@@ -7,12 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeScreen from "./components/HomeScreen/HomeScreen";
 
-import {
-  Feather,
-  AntDesign,
-  MaterialCommunityIcons,
-  FontAwesome5,
-} from "@expo/vector-icons";
+import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 
 import Signin from "./components/user-auth/Signin";
 import Signup from "./components/user-auth/Signup";
