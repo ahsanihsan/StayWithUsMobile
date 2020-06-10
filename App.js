@@ -18,118 +18,112 @@ const HomeStack = createStackNavigator();
 const RootStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 const HomeTabs = createBottomTabNavigator();
-// const Tab = createMaterialBottomTabNavigator();
 import Alert from "./Alert";
 const Auth = () => (
-  <AuthStack.Navigator headerMode='none'>
-    <AuthStack.Screen name='signin' component={Signin} />
-    <AuthStack.Screen name='signup' component={Signup} />
-  </AuthStack.Navigator>
+	<AuthStack.Navigator headerMode="none">
+		<AuthStack.Screen name="signin" component={Signin} />
+		<AuthStack.Screen name="signup" component={Signup} />
+	</AuthStack.Navigator>
 );
 
 const HomeScreenStack = ({ navigation }) => (
-  <HomeStack.Navigator>
-    <HomeStack.Screen
-      name='Home'
-      component={HomeScreen}
-      options={{
-        headerShown: false,
-      }}
-    />
-    <HomeStack.Screen
-      name='Details'
-      component={Details}
-      options={({ route }) => ({
-        title: route.params ? route.params.name : "Details Screen",
-        headerStyle: {
-          backgroundColor: "transparent",
-        },
-      })}
-    />
-  </HomeStack.Navigator>
+	<HomeStack.Navigator>
+		<HomeStack.Screen
+			name="Home"
+			component={HomeScreen}
+			options={{
+				headerShown: false,
+			}}
+		/>
+		<HomeStack.Screen
+			name="Details"
+			component={Details}
+			options={({ route }) => ({
+				headerShown: false,
+				title: route.params ? route.params.name : "Details Screen",
+			})}
+		/>
+	</HomeStack.Navigator>
 );
 
 const HomeTabsScreen = () => (
-  <HomeTabs.Navigator
-    tabBarOptions={{
-      tabStyle: {},
-      activeTintColor: "#474787",
-      inactiveTintColor: "gray",
-    }}
-    initialRouteName='Home'>
-    <HomeTabs.Screen
-      name='HomeScreen'
-      component={HomeScreenStack}
-      options={{
-        tabBarLabel: "Home",
+	<HomeTabs.Navigator
+		tabBarOptions={{
+			tabStyle: {},
+			activeTintColor: "#474787",
+			inactiveTintColor: "gray",
+		}}
+		initialRouteName="Home"
+	>
+		<HomeTabs.Screen
+			name="HomeScreen"
+			component={HomeScreenStack}
+			options={{
+				tabBarLabel: "Home",
 
-        tabBarIcon: ({ focused, color }) => (
-          <MaterialCommunityIcons
-            name={focused ? "view-dashboard" : "view-dashboard-outline"}
-            size={26}
-            color={color}
-          />
-        ),
-      }}
-    />
-    <HomeTabs.Screen
-      name='Apartments'
-      component={Apartments}
-      options={{
-        tabBarIcon: ({ focused, color }) => (
-          <MaterialCommunityIcons
-            name={focused ? "shield-home" : "home-city-outline"}
-            color={color}
-            size={26}
-          />
-        ),
-      }}
-    />
-    <HomeTabs.Screen
-      name='Profile'
-      component={Profile}
-      options={{
-        tabBarIcon: ({ focused, color }) => (
-          <FontAwesome5
-            name={focused ? "user-ninja" : "users-cog"}
-            size={26}
-            color={color}
-          />
-        ),
-      }}
-    />
-  </HomeTabs.Navigator>
+				tabBarIcon: ({ focused, color }) => (
+					<MaterialCommunityIcons
+						name={focused ? "view-dashboard" : "view-dashboard-outline"}
+						size={26}
+						color={color}
+					/>
+				),
+			}}
+		/>
+		{/* <HomeTabs.Screen
+			name="Apartments"
+			component={Apartments}
+			options={{
+				tabBarIcon: ({ focused, color }) => (
+					<MaterialCommunityIcons
+						name={focused ? "shield-home" : "home-city-outline"}
+						color={color}
+						size={26}
+					/>
+				),
+			}}
+		/> */}
+		<HomeTabs.Screen
+			name="Profile"
+			component={Profile}
+			options={{
+				tabBarIcon: ({ focused, color }) => (
+					<FontAwesome5
+						name={focused ? "user-ninja" : "users-cog"}
+						size={26}
+						color={color}
+					/>
+				),
+			}}
+		/>
+	</HomeTabs.Navigator>
 );
 
 const RootStackScreen = () => {
-  const [user, setUser] = React.useState({});
-  return (
-    <RootStack.Navigator headerMode='none'>
-      {user ? (
-        <RootStack.Screen name='app' component={HomeTabsScreen} />
-      ) : (
-        <RootStack.Screen name='auth' component={Auth} />
-      )}
-      {/* <RootStack.Screen name='custom' component={Auth} /> */}
-      <RootStack.Screen
-        name='alert'
-        component={Alert}
-        options={{
-          animationEnabled: true,
-          cardStyle: { backgroundColor: "rgba(0,0,0,0.15)" },
-          cardOverlayEnabled: true,
-        }}
-      />
-    </RootStack.Navigator>
-  );
+	const [user, setUser] = React.useState({});
+	return (
+		<RootStack.Navigator headerMode="none">
+			<RootStack.Screen name="auth" component={Auth} />
+			<RootStack.Screen name="app" component={HomeTabsScreen} />
+			<RootStack.Screen
+				name="alert"
+				component={Alert}
+				options={{
+					animationEnabled: true,
+					cardStyle: { backgroundColor: "rgba(0,0,0,0.15)" },
+					cardOverlayEnabled: true,
+				}}
+			/>
+		</RootStack.Navigator>
+	);
 };
 
 const App = () => {
-  return (
-    <NavigationContainer>
-      <RootStackScreen />
-    </NavigationContainer>
-  );
+	return (
+		<NavigationContainer>
+			<RootStackScreen />
+		</NavigationContainer>
+	);
 };
 
 export default App;
