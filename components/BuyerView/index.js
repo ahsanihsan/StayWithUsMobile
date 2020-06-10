@@ -90,7 +90,9 @@ export default class index extends Component {
 							{properties.map((item) => {
 								return (
 									<TouchableOpacity
-										onPress={() => this.props.navigation.push("Details")}
+										onPress={() =>
+											this.props.navigation.push("Details", { id: item._id })
+										}
 										style={styles.outerContainer}
 									>
 										<Image
