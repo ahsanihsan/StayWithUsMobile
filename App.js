@@ -12,13 +12,16 @@ import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import Signin from "./components/user-auth/Signin";
 import Signup from "./components/user-auth/Signup";
 import Profile from "./components/User-Profile/Profile";
-import Apartments from "./components/Apartments/Apartments";
+// import AddApartment from "./components/Apartments/Apartments";
+import AddApartment from "./components/AddApartment";
 import Details from "./components/Apartment_Detail/Details";
 const HomeStack = createStackNavigator();
 const RootStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 const HomeTabs = createBottomTabNavigator();
 import Alert from "./Alert";
+import EditApartment from "./components/EditApartment";
+
 const Auth = () => (
 	<AuthStack.Navigator headerMode="none">
 		<AuthStack.Screen name="signin" component={Signin} />
@@ -40,7 +43,20 @@ const HomeScreenStack = ({ navigation }) => (
 			component={Details}
 			options={({ route }) => ({
 				headerShown: false,
-				title: route.params ? route.params.name : "Details Screen",
+			})}
+		/>
+		<HomeStack.Screen
+			name="AddApartment"
+			component={AddApartment}
+			options={({ route }) => ({
+				headerShown: false,
+			})}
+		/>
+		<HomeStack.Screen
+			name="EditApartment"
+			component={EditApartment}
+			options={({ route }) => ({
+				headerShown: false,
 			})}
 		/>
 	</HomeStack.Navigator>

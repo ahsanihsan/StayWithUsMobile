@@ -97,8 +97,7 @@ export default class index extends Component {
 									>
 										<Image
 											source={{
-												uri:
-													"https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+												uri: URL + item._id + ".jpg",
 											}}
 											style={{
 												width: "100%",
@@ -221,7 +220,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-around",
 		alignItems: "center",
-
 		paddingHorizontal: 10,
 	},
 	mainCard: {

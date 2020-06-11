@@ -19,8 +19,9 @@ export default class Signin extends Component {
 			text: "",
 			error: false,
 			loading: false,
-			email: "ahsan@test1.com",
+			email: "seller@test.com",
 			password: "ahsan11343",
+			isLoading: true,
 		};
 	}
 
@@ -63,7 +64,6 @@ export default class Signin extends Component {
 				}
 			})
 			.catch((error) => {
-				console.log(error.response);
 				Alert.alert("Invalid email or password");
 				this.setState({ loading: false });
 			});

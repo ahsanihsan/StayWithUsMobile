@@ -6,6 +6,7 @@ import {
 	Image,
 	ScrollView,
 	AsyncStorage,
+	TouchableOpacity,
 } from "react-native";
 import {
 	Avatar,
@@ -16,11 +17,15 @@ import {
 } from "react-native-paper";
 import Constants from "expo-constants";
 import { Entypo } from "@expo/vector-icons";
+import Axios from "axios";
+import { URL } from "../../Helpers/helper";
+
 export default class Profile extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			isLoading: true,
+			wishList: [],
 		};
 	}
 
@@ -29,6 +34,25 @@ export default class Profile extends Component {
 		if (profile) {
 			profile = JSON.parse(profile);
 			this.setState({ profile, isLoading: false });
+			Axios({
+				method: "GET",
+				url: URL + "users/wishlist/" + profile._id,
+			})
+				.then((response) => {
+					if (response && response.data) {
+						if (response.data.success) {
+							this.setState({
+								wishList: response.data.message,
+								isLoading: false,
+							});
+						} else {
+							this.setState({ wishList: [], isLoading: false });
+						}
+					}
+				})
+				.catch((error) => {
+					this.setState({ wishList: [], isLoading: false });
+				});
 		}
 	}
 
@@ -69,24 +93,58 @@ export default class Profile extends Component {
 						>
 							My Wishlist
 						</Text>
+						<ScrollView>
+							{this.state.isLoading ? (
+								<ActivityIndicator />
+							) : this.state.wishList.length > 0 ? (
+								this.state.wishList.map((item) => {
+									return (
+										<View style={styles.outerContainer}>
+											<Image
+												source={{
+													uri: URL + item._id + ".jpg",
+												}}
+												style={{
+													width: "100%",
+													height: 150,
+													borderTopLeftRadius: 10,
+													borderTopRightRadius: 10,
+												}}
+											/>
+											<View style={styles.mainCard}>
+												<View style={styles.mainCardImage}>
+													<View style={styles.mainCardText}>
+														<View>
+															<Text
+																style={{ fontSize: 22, fontWeight: "bold" }}
+															>
+																{item.name}
+															</Text>
+															<Text
+																style={{
+																	fontSize: 16,
+																	color: "gray",
+																	marginTop: 5,
+																}}
+															>
+																{item.address}
+															</Text>
+														</View>
+													</View>
+												</View>
+											</View>
+										</View>
+									);
+								})
+							) : (
+								<Text>There are no items in your wishlist</Text>
+							)}
+						</ScrollView>
 						{/* <ScrollView
 							horizontal={true}
 							showsHorizontalScrollIndicator={false}
 							style={{ flex: 1 }}
 						>
-							<Image
-								source={{
-									uri:
-										"https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-								}}
-								style={{
-									width: 200,
-									height: 200,
-									marginRight: 10,
-									borderRadius: 15,
-									resizeMode: "cover",
-								}}
-							/>
 							<Image
 								source={{
 									uri:
@@ -168,5 +226,48 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: 35,
 		marginTop: -30,
 		padding: 10,
+	},
+	mainText: {
+		fontSize: 28,
+		fontWeight: "bold",
+	},
+	mainHeader: {
+		width: "100%",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		padding: 20,
+	},
+	mainIcons: {
+		width: "30%",
+		flexDirection: "row",
+		justifyContent: "space-around",
+		alignItems: "center",
+		paddingHorizontal: 10,
+	},
+	mainCard: {
+		padding: 15,
+	},
+	outerContainer: {
+		elevation: 7,
+		borderRadius: 10,
+		margin: 20,
+		backgroundColor: "#fff",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 0 },
+		shadowOpacity: 0.7,
+	},
+	mainCardImage: {
+		// borderBottomColor: "#333",
+	},
+	mainCardText: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+	},
+	fab: {
+		position: "absolute",
+		margin: 16,
+		right: 0,
+		bottom: 0,
+		backgroundColor: "#0652DD",
 	},
 });
