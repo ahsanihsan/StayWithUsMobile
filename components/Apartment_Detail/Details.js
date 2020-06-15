@@ -312,19 +312,21 @@ export default class Details extends Component {
 											</Text>
 										</View>
 									</View>
-									<Button
-										style={{
-											padding: 10,
-											borderRadius: 20,
-											backgroundColor: "#0652DD",
-										}}
-										contentStyle={{}}
-										labelStyle={{ fontSize: 18, fontWeight: "bold" }}
-										mode="contained"
-										onPress={() => this.setState({ modalVisible: true })}
-									>
-										Rent now
-									</Button>
+									{this.state.userRole === "Seller" ? undefined : (
+										<Button
+											style={{
+												padding: 10,
+												borderRadius: 20,
+												backgroundColor: "#0652DD",
+											}}
+											contentStyle={{}}
+											labelStyle={{ fontSize: 18, fontWeight: "bold" }}
+											mode="contained"
+											onPress={() => this.setState({ modalVisible: true })}
+										>
+											Rent now
+										</Button>
+									)}
 									<Modal
 										isVisible={this.state.modalVisible}
 										onBackButtonPress={() => {

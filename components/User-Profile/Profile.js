@@ -7,6 +7,7 @@ import {
 	ScrollView,
 	AsyncStorage,
 	TouchableOpacity,
+	RefreshControl,
 } from "react-native";
 import {
 	Avatar,
@@ -29,7 +30,8 @@ export default class Profile extends Component {
 		};
 	}
 
-	async componentDidMount() {
+	fetchWishList = async () => {
+		this.setState({ refreshing: true });
 		let profile = await AsyncStorage.getItem("currentUser");
 		if (profile) {
 			profile = JSON.parse(profile);
@@ -44,16 +46,25 @@ export default class Profile extends Component {
 							this.setState({
 								wishList: response.data.message,
 								isLoading: false,
+								refreshing: false,
 							});
 						} else {
-							this.setState({ wishList: [], isLoading: false });
+							this.setState({
+								wishList: [],
+								isLoading: false,
+								refreshing: false,
+							});
 						}
 					}
 				})
 				.catch((error) => {
-					this.setState({ wishList: [], isLoading: false });
+					this.setState({ wishList: [], isLoading: false, refreshing: false });
 				});
 		}
+	};
+
+	async componentDidMount() {
+		this.fetchWishList();
 	}
 
 	render() {
@@ -93,7 +104,14 @@ export default class Profile extends Component {
 						>
 							My Wishlist
 						</Text>
-						<ScrollView>
+						<ScrollView
+							refreshControl={
+								<RefreshControl
+									refreshing={this.state.refreshing}
+									onRefresh={() => this.fetchWishList()}
+								/>
+							}
+						>
 							{this.state.isLoading ? (
 								<ActivityIndicator />
 							) : this.state.wishList.length > 0 ? (

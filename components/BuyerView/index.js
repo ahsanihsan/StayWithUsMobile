@@ -62,14 +62,14 @@ export default class index extends Component {
 			<View style={styles.container}>
 				<View style={styles.mainHeader}>
 					<Text style={styles.mainText}>Find your house</Text>
-					<View style={styles.mainIcons}>
+					{/* <View style={styles.mainIcons}>
 						<Ionicons name="ios-search" size={32} color="gray" />
 						<MaterialCommunityIcons
 							name="filter-outline"
 							size={32}
 							color="gray"
 						/>
-					</View>
+					</View> */}
 				</View>
 				{isLoading ? (
 					<ActivityIndicator />

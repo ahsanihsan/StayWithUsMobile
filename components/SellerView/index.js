@@ -68,12 +68,12 @@ export default class SellerView extends Component {
 				<View style={styles.mainHeader}>
 					<Text style={styles.mainText}>Your properties</Text>
 					<View style={styles.mainIcons}>
-						<Ionicons name="ios-search" size={32} color="gray" />
+						{/* <Ionicons name="ios-search" size={32} color="gray" />
 						<MaterialCommunityIcons
 							name="filter-outline"
 							size={32}
 							color="gray"
-						/>
+						/> */}
 					</View>
 				</View>
 				{isLoading ? (

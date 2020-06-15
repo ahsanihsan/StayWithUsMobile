@@ -174,12 +174,23 @@ export default class EditApartment extends Component {
 								<ActivityIndicator />
 							) : (
 								<>
+									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Apartment Name
+									</Text>
 									<Input
 										placeholder="Enter apartment name"
 										style={{ alignSelf: "center" }}
 										value={this.state.name}
 										onChangeText={(name) => this.setState({ name })}
 									/>
+									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Apartment Description
+									</Text>
+
 									<Input
 										placeholder="Enter apartment description"
 										style={{ alignSelf: "center" }}
@@ -188,6 +199,12 @@ export default class EditApartment extends Component {
 											this.setState({ description })
 										}
 									/>
+									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Apartment Address
+									</Text>
+
 									<Input
 										placeholder="Enter apartment address"
 										style={{ alignSelf: "center" }}
@@ -197,7 +214,7 @@ export default class EditApartment extends Component {
 									<Text
 										style={{ paddingTop: 5, paddingBottom: 5, fontSize: 15 }}
 									>
-										Area
+										Area (Square Meter)
 									</Text>
 									<NumericInput
 										initValue={this.state.area}
@@ -208,7 +225,7 @@ export default class EditApartment extends Component {
 									<Text
 										style={{ paddingTop: 5, paddingBottom: 5, fontSize: 15 }}
 									>
-										Bedrooms
+										Bedrooms (Unit)
 									</Text>
 									<NumericInput
 										initValue={this.state.bedroom}
@@ -218,7 +235,7 @@ export default class EditApartment extends Component {
 									<Text
 										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 									>
-										Kitchens
+										Kitchens (Unit)
 									</Text>
 									<NumericInput
 										initValue={this.state.kitchen}
@@ -228,7 +245,7 @@ export default class EditApartment extends Component {
 									<Text
 										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 									>
-										Bathroom
+										Bathroom (Unit)
 									</Text>
 									<NumericInput
 										value={this.state.bathroom}
@@ -238,7 +255,7 @@ export default class EditApartment extends Component {
 									<Text
 										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 									>
-										Rent
+										Rent (PKR)
 									</Text>
 									<NumericInput
 										initValue={this.state.rent}
@@ -246,17 +263,7 @@ export default class EditApartment extends Component {
 										onChange={(rent) => this.setState({ rent })}
 										step={500}
 									/>
-									<Text
-										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
-									>
-										Rating
-									</Text>
 
-									<NumericInput
-										value={this.state.rating}
-										initValue={this.state.rating}
-										onChange={(rating) => this.setState({ rating })}
-									/>
 									<Button
 										color="info"
 										loading={this.state.loading}

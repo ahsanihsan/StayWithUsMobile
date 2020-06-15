@@ -8,6 +8,7 @@ import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import Axios from "axios";
 import { URL } from "../../Helpers/helper";
+import { AirbnbRating } from "react-native-elements";
 
 export default class AddApartment extends Component {
 	constructor(props) {
@@ -160,7 +161,7 @@ export default class AddApartment extends Component {
 								onChangeText={(address) => this.setState({ address })}
 							/>
 							<Text style={{ paddingTop: 5, paddingBottom: 5, fontSize: 15 }}>
-								Area
+								Area (Square Meter)
 							</Text>
 							<NumericInput
 								onChange={(area) => this.setState({ area })}
@@ -168,41 +169,33 @@ export default class AddApartment extends Component {
 								value={this.state.area}
 							/>
 							<Text style={{ paddingTop: 5, paddingBottom: 5, fontSize: 15 }}>
-								Bedrooms
+								Bedrooms (Units)
 							</Text>
 							<NumericInput
 								value={this.state.bedroom}
 								onChange={(bedroom) => this.setState({ bedroom })}
 							/>
 							<Text style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}>
-								Kitchens
+								Kitchens (Units)
 							</Text>
 							<NumericInput
 								value={this.state.kitchen}
 								onChange={(kitchen) => this.setState({ kitchen })}
 							/>
 							<Text style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}>
-								Bathroom
+								Bathroom (Units)
 							</Text>
 							<NumericInput
 								value={this.state.bathroom}
 								onChange={(bathroom) => this.setState({ bathroom })}
 							/>
 							<Text style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}>
-								Rent
+								Rent (PKR)
 							</Text>
 							<NumericInput
 								value={this.state.rent}
 								onChange={(rent) => this.setState({ rent })}
 								step={500}
-							/>
-							<Text style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}>
-								Rating
-							</Text>
-
-							<NumericInput
-								value={this.state.rating}
-								onChange={(rating) => this.setState({ rating })}
 							/>
 							<Button
 								color="success"
