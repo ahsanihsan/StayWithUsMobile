@@ -22,7 +22,6 @@ export default class EditApartment extends Component {
 			// kitchen: 3,
 			// bathroom: 1,
 			// rent: 45000,
-			// rating: 2,
 			// image: "",
 			name: "",
 			description: "",
@@ -32,7 +31,6 @@ export default class EditApartment extends Component {
 			kitchen: 0,
 			bathroom: 0,
 			rent: 0,
-			rating: 0,
 			image: 0,
 		};
 	}
@@ -57,7 +55,6 @@ export default class EditApartment extends Component {
 							kitchen: property.kitchen,
 							bathroom: property.bathroom,
 							rent: property.rent,
-							rating: property.rating,
 							id: property._id,
 							isLoading: false,
 						});
@@ -87,7 +84,6 @@ export default class EditApartment extends Component {
 			kitchen,
 			bathroom,
 			rent,
-			rating,
 		} = this.state;
 		if (
 			!(
@@ -98,8 +94,7 @@ export default class EditApartment extends Component {
 				bedroom &&
 				kitchen &&
 				bathroom &&
-				rent &&
-				rating
+				rent
 			)
 		) {
 			Alert.alert("Please check there is some data missing");
@@ -119,7 +114,6 @@ export default class EditApartment extends Component {
 				kitchen,
 				bathroom,
 				rent,
-				rating,
 				area,
 				seller: id,
 			},
@@ -158,7 +152,6 @@ export default class EditApartment extends Component {
 				this.setState({ image: result.base64, fileName });
 			}
 		};
-		console.log(this.state);
 		return (
 			<View>
 				<Header
@@ -214,7 +207,7 @@ export default class EditApartment extends Component {
 									<Text
 										style={{ paddingTop: 5, paddingBottom: 5, fontSize: 15 }}
 									>
-										Area (Square Meter)
+										Area (Square Feet)
 									</Text>
 									<NumericInput
 										initValue={this.state.area}

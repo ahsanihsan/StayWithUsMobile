@@ -42,6 +42,7 @@ export default class Details extends Component {
 			.then((response) => {
 				if (response && response.data) {
 					if (response.data.success) {
+						this.getPropertyRating(response.data.message.rating);
 						this.setState({
 							property: response.data.message,
 							isLoading: false,
@@ -80,9 +81,6 @@ export default class Details extends Component {
 			.then((response) => {
 				if (response.data) {
 					if (response.data.success) {
-						console.log("******");
-						console.log(response.data);
-						console.log("******");
 						this.setState({
 							alreadyFavourite: !this.state.alreadyFavourite,
 							addingWishList: false,
@@ -94,9 +92,6 @@ export default class Details extends Component {
 				this.setState({ addingWishList: false });
 			})
 			.catch((error) => {
-				console.log("******");
-				console.log(error.response);
-				console.log("******");
 				this.setState({ addingWishList: false });
 			});
 	};
@@ -109,8 +104,52 @@ export default class Details extends Component {
 		this.fetch();
 	}
 
+	handleRatings = async (rating) => {
+		let currentUser = await AsyncStorage.getItem("currentUser");
+		currentUser = JSON.parse(currentUser);
+		let id = currentUser._id;
+		Axios({
+			method: "POST",
+			url: URL + "property/rate",
+			data: {
+				property: this.state.property._id,
+				user: id,
+				rating: rating,
+			},
+		})
+			.then((response) => {
+				this.fetch();
+				// if (response.data) {
+				// 	if (response.data.success) {
+				// 		this.setState({
+				// 			alreadyFavourite: !this.state.alreadyFavourite,
+				// 			addingWishList: false,
+				// 		});
+				// 	} else {
+				// 		this.setState({ addingWishList: false });
+				// 	}
+				// }
+				// this.setState({ addingWishList: false });
+			})
+			.catch((error) => {
+				// this.setState({ addingWishList: false });
+			});
+	};
+
+	getPropertyRating = (rating) => {
+		if (rating && rating instanceof Array && rating.length > 0) {
+			let averageRating = 0;
+			rating.map((item) => {
+				if (item && item.rating) averageRating = averageRating + item.rating;
+			});
+			averageRating = averageRating / rating.length;
+			this.setState({ rating: averageRating });
+		} else {
+			this.setState({ rating: 0 });
+		}
+	};
 	render() {
-		const { property } = this.state;
+		const { property, rating } = this.state;
 		return (
 			<View style={{ flex: 1, backgroundColor: "white" }}>
 				<Header title="Details" isBack navigation={this.props.navigation} />
@@ -185,22 +224,37 @@ export default class Details extends Component {
 											</TouchableOpacity>
 										)}
 									</View>
+									<View
+										style={{
+											flexDirection: "row",
+											alignItems: "center",
+											marginBottom: 10,
+										}}
+									>
+										<Rating
+											readonly={this.state.userRole === "Seller" ? true : false}
+											startingValue={this.state.rating}
+											onFinishRating={(rating) => {
+												this.handleRatings(rating);
+											}}
+											style={{
+												alignSelf: "flex-start",
+												backgroundColor: "transparent",
+											}}
+											imageSize={25}
+										/>
+										<Text style={{ fontSize: 15, marginLeft: 5 }}>
+											(
+											{property.rating && property.rating instanceof Array
+												? property.rating.length
+												: 0}
+											)
+										</Text>
+									</View>
 									<Text style={{ textAlignVertical: "center", color: "gray" }}>
-										{" "}
-										<EvilIcons name="location" size={28} />
+										<EvilIcons name="location" size={20} />
 										{property.address}
 									</Text>
-									<Rating
-										readonly
-										startingValue={property.rating}
-										style={{
-											alignSelf: "flex-start",
-											marginLeft: 10,
-											marginTop: 5,
-											backgroundColor: "transparent",
-										}}
-										imageSize={18}
-									/>
 									<Text>
 										<Text
 											style={{

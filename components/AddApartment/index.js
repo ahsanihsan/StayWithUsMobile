@@ -8,7 +8,6 @@ import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import Axios from "axios";
 import { URL } from "../../Helpers/helper";
-import { AirbnbRating } from "react-native-elements";
 
 export default class AddApartment extends Component {
 	constructor(props) {
@@ -23,7 +22,6 @@ export default class AddApartment extends Component {
 			// kitchen: 3,
 			// bathroom: 1,
 			// rent: 45000,
-			// rating: 2,
 			// image: "",
 			name: "",
 			description: "",
@@ -33,7 +31,6 @@ export default class AddApartment extends Component {
 			kitchen: 0,
 			bathroom: 0,
 			rent: 0,
-			rating: 0,
 			image: 0,
 		};
 	}
@@ -57,7 +54,6 @@ export default class AddApartment extends Component {
 			kitchen,
 			bathroom,
 			rent,
-			rating,
 			image,
 		} = this.state;
 		if (
@@ -70,7 +66,6 @@ export default class AddApartment extends Component {
 				kitchen &&
 				bathroom &&
 				rent &&
-				rating &&
 				image
 			)
 		) {
@@ -91,7 +86,6 @@ export default class AddApartment extends Component {
 				kitchen,
 				bathroom,
 				rent,
-				rating,
 				image,
 				area,
 				seller: id,
@@ -161,7 +155,7 @@ export default class AddApartment extends Component {
 								onChangeText={(address) => this.setState({ address })}
 							/>
 							<Text style={{ paddingTop: 5, paddingBottom: 5, fontSize: 15 }}>
-								Area (Square Meter)
+								Area (Square Feet)
 							</Text>
 							<NumericInput
 								onChange={(area) => this.setState({ area })}
