@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, ScrollView, Alert, AsyncStorage } from "react-native";
 import Header from "../../ReuseableComponents/Header";
-import { Card } from "react-native-paper";
+import { Card, Switch } from "react-native-paper";
 import NumericInput from "react-native-numeric-input";
 import { Input, Button } from "galio-framework";
 import * as ImagePicker from "expo-image-picker";
@@ -32,6 +32,11 @@ export default class AddApartment extends Component {
 			bathroom: 0,
 			rent: 0,
 			image: 0,
+			dinnerCost: 0,
+			lunchCost: 0,
+			breakfastCost: 0,
+			meals: false,
+			carParking: false,
 		};
 	}
 
@@ -55,6 +60,11 @@ export default class AddApartment extends Component {
 			bathroom,
 			rent,
 			image,
+			dinnerCost,
+			lunchCost,
+			breakfastCost,
+			meals,
+			carParking,
 		} = this.state;
 		if (
 			!(
@@ -89,6 +99,11 @@ export default class AddApartment extends Component {
 				image,
 				area,
 				seller: id,
+				dinnerCost,
+				lunchCost,
+				breakfastCost,
+				meals,
+				carParking,
 			},
 		})
 			.then((response) => {
@@ -191,6 +206,83 @@ export default class AddApartment extends Component {
 								onChange={(rent) => this.setState({ rent })}
 								step={500}
 							/>
+							<View
+								style={{
+									flexDirection: "row",
+									alignItems: "center",
+									marginTop: 10,
+								}}
+							>
+								<Text
+									style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+								>
+									Car Parking
+								</Text>
+								<Switch
+									value={this.state.carParking}
+									style={{ marginLeft: 10 }}
+									onValueChange={(check) => {
+										this.setState({ carParking: check });
+									}}
+								/>
+							</View>
+							<View
+								style={{
+									flexDirection: "row",
+									alignItems: "center",
+									marginTop: 10,
+									marginBottom: 10,
+								}}
+							>
+								<Text
+									style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+								>
+									Meals
+								</Text>
+								<Switch
+									style={{ marginLeft: 10 }}
+									value={this.state.meals}
+									onValueChange={(check) => {
+										this.setState({ meals: check });
+									}}
+								/>
+							</View>
+							{this.state.meals ? (
+								<>
+									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Breakfast Price (PKR)
+									</Text>
+									<NumericInput
+										value={this.state.breakfastCost}
+										onChange={(breakfastCost) =>
+											this.setState({ breakfastCost })
+										}
+										step={100}
+									/>
+									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Lunch Price (PKR)
+									</Text>
+									<NumericInput
+										value={this.state.lunchCost}
+										onChange={(lunchCost) => this.setState({ lunchCost })}
+										step={100}
+									/>
+									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Dinner Price (PKR)
+									</Text>
+									<NumericInput
+										value={this.state.dinnerCost}
+										onChange={(dinnerCost) => this.setState({ dinnerCost })}
+										step={100}
+									/>
+								</>
+							) : undefined}
 							<Button
 								color="success"
 								onPress={() => pickImage()}

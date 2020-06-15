@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, ScrollView, Alert, AsyncStorage } from "react-native";
 import Header from "../../ReuseableComponents/Header";
-import { Card, ActivityIndicator } from "react-native-paper";
+import { Card, ActivityIndicator, Switch } from "react-native-paper";
 import NumericInput from "react-native-numeric-input";
 import { Input, Button } from "galio-framework";
 import * as ImagePicker from "expo-image-picker";
@@ -56,6 +56,11 @@ export default class EditApartment extends Component {
 							bathroom: property.bathroom,
 							rent: property.rent,
 							id: property._id,
+							carParking: property.carParking,
+							meals: property.meals,
+							lunchCost: property.lunchCost,
+							breakfastCost: property.breakfastCost,
+							dinnerCost: property.dinnerCost,
 							isLoading: false,
 						});
 					} else {
@@ -84,6 +89,11 @@ export default class EditApartment extends Component {
 			kitchen,
 			bathroom,
 			rent,
+			meals,
+			carParking,
+			lunchCost,
+			dinnerCost,
+			breakfastCost,
 		} = this.state;
 		if (
 			!(
@@ -116,6 +126,11 @@ export default class EditApartment extends Component {
 				rent,
 				area,
 				seller: id,
+				meals,
+				carParking,
+				lunchCost,
+				dinnerCost,
+				breakfastCost,
 			},
 		})
 			.then((response) => {
@@ -256,7 +271,96 @@ export default class EditApartment extends Component {
 										onChange={(rent) => this.setState({ rent })}
 										step={500}
 									/>
+									<View
+										style={{
+											flexDirection: "row",
+											alignItems: "center",
+											marginTop: 10,
+										}}
+									>
+										<Text
+											style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+										>
+											Car Parking
+										</Text>
+										<Switch
+											value={this.state.carParking}
+											style={{ marginLeft: 10 }}
+											onValueChange={(check) => {
+												this.setState({ carParking: check });
+											}}
+										/>
+									</View>
+									<View
+										style={{
+											flexDirection: "row",
+											alignItems: "center",
+											marginTop: 10,
+											marginBottom: 10,
+										}}
+									>
+										<Text
+											style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+										>
+											Meals
+										</Text>
+										<Switch
+											style={{ marginLeft: 10 }}
+											value={this.state.meals}
+											onValueChange={(check) => {
+												this.setState({ meals: check });
+											}}
+										/>
+									</View>
 
+									{this.state.meals ? (
+										<>
+											<Text
+												style={{
+													paddingTop: 10,
+													paddingBottom: 5,
+													fontSize: 15,
+												}}
+											>
+												Breakfast Price (PKR)
+											</Text>
+											<NumericInput
+												value={this.state.breakfastCost}
+												onChange={(breakfastCost) =>
+													this.setState({ breakfastCost })
+												}
+												step={100}
+											/>
+											<Text
+												style={{
+													paddingTop: 10,
+													paddingBottom: 5,
+													fontSize: 15,
+												}}
+											>
+												Lunch Price (PKR)
+											</Text>
+											<NumericInput
+												value={this.state.lunchCost}
+												onChange={(lunchCost) => this.setState({ lunchCost })}
+												step={100}
+											/>
+											<Text
+												style={{
+													paddingTop: 10,
+													paddingBottom: 5,
+													fontSize: 15,
+												}}
+											>
+												Dinner Price (PKR)
+											</Text>
+											<NumericInput
+												value={this.state.dinnerCost}
+												onChange={(dinnerCost) => this.setState({ dinnerCost })}
+												step={100}
+											/>
+										</>
+									) : undefined}
 									<Button
 										color="info"
 										loading={this.state.loading}

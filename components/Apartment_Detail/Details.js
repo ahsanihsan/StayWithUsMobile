@@ -349,6 +349,92 @@ export default class Details extends Component {
 												{property.bathroom} Bathroom
 											</Text>
 										</View>
+										{property.carParking ? (
+											<View
+												style={{
+													width: 160,
+													flexDirection: "row",
+													justifyContent: "space-around",
+													alignItems: "center",
+													borderColor: "gray",
+													borderWidth: 2,
+													margin: 10,
+													padding: 10,
+												}}
+											>
+												<FontAwesome5 name="car" size={32} color="black" />
+												<Text style={{ fontSize: 16, color: "#333" }}>
+													Car Parking
+												</Text>
+											</View>
+										) : undefined}
+										{property.meals ? (
+											<>
+												<View
+													style={{
+														width: 160,
+														flexDirection: "row",
+														justifyContent: "space-around",
+														alignItems: "center",
+														borderColor: "gray",
+														borderWidth: 2,
+														margin: 10,
+														padding: 10,
+													}}
+												>
+													<FontAwesome5
+														name="utensils"
+														size={32}
+														color="black"
+													/>
+													<Text style={{ fontSize: 16, color: "#333" }}>
+														{property.breakfastCost} PKR {"\n"}Breakfast
+													</Text>
+												</View>
+												<View
+													style={{
+														width: 160,
+														flexDirection: "row",
+														justifyContent: "space-around",
+														alignItems: "center",
+														borderColor: "gray",
+														borderWidth: 2,
+														margin: 10,
+														padding: 10,
+													}}
+												>
+													<FontAwesome5
+														name="utensils"
+														size={32}
+														color="black"
+													/>
+													<Text style={{ fontSize: 16, color: "#333" }}>
+														{property.lunchCost} PKR {"\n"}Lunch
+													</Text>
+												</View>
+												<View
+													style={{
+														width: 160,
+														flexDirection: "row",
+														justifyContent: "space-around",
+														alignItems: "center",
+														borderColor: "gray",
+														borderWidth: 2,
+														margin: 10,
+														padding: 10,
+													}}
+												>
+													<FontAwesome5
+														name="utensils"
+														size={32}
+														color="black"
+													/>
+													<Text style={{ fontSize: 16, color: "#333" }}>
+														{property.dinnerCost} PKR {"\n"}Dinner
+													</Text>
+												</View>
+											</>
+										) : undefined}
 									</View>
 									<View
 										style={{

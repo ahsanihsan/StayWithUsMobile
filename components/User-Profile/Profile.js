@@ -117,7 +117,14 @@ export default class Profile extends Component {
 							) : this.state.wishList.length > 0 ? (
 								this.state.wishList.map((item) => {
 									return (
-										<View style={styles.outerContainer}>
+										<TouchableOpacity
+											style={styles.outerContainer}
+											onPress={() =>
+												this.props.navigation.navigate("Details", {
+													id: item._id,
+												})
+											}
+										>
 											<Image
 												source={{
 													uri: URL + item._id + ".jpg",
@@ -151,7 +158,7 @@ export default class Profile extends Component {
 													</View>
 												</View>
 											</View>
-										</View>
+										</TouchableOpacity>
 									);
 								})
 							) : (
