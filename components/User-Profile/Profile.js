@@ -20,6 +20,8 @@ import Constants from "expo-constants";
 import { Entypo } from "@expo/vector-icons";
 import Axios from "axios";
 import { URL } from "../../Helpers/helper";
+import Modal from "react-native-modal";
+import { Input } from "galio-framework";
 
 export default class Profile extends Component {
 	constructor(props) {
@@ -27,8 +29,38 @@ export default class Profile extends Component {
 		this.state = {
 			isLoading: true,
 			wishList: [],
+			user: "",
+			profile: "",
 		};
 	}
+
+	fetchUser = () => {
+		Axios({
+			method: "GET",
+			url: URL + "users/" + this.state.profile._id,
+		})
+			.then((response) => {
+				if (response && response.data) {
+					if (response.data.success) {
+						console.log("******");
+						console.log(response.data);
+						console.log("******");
+						this.setState({
+							user: response.data.message,
+							fetchingUser: false,
+						});
+					} else {
+						this.setState({
+							user: this.state.profile,
+							fetchingUser: false,
+						});
+					}
+				}
+			})
+			.catch((error) => {
+				this.setState({ wishList: [], isLoading: false, refreshing: false });
+			});
+	};
 
 	fetchWishList = async () => {
 		this.setState({ refreshing: true });
@@ -65,7 +97,46 @@ export default class Profile extends Component {
 
 	async componentDidMount() {
 		this.fetchWishList();
+		this.fetchUser();
 	}
+
+	handleSubmit = () => {
+		Axios({
+			method: "PUT",
+			url: URL + "users/" + this.state.profile._id,
+			data: {
+				name: this.state.user.name,
+				phone_number: this.state.user.phone_number,
+				email: this.state.user.email,
+			},
+		})
+			.then((response) => {
+				if (response && response.data) {
+					if (response.data.success) {
+						AsyncStorage.setItem(
+							"currentUser",
+							JSON.stringify(response.data.message)
+						);
+						this.setState({
+							profile: response.data.message,
+							editProfileModal: false,
+							editingUser: false,
+						});
+					} else {
+						this.setState({
+							editingUser: false,
+							editProfileModal: false,
+						});
+					}
+				}
+			})
+			.catch((error) => {
+				this.setState({
+					editingUser: false,
+					editProfileModal: false,
+				});
+			});
+	};
 
 	render() {
 		const { profile } = this.state;
@@ -93,6 +164,19 @@ export default class Profile extends Component {
 								<Text style={{ fontSize: 16, color: "#fff" }}>
 									{profile.phone_number}
 								</Text>
+								<Button
+									mode="contained"
+									uppercase={true}
+									onPress={() => {
+										this.setState({ editProfileModal: true });
+									}}
+									style={{
+										borderRadius: 5,
+										marginTop: 10,
+									}}
+								>
+									Edit
+								</Button>
 							</View>
 						</>
 					)}
@@ -165,38 +249,6 @@ export default class Profile extends Component {
 								<Text>There are no items in your wishlist</Text>
 							)}
 						</ScrollView>
-						{/* <ScrollView
-							horizontal={true}
-							showsHorizontalScrollIndicator={false}
-							style={{ flex: 1 }}
-						>
-							<Image
-								source={{
-									uri:
-										"https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-								}}
-								style={{
-									width: 200,
-									height: 200,
-									marginRight: 10,
-									borderRadius: 15,
-									resizeMode: "cover",
-								}}
-							/>
-							<Image
-								source={{
-									uri:
-										"https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-								}}
-								style={{
-									width: 200,
-									height: 200,
-									marginRight: 10,
-									borderRadius: 15,
-									resizeMode: "cover",
-								}}
-							/>
-						</ScrollView> */}
 					</View>
 				</View>
 
@@ -217,6 +269,117 @@ export default class Profile extends Component {
 				>
 					Logout
 				</Button>
+				<Modal
+					isVisible={this.state.editProfileModal}
+					onBackButtonPress={() => {
+						this.setState({ editProfileModal: false });
+					}}
+					onBackdropPress={() => {
+						this.setState({ editProfileModal: false });
+					}}
+				>
+					{this.state.fetchingUser ? (
+						<ActivityIndicator />
+					) : (
+						<View
+							style={{
+								backgroundColor: "#fff",
+								width: "90%",
+								padding: 10,
+								borderRadius: 10,
+								alignSelf: "center",
+							}}
+						>
+							<Text
+								style={{
+									textAlign: "center",
+									fontSize: 20,
+									marginBottom: 15,
+								}}
+							>
+								Edit User
+							</Text>
+							<Input
+								placeholder="Enter your Name"
+								right
+								icon="user"
+								family="Entypo"
+								rounded
+								value={this.state.user.name}
+								style={{ width: "90%", alignSelf: "center" }}
+								iconSize={16}
+								iconColor="grey"
+								onChangeText={(name) =>
+									this.setState((prevState) => ({
+										...prevState,
+										user: {
+											...prevState.user,
+											name: name,
+										},
+									}))
+								}
+							/>
+							<Input
+								type="email-address"
+								placeholder="Enter your email-address"
+								right
+								icon="email"
+								family="Entypo"
+								rounded
+								value={this.state.user.email}
+								style={{ width: "90%", alignSelf: "center" }}
+								iconSize={16}
+								iconColor="grey"
+								onChangeText={(email) =>
+									this.setState((prevState) => ({
+										...prevState,
+										user: {
+											...prevState.user,
+											email: email,
+										},
+									}))
+								}
+							/>
+							<Input
+								type="numeric"
+								placeholder="Enter your phone number"
+								right
+								value={this.state.user.phone_number}
+								icon="phone"
+								family="Entypo"
+								rounded
+								style={{ width: "90%", alignSelf: "center" }}
+								iconSize={16}
+								iconColor="grey"
+								onChangeText={(phone_number) =>
+									this.setState((prevState) => ({
+										...prevState,
+										user: {
+											...prevState.user,
+											phone_number: phone_number,
+										},
+									}))
+								}
+							/>
+							<Button
+								mode="contained"
+								uppercase={true}
+								onPress={() => {
+									this.handleSubmit();
+								}}
+								style={{
+									borderRadius: 20,
+									marginTop: 10,
+									marginBottom: 10,
+									width: "90%",
+									alignSelf: "center",
+								}}
+							>
+								Submit
+							</Button>
+						</View>
+					)}
+				</Modal>
 			</View>
 		);
 	}
