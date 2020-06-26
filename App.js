@@ -21,11 +21,13 @@ const AuthStack = createStackNavigator();
 const HomeTabs = createBottomTabNavigator();
 import Alert from "./Alert";
 import EditApartment from "./components/EditApartment";
+import ForgotPassword from "./components/user-auth/ForgotPassword";
 
 const Auth = () => (
 	<AuthStack.Navigator headerMode="none">
 		<AuthStack.Screen name="signin" component={Signin} />
 		<AuthStack.Screen name="signup" component={Signup} />
+		<AuthStack.Screen name="forgotpassword" component={ForgotPassword} />
 	</AuthStack.Navigator>
 );
 

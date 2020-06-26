@@ -141,6 +141,14 @@ export default class Signin extends Component {
 					>
 						LOGIN
 					</Button>
+					<TouchableOpacity
+						onPress={() => this.props.navigation.push("forgotpassword")}
+						style={{ alignSelf: "center", margin: 30 }}
+					>
+						<Text style={{ fontSize: 20, color: "#0097e6", marginLeft: 5 }}>
+							Forgot Password?
+						</Text>
+					</TouchableOpacity>
 					<View
 						style={{
 							flexDirection: "row",
