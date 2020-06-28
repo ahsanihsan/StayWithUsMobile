@@ -102,7 +102,7 @@ export default class SellerView extends Component {
 									>
 										<Image
 											source={{
-												uri: URL + item._id + ".jpg",
+												uri: URL + item.images[0],
 											}}
 											style={{
 												width: "100%",
