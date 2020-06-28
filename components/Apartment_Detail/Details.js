@@ -25,6 +25,7 @@ import Axios from "axios";
 import Modal from "react-native-modal";
 import { Button } from "galio-framework";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Input } from "galio-framework";
 
 export default class Details extends Component {
 	constructor(props) {
@@ -42,6 +43,7 @@ export default class Details extends Component {
 			.then((response) => {
 				if (response && response.data) {
 					if (response.data.success) {
+						console.log(response.data.message);
 						this.getPropertyRating(response.data.message.rating);
 						this.setState({
 							property: response.data.message,
@@ -104,7 +106,7 @@ export default class Details extends Component {
 		this.fetch();
 	}
 
-	handleRatings = async (rating) => {
+	handleRatings = async () => {
 		let currentUser = await AsyncStorage.getItem("currentUser");
 		currentUser = JSON.parse(currentUser);
 		let id = currentUser._id;
@@ -114,11 +116,13 @@ export default class Details extends Component {
 			data: {
 				property: this.state.property._id,
 				user: id,
-				rating: rating,
+				rating: this.state.propertyRating,
+				ratingText: this.state.ratingText,
 			},
 		})
 			.then((response) => {
 				this.fetch();
+				this.setState({ ratingModal: false });
 				// if (response.data) {
 				// 	if (response.data.success) {
 				// 		this.setState({
@@ -157,7 +161,7 @@ export default class Details extends Component {
 					<ActivityIndicator />
 				) : (
 					<ScrollView
-						style={{ marginBottom: 10 }}
+						// style={{ marginBottom: 10 }}
 						refreshControl={
 							<RefreshControl
 								onRefresh={() => this.fetch()}
@@ -176,15 +180,22 @@ export default class Details extends Component {
 										pagingEnabled
 										style={{ flex: 1 }}
 									>
-										<Image
-											source={{
-												uri: URL + property._id + ".jpg",
-											}}
-											style={{
-												width: Dimensions.get("window").width,
-												height: 300,
-											}}
-										/>
+										{property.images.map((item, index) => {
+											if (item) {
+												return (
+													<Image
+														key={index}
+														source={{
+															uri: URL + item,
+														}}
+														style={{
+															width: Dimensions.get("window").width,
+															height: 300,
+														}}
+													/>
+												);
+											}
+										})}
 									</ScrollView>
 								</View>
 								<View style={styles.apart_details}>
@@ -443,13 +454,147 @@ export default class Details extends Component {
 											paddingHorizontal: 10,
 										}}
 									>
-										<Text style={{ fontSize: 28, fontWeight: "bold" }}>
-											Description{" "}
+										<Text
+											style={{
+												fontSize: 28,
+												fontWeight: "bold",
+												marginBottom: 10,
+											}}
+										>
+											Description
 										</Text>
 										<View style={{}}>
 											<Text style={{ textAlign: "justify" }}>
 												{property.description}
 											</Text>
+										</View>
+										<View
+											style={{
+												flexDirection: "row",
+												justifyContent: "space-between",
+												alignItems: "center",
+											}}
+										>
+											<Text
+												style={{
+													fontSize: 28,
+													fontWeight: "bold",
+													marginTop: 20,
+													marginBottom: 20,
+												}}
+											>
+												Rating ({property.rating.length})
+											</Text>
+											{this.state.userRole === "Buyer" ? (
+												<TouchableOpacity
+													onPress={() => this.setState({ ratingModal: true })}
+												>
+													<MaterialCommunityIcons
+														name="plus"
+														size={30}
+														color={"blue"}
+														style={{ padding: 20 }}
+													/>
+												</TouchableOpacity>
+											) : undefined}
+										</View>
+										<Modal
+											isVisible={this.state.ratingModal}
+											onBackButtonPress={() => {
+												this.setState({ ratingModal: false });
+											}}
+											onBackdropPress={() => {
+												this.setState({ ratingModal: false });
+											}}
+										>
+											<View
+												style={{
+													backgroundColor: "#fff",
+													width: "100%",
+													padding: 20,
+													borderRadius: 10,
+													alignSelf: "center",
+												}}
+											>
+												<Text
+													style={{
+														fontSize: 16,
+														marginTop: 5,
+														marginBottom: 10,
+													}}
+												>
+													Rating:
+												</Text>
+												<Rating
+													onFinishRating={(rating) => {
+														this.setState({ propertyRating: rating });
+													}}
+													style={{
+														alignSelf: "flex-start",
+														backgroundColor: "transparent",
+													}}
+													imageSize={25}
+												/>
+												<Input
+													placeholder="Enter your review"
+													rounded
+													style={{
+														width: "100%",
+														alignSelf: "center",
+														marginTop: 10,
+													}}
+													value={this.state.ratingText}
+													onChangeText={(ratingText) =>
+														this.setState({ ratingText })
+													}
+												/>
+												<Button
+													style={{
+														padding: 10,
+														borderRadius: 20,
+														backgroundColor: "#0652DD",
+														marginBottom: 10,
+														width: "100%",
+													}}
+													labelStyle={{
+														fontSize: 18,
+														fontWeight: "bold",
+													}}
+													mode="contained"
+													onPress={() => this.handleRatings()}
+												>
+													Submit
+												</Button>
+											</View>
+										</Modal>
+										<View>
+											{property.rating && property.rating.length > 0 ? (
+												property.rating.map((item) => {
+													return (
+														<View
+															style={{
+																borderWidth: 0.9,
+																borderRadius: 10,
+																borderColor: "grey",
+																alignItems: "flex-start",
+																padding: 20,
+															}}
+														>
+															<AirbnbRating
+																readonly
+																defaultRating={item.rating}
+																showRating={false}
+																size={20}
+															/>
+															<Text>{item.ratingText}</Text>
+														</View>
+													);
+												})
+											) : (
+												<Text style={{ textAlign: "justify" }}>
+													There is no rating for the current property yet
+												</Text>
+											)}
 										</View>
 									</View>
 									{this.state.userRole === "Seller" ? undefined : (
@@ -458,6 +603,7 @@ export default class Details extends Component {
 												padding: 10,
 												borderRadius: 20,
 												backgroundColor: "#0652DD",
+												marginBottom: 10,
 											}}
 											contentStyle={{}}
 											labelStyle={{ fontSize: 18, fontWeight: "bold" }}

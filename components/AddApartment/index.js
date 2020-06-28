@@ -59,7 +59,10 @@ export default class AddApartment extends Component {
 			kitchen,
 			bathroom,
 			rent,
-			image,
+			image1,
+			image2,
+			image3,
+			image4,
 			dinnerCost,
 			lunchCost,
 			breakfastCost,
@@ -76,7 +79,7 @@ export default class AddApartment extends Component {
 				kitchen &&
 				bathroom &&
 				rent &&
-				image
+				image1
 			)
 		) {
 			Alert.alert("Please check there is some data missing");
@@ -96,7 +99,7 @@ export default class AddApartment extends Component {
 				kitchen,
 				bathroom,
 				rent,
-				image,
+				images: [image1, image2, image3, image4],
 				area,
 				seller: id,
 				dinnerCost,
@@ -125,7 +128,7 @@ export default class AddApartment extends Component {
 		this.setState({ loading: true });
 	};
 	render() {
-		const pickImage = async () => {
+		const pickImage = async (imageNo) => {
 			let result = await ImagePicker.launchImageLibraryAsync({
 				mediaTypes: ImagePicker.MediaTypeOptions.Images,
 				allowsEditing: true,
@@ -136,8 +139,15 @@ export default class AddApartment extends Component {
 
 			if (!result.cancelled) {
 				let fileName = result.uri;
-
-				this.setState({ image: result.base64, fileName });
+				if (imageNo === 1) {
+					this.setState({ image1: result.base64, fileName1: fileName });
+				} else if (imageNo === 2) {
+					this.setState({ image2: result.base64, fileName2: fileName });
+				} else if (imageNo === 3) {
+					this.setState({ image3: result.base64, fileName3: fileName });
+				} else {
+					this.setState({ image4: result.base64, fileName4: fileName });
+				}
 			}
 		};
 		return (
@@ -285,16 +295,61 @@ export default class AddApartment extends Component {
 							) : undefined}
 							<Button
 								color="success"
-								onPress={() => pickImage()}
+								onPress={() => pickImage(1)}
 								style={{ width: "50%", marginTop: 20 }}
 							>
-								Pick Image
+								Pick Image 1
 							</Button>
 							<Text style={{ fontSize: 15, marginTop: 20 }}>
-								File Name:{" "}
-								{this.state.fileName
-									? this.state.fileName.substring(
-											this.state.fileName.length - 20
+								File Name 1:{" "}
+								{this.state.fileName1
+									? this.state.fileName1.substring(
+											this.state.fileName1.length - 20
+									  )
+									: "Please pick an image"}
+							</Text>
+							<Button
+								color="success"
+								onPress={() => pickImage(2)}
+								style={{ width: "50%", marginTop: 20 }}
+							>
+								Pick Image 2
+							</Button>
+							<Text style={{ fontSize: 15, marginTop: 20 }}>
+								File Name 2:{" "}
+								{this.state.fileName2
+									? this.state.fileName2.substring(
+											this.state.fileName2.length - 20
+									  )
+									: "Please pick an image"}
+							</Text>
+							<Button
+								color="success"
+								onPress={() => pickImage(3)}
+								style={{ width: "50%", marginTop: 20 }}
+							>
+								Pick Image 3
+							</Button>
+							<Text style={{ fontSize: 15, marginTop: 20 }}>
+								File Name 3:{" "}
+								{this.state.fileName3
+									? this.state.fileName3.substring(
+											this.state.fileName3.length - 20
+									  )
+									: "Please pick an image"}
+							</Text>
+							<Button
+								color="success"
+								onPress={() => pickImage(4)}
+								style={{ width: "50%", marginTop: 20 }}
+							>
+								Pick Image 4
+							</Button>
+							<Text style={{ fontSize: 15, marginTop: 20 }}>
+								File Name 4:{" "}
+								{this.state.fileName4
+									? this.state.fileName4.substring(
+											this.state.fileName4.length - 20
 									  )
 									: "Please pick an image"}
 							</Text>
