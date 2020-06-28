@@ -15,10 +15,13 @@ import Profile from "./components/User-Profile/Profile";
 // import AddApartment from "./components/Apartments/Apartments";
 import AddApartment from "./components/AddApartment";
 import Details from "./components/Apartment_Detail/Details";
+import RentNow from "./components/Apartment_Detail/RentNow";
+
 const HomeStack = createStackNavigator();
 const RootStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 const HomeTabs = createBottomTabNavigator();
+
 import Alert from "./Alert";
 import EditApartment from "./components/EditApartment";
 import ForgotPassword from "./components/user-auth/ForgotPassword";
@@ -57,6 +60,13 @@ const HomeScreenStack = ({ navigation }) => (
 		<HomeStack.Screen
 			name="EditApartment"
 			component={EditApartment}
+			options={({ route }) => ({
+				headerShown: false,
+			})}
+		/>
+		<HomeStack.Screen
+			name="RentNow"
+			component={RentNow}
 			options={({ route }) => ({
 				headerShown: false,
 			})}

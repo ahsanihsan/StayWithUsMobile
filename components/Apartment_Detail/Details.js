@@ -578,6 +578,7 @@ export default class Details extends Component {
 																borderColor: "grey",
 																alignItems: "flex-start",
 																padding: 20,
+																marginTop: 10,
 															}}
 														>
 															<AirbnbRating
@@ -608,7 +609,12 @@ export default class Details extends Component {
 											contentStyle={{}}
 											labelStyle={{ fontSize: 18, fontWeight: "bold" }}
 											mode="contained"
-											onPress={() => this.setState({ modalVisible: true })}
+											// onPress={() => this.setState({ modalVisible: true })}
+											onPress={() =>
+												this.props.navigation.navigate("RentNow", {
+													id: property._id,
+												})
+											}
 										>
 											Rent now
 										</Button>
