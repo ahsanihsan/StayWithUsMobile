@@ -4,28 +4,15 @@ import {
 	Text,
 	ScrollView,
 	StyleSheet,
-	Image,
-	Dimensions,
-	Linking,
-	RefreshControl,
 	AsyncStorage,
+	Alert,
 } from "react-native";
-import Constants from "expo-constants";
-import {
-	EvilIcons,
-	FontAwesome5,
-	FontAwesome,
-	MaterialCommunityIcons,
-} from "@expo/vector-icons";
-import { Rating, AirbnbRating } from "react-native-elements";
-import { Chip, ActivityIndicator, Switch } from "react-native-paper";
+import { ActivityIndicator, Switch } from "react-native-paper";
 import Header from "../../ReuseableComponents/Header";
 import { URL } from "../../Helpers/helper";
 import Axios from "axios";
 import Modal from "react-native-modal";
 import { Button } from "galio-framework";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Input } from "galio-framework";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 
@@ -39,17 +26,57 @@ export default class RentNow extends Component {
 			dinner: false,
 			lunch: false,
 			breakfast: false,
+			dateTextCheckIn: "",
+			dateTextCheckOut: "",
 		};
 	}
 
 	handleSubmit = () => {
-		console.log("********** PROPERTY **********");
-		console.log(this.state.property);
-		console.log("********** PROPERTY **********");
+		let checkIn = this.state.dateTextCheckIn;
+		let checkOut = this.state.dateTextCheckOut;
+		var a = moment(checkIn);
+		var b = moment(checkOut);
+		let totalDaysStay = b.diff(a, "days") + 1;
+		totalDaysStay = totalDaysStay < 0 ? totalDaysStay * -1 : totalDaysStay;
 
-		console.log("********** BOOKING DETAILS *******");
-		console.log(this.state);
-		console.log("********** BOOKING DETAILS *******");
+		let totalRentProperty = this.state.property.rent;
+		let totalBreakfastCost = this.state.property.breakfastCost;
+		let totalLunchCost = this.state.property.lunchCost;
+		let totalDinnerCost = this.state.property.dinnerCost;
+		let totalVehicleCost = 0;
+
+		let consumedRent = totalRentProperty * totalDaysStay;
+		let consumedBreakFast = this.state.breakfast
+			? totalBreakfastCost * totalDaysStay
+			: 0;
+		let consumedLunch = this.state.lunch ? totalLunchCost * totalDaysStay : 0;
+		let consumedDinner = this.state.dinner
+			? totalDinnerCost * totalDaysStay
+			: 0;
+
+		let consumedVehicleCost = this.state.vehicle
+			? totalVehicleCost * totalDaysStay
+			: 0;
+
+		if (!checkIn || !checkOut) {
+			Alert.alert("Please select your check in and check out date.");
+			return false;
+		}
+		const data = {
+			checkInDate: checkIn,
+			checkOutDate: checkOut,
+			rentCost: consumedRent,
+			vehicleCost: consumedVehicleCost,
+			breakfastCost: consumedBreakFast,
+			lunchCost: consumedLunch,
+			dinnerCost: consumedDinner,
+			totalDaysStay: totalDaysStay,
+			property: this.state.property._id,
+			buyer: this.state.userId,
+			seller: this.state.property.seller._id,
+		};
+
+		this.setState({ bill: data, showBillModal: true });
 	};
 
 	fetch = () => {
@@ -85,12 +112,44 @@ export default class RentNow extends Component {
 		let currentUser = await AsyncStorage.getItem("currentUser");
 		currentUser = JSON.parse(currentUser);
 		let userRole = currentUser.userType;
-		this.setState({ userRole });
+		let userId = currentUser._id;
+		this.setState({ userRole, userId });
 		this.fetch();
 	}
 
+	handleConfirmation = async () => {
+		this.setState({ bill: "" });
+		Axios({
+			url: URL + "property/booking",
+			method: "POST",
+			data: this.state.bill,
+		})
+			.then((response) => {
+				if (response && response.data) {
+					if (response.data.success) {
+						Alert.alert("Success", response.data.message, {
+							text: "OK",
+							onPress: () => this.props.navigation.goBack(),
+						});
+					} else {
+						Alert.alert("Error", response.data.message, [
+							{
+								text: "OK",
+								onPress: () => this.setState({ showBillModal: false }),
+							},
+						]);
+					}
+				}
+			})
+			.catch((error) => {
+				Alert.alert(
+					"There was some problem booking your order, please try again later"
+				);
+			});
+	};
+
 	render() {
-		const { property, rating } = this.state;
+		const { property, bill } = this.state;
 		return (
 			<View style={{ flex: 1, backgroundColor: "white" }}>
 				<Header
@@ -158,7 +217,7 @@ export default class RentNow extends Component {
 									}
 									is24Hour={true}
 									display="default"
-									minimumDate={this.state.checkInDate}
+									// minimumDate={this.state.checkInDate}
 									onChange={(event, date) => {
 										let dateTextCheckOut = moment(date).format("YYYY-MM-DD");
 										this.setState({ checkOutDate: date, dateTextCheckOut });
@@ -238,6 +297,199 @@ export default class RentNow extends Component {
 						</View>
 					</ScrollView>
 				)}
+
+				<Modal
+					isVisible={this.state.showBillModal}
+					onBackButtonPress={() => {
+						this.setState({ showBillModal: false });
+					}}
+					onBackdropPress={() => {
+						this.setState({ showBillModal: false });
+					}}
+				>
+					<View
+						style={{
+							backgroundColor: "#fff",
+							width: "100%",
+							padding: 20,
+							borderRadius: 10,
+							alignSelf: "center",
+						}}
+					>
+						{this.state.bill ? (
+							<>
+								<Text
+									style={{
+										textAlign: "center",
+										fontSize: 25,
+										fontWeight: "bold",
+									}}
+								>
+									Your Bill
+								</Text>
+								<View style={{ marginTop: 20, marginBottom: 20 }}>
+									<Text
+										style={{
+											fontSize: 15,
+											fontWeight: "600",
+											marginTop: 10,
+											marginBottom: 10,
+										}}
+									>
+										Starting Date:{" "}
+										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+											{moment(bill.checkInDate).format("MMMM Do YYYY")}
+										</Text>
+									</Text>
+									<Text
+										style={{
+											fontSize: 15,
+											fontWeight: "600",
+											marginTop: 10,
+											marginBottom: 10,
+										}}
+									>
+										Ending Date:{" "}
+										<Text
+											style={{
+												fontSize: 20,
+												fontWeight: "bold",
+											}}
+										>
+											{moment(bill.checkOutDate).format("MMMM Do YYYY")}
+										</Text>
+									</Text>
+									<Text
+										style={{
+											fontSize: 15,
+											fontWeight: "600",
+											marginTop: 10,
+											marginBottom: 10,
+										}}
+									>
+										Total Days:{" "}
+										<Text
+											style={{
+												fontSize: 20,
+												fontWeight: "bold",
+											}}
+										>
+											{bill.totalDaysStay}
+										</Text>
+									</Text>
+									<Text
+										style={{
+											fontSize: 15,
+											fontWeight: "600",
+											marginTop: 10,
+											marginBottom: 10,
+										}}
+									>
+										Rent:{" "}
+										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+											{bill.rentCost}
+										</Text>{" "}
+										PKR
+									</Text>
+									<Text
+										style={{
+											fontSize: 15,
+											fontWeight: "600",
+											marginTop: 10,
+											marginBottom: 10,
+										}}
+									>
+										Breakfast:{" "}
+										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+											{bill.breakfastCost}
+										</Text>{" "}
+										PKR
+									</Text>
+									<Text
+										style={{
+											fontSize: 15,
+											fontWeight: "600",
+											marginTop: 10,
+											marginBottom: 10,
+										}}
+									>
+										Lunch:{" "}
+										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+											{bill.lunchCost}
+										</Text>{" "}
+										PKR
+									</Text>
+									<Text
+										style={{
+											fontSize: 15,
+											fontWeight: "600",
+											marginTop: 10,
+											marginBottom: 10,
+										}}
+									>
+										Dinner:{" "}
+										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+											{bill.dinnerCost}
+										</Text>{" "}
+										PKR
+									</Text>
+									<Text
+										style={{
+											fontSize: 15,
+											fontWeight: "600",
+											marginTop: 10,
+											marginBottom: 10,
+										}}
+									>
+										Vehicle:{" "}
+										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+											{bill.vehicleCost}
+										</Text>{" "}
+										PKR
+									</Text>
+									<Text
+										style={{
+											fontSize: 15,
+											fontWeight: "600",
+											marginTop: 10,
+											marginBottom: 10,
+											textAlign: "right",
+										}}
+									>
+										Total Bill:{" "}
+										<Text style={{ fontSize: 22, fontWeight: "bold" }}>
+											{bill.dinnerCost +
+												bill.breakfastCost +
+												bill.lunchCost +
+												bill.rentCost +
+												bill.vehicleCost}
+										</Text>{" "}
+										PKR
+									</Text>
+								</View>
+								<Button
+									style={{
+										padding: 10,
+										borderRadius: 20,
+										backgroundColor: "#0652DD",
+										marginBottom: 10,
+										width: "100%",
+									}}
+									labelStyle={{
+										fontSize: 18,
+										fontWeight: "bold",
+									}}
+									mode="contained"
+									onPress={() => this.handleConfirmation()}
+								>
+									Confirm order
+								</Button>
+							</>
+						) : (
+							<ActivityIndicator />
+						)}
+					</View>
+				</Modal>
 			</View>
 		);
 	}
