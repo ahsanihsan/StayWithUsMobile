@@ -42,6 +42,16 @@ export default class RentNow extends Component {
 		};
 	}
 
+	handleSubmit = () => {
+		console.log("********** PROPERTY **********");
+		console.log(this.state.property);
+		console.log("********** PROPERTY **********");
+
+		console.log("********** BOOKING DETAILS *******");
+		console.log(this.state);
+		console.log("********** BOOKING DETAILS *******");
+	};
+
 	fetch = () => {
 		this.setState({ refreshing: true });
 		let id = this.props.route.params.id;
@@ -118,7 +128,7 @@ export default class RentNow extends Component {
 									display="default"
 									minimumDate={new Date()}
 									onChange={(event, date) => {
-										let dateTextCheckIn = moment(date).format("DD-MM-YYYY");
+										let dateTextCheckIn = moment(date).format("YYYY-MM-DD");
 										this.setState({ checkInDate: date, dateTextCheckIn });
 									}}
 								/>
@@ -150,7 +160,7 @@ export default class RentNow extends Component {
 									display="default"
 									minimumDate={this.state.checkInDate}
 									onChange={(event, date) => {
-										let dateTextCheckOut = moment(date).format("DD-MM-YYYY");
+										let dateTextCheckOut = moment(date).format("YYYY-MM-DD");
 										this.setState({ checkOutDate: date, dateTextCheckOut });
 									}}
 								/>
