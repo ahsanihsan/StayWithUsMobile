@@ -25,6 +25,7 @@ const HomeTabs = createBottomTabNavigator();
 import Alert from "./Alert";
 import EditApartment from "./components/EditApartment";
 import ForgotPassword from "./components/user-auth/ForgotPassword";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Auth = () => (
 	<AuthStack.Navigator headerMode="none">
@@ -127,12 +128,21 @@ const HomeTabsScreen = () => (
 	</HomeTabs.Navigator>
 );
 
+const Drawer = createDrawerNavigator();
+
+const DrawerStackScreen = () => {
+	return (
+		<Drawer.Navigator initialRouteName="Auth">
+			<Drawer.Screen name="Home" component={HomeTabsScreen} />
+		</Drawer.Navigator>
+	);
+};
 const RootStackScreen = () => {
 	const [user, setUser] = React.useState({});
 	return (
 		<RootStack.Navigator headerMode="none">
 			<RootStack.Screen name="auth" component={Auth} />
-			<RootStack.Screen name="app" component={HomeTabsScreen} />
+			<RootStack.Screen name="app" component={DrawerStackScreen} />
 			<RootStack.Screen
 				name="alert"
 				component={Alert}
