@@ -8,6 +8,7 @@ import {
 	AsyncStorage,
 	TouchableOpacity,
 	RefreshControl,
+	Alert,
 } from "react-native";
 import {
 	Avatar,
@@ -42,9 +43,6 @@ export default class Profile extends Component {
 			.then((response) => {
 				if (response && response.data) {
 					if (response.data.success) {
-						console.log("******");
-						console.log(response.data);
-						console.log("******");
 						this.setState({
 							user: response.data.message,
 							fetchingUser: false,
@@ -177,6 +175,32 @@ export default class Profile extends Component {
 								>
 									Edit
 								</Button>
+								{/* <Button
+									color="red"
+									uppercase={true}
+									onPress={() => {
+										Alert.alert(
+											"Confirmation",
+											"Are you sure you want to deactivate your account?",
+											[
+												{
+													text: "No",
+												},
+												{
+													text: "Yes",
+													onPress: () => this.handleDeactivateAccount(),
+												},
+											]
+										);
+									}}
+									style={{
+										borderRadius: 5,
+										marginTop: 10,
+										backgroundColor: "white",
+									}}
+								>
+									Deactivate Account
+								</Button> */}
 							</View>
 						</>
 					)}

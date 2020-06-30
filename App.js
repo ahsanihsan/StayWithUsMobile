@@ -31,6 +31,7 @@ import {
 	DrawerItemList,
 } from "@react-navigation/drawer";
 import BookingDetails from "./components/BookingDetails";
+import ApprovedRequests from "./components/BookingApproved";
 
 const Auth = () => (
 	<AuthStack.Navigator headerMode="none">
@@ -148,6 +149,13 @@ const DrawerStackScreen = () => {
 			<Drawer.Screen
 				name="Booking Requests"
 				component={BookingDetails}
+				options={{
+					swipeEnabled: false,
+				}}
+			/>
+			<Drawer.Screen
+				name="Approved Bookings"
+				component={ApprovedRequests}
 				options={{
 					swipeEnabled: false,
 				}}

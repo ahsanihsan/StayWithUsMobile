@@ -43,7 +43,6 @@ export default class Details extends Component {
 			.then((response) => {
 				if (response && response.data) {
 					if (response.data.success) {
-						console.log(response.data.message);
 						this.getPropertyRating(response.data.message.rating);
 						this.setState({
 							property: response.data.message,

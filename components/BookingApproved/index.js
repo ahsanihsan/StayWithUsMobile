@@ -7,7 +7,7 @@ import { URL } from "../../Helpers/helper";
 import { Button } from "galio-framework";
 import { ScrollView } from "react-native-gesture-handler";
 
-export default class BookingDetails extends Component {
+export default class ApprovedRequests extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -28,7 +28,7 @@ export default class BookingDetails extends Component {
 	fetch = () => {
 		this.setState({ refreshing: true });
 		Axios({
-			url: URL + "property/booking/" + this.state.userId,
+			url: URL + "property/booked/" + this.state.userId,
 			method: "GET",
 		})
 			.then((response) => {
@@ -53,72 +53,11 @@ export default class BookingDetails extends Component {
 			});
 	};
 
-	handleApprove = (id) => {
-		this.setState({ gettingRequest: true });
-		Axios({
-			url: URL + "property/booking/change/" + id,
-			method: "POST",
-			data: {
-				change: "approved",
-			},
-		})
-			.then((response) => {
-				if (response && response.data) {
-					if (response.data.success) {
-						Alert.alert("Success", response.data.message);
-						this.setState({ gettingRequest: false });
-					} else {
-						Alert.alert("Error", response.data.message);
-						this.setState({ gettingRequest: false });
-					}
-				}
-				this.fetch();
-			})
-			.catch((error) => {
-				this.setState({
-					property: null,
-					isLoading: false,
-					refreshing: false,
-					gettingRequest: false,
-				});
-			});
-	};
-
-	handleDecline = (id) => {
-		Axios({
-			url: URL + "property/booking/change/" + id,
-			method: "POST",
-			data: {
-				change: "declined",
-			},
-		})
-			.then((response) => {
-				if (response && response.data) {
-					if (response.data.success) {
-						Alert.alert("Success", response.data.message);
-						this.setState({ gettingRequest: false });
-					} else {
-						Alert.alert("Error", response.data.message);
-						this.setState({ gettingRequest: false });
-					}
-				}
-				this.fetch();
-			})
-			.catch((error) => {
-				this.setState({
-					property: null,
-					isLoading: false,
-					refreshing: false,
-					gettingRequest: false,
-				});
-			});
-	};
-
 	render() {
 		return (
 			<View>
 				<Header
-					title="Booking Requests"
+					title="Approved Bookings"
 					isBack
 					navigation={this.props.navigation}
 				/>
@@ -182,42 +121,12 @@ export default class BookingDetails extends Component {
 											item.rentCost +
 											item.breakfastCost}
 									</Text>
-									<View
-										style={{
-											flexDirection: "row",
-											justifyContent: "space-between",
-											marginTop: 10,
-										}}
-									>
-										{this.state.gettingRequest ? (
-											<ActivityIndicator />
-										) : (
-											<>
-												<Button
-													loading={this.state.gettingRequest}
-													style={{ width: "45%" }}
-													color="error"
-													onPress={() => this.handleDecline(item._id)}
-												>
-													Decline
-												</Button>
-												<Button
-													loading={this.state.gettingRequest}
-													style={{ width: "45%" }}
-													color="success"
-													onPress={() => this.handleApprove(item._id)}
-												>
-													Approve
-												</Button>
-											</>
-										)}
-									</View>
 								</View>
 							);
 						})
 					) : (
 						<Text style={{ textAlign: "center", fontSize: 18 }}>
-							No booking requests received so far.
+							No approved requests received so far.
 						</Text>
 					)}
 				</ScrollView>
