@@ -26,6 +26,11 @@ import Alert from "./Alert";
 import EditApartment from "./components/EditApartment";
 import ForgotPassword from "./components/user-auth/ForgotPassword";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+	DrawerContentScrollView,
+	DrawerItemList,
+} from "@react-navigation/drawer";
+import BookingDetails from "./components/BookingDetails";
 
 const Auth = () => (
 	<AuthStack.Navigator headerMode="none">
@@ -133,7 +138,20 @@ const Drawer = createDrawerNavigator();
 const DrawerStackScreen = () => {
 	return (
 		<Drawer.Navigator initialRouteName="Auth">
-			<Drawer.Screen name="Home" component={HomeTabsScreen} />
+			<Drawer.Screen
+				name="Home"
+				component={HomeTabsScreen}
+				options={{
+					swipeEnabled: false,
+				}}
+			/>
+			<Drawer.Screen
+				name="Booking Requests"
+				component={BookingDetails}
+				options={{
+					swipeEnabled: false,
+				}}
+			/>
 		</Drawer.Navigator>
 	);
 };

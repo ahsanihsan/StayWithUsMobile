@@ -61,14 +61,20 @@ export default class index extends Component {
 		return (
 			<View style={styles.container}>
 				<View style={styles.mainHeader}>
+					<TouchableOpacity
+						onPress={() => {
+							this.props.navigation.openDrawer();
+						}}
+					>
+						<MaterialCommunityIcons
+							name="menu"
+							size={32}
+							style={{ marginRight: 20 }}
+						/>
+					</TouchableOpacity>
 					<Text style={styles.mainText}>Find your house</Text>
 					{/* <View style={styles.mainIcons}>
 						<Ionicons name="ios-search" size={32} color="gray" />
-						<MaterialCommunityIcons
-							name="filter-outline"
-							size={32}
-							color="gray"
-						/>
 					</View> */}
 				</View>
 				{isLoading ? (
@@ -212,7 +218,7 @@ const styles = StyleSheet.create({
 	mainHeader: {
 		width: "100%",
 		flexDirection: "row",
-		justifyContent: "space-between",
+		alignItems: "center",
 		padding: 20,
 	},
 	mainIcons: {

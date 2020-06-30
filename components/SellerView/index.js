@@ -66,6 +66,17 @@ export default class SellerView extends Component {
 		return (
 			<View style={styles.container}>
 				<View style={styles.mainHeader}>
+					<TouchableOpacity
+						onPress={() => {
+							this.props.navigation.openDrawer();
+						}}
+					>
+						<MaterialCommunityIcons
+							name="menu"
+							size={32}
+							style={{ marginRight: 20 }}
+						/>
+					</TouchableOpacity>
 					<Text style={styles.mainText}>Your properties</Text>
 					<View style={styles.mainIcons}>
 						{/* <Ionicons name="ios-search" size={32} color="gray" />
