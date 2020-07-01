@@ -194,32 +194,30 @@ export default class Profile extends Component {
 								>
 									Edit
 								</Button>
-								{this.state.profile.userType === "Seller" ? (
-									<Button
-										color="red"
-										uppercase={true}
-										onPress={() => {
-											Alert.alert(
-												"Confirmation",
-												"Are you sure you want to de activate your account",
-												[
-													{ text: "No" },
-													{
-														text: "Yes",
-														onPress: () => this.handleDeactivate(),
-													},
-												]
-											);
-										}}
-										style={{
-											borderRadius: 5,
-											marginTop: 10,
-											backgroundColor: "white",
-										}}
-									>
-										Deactivate Account
-									</Button>
-								) : undefined}
+								<Button
+									color="red"
+									uppercase={true}
+									onPress={() => {
+										Alert.alert(
+											"Confirmation",
+											"Are you sure you want to de activate your account",
+											[
+												{ text: "No" },
+												{
+													text: "Yes",
+													onPress: () => this.handleDeactivate(),
+												},
+											]
+										);
+									}}
+									style={{
+										borderRadius: 5,
+										marginTop: 10,
+										backgroundColor: "white",
+									}}
+								>
+									Deactivate Account
+								</Button>
 								{/* <Button
 									color="red"
 									uppercase={true}

@@ -16,12 +16,14 @@ import { Button, ActivityIndicator, FAB } from "react-native-paper";
 import { URL } from "../../Helpers/helper";
 import Axios from "axios";
 import { RefreshControl } from "react-native";
+import { SearchBar } from "react-native-elements";
 
 export default class SellerView extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			properties: [],
+			backupProperties: [],
 			isLoading: true,
 		};
 	}
@@ -38,12 +40,14 @@ export default class SellerView extends Component {
 				if (response && response.data && response.data.success) {
 					this.setState({
 						properties: response.data.message,
+						backupProperties: response.data.message,
 						isLoading: false,
 						refreshing: false,
 					});
 				} else {
 					this.setState({
 						properties: [],
+						backupProperties: [],
 						isLoading: false,
 						refreshing: false,
 					});
@@ -58,6 +62,20 @@ export default class SellerView extends Component {
 				});
 			});
 	};
+	handleSearch = (searchedText = "") => {
+		let filteredVideos = [];
+		if (this.state.backupProperties.length == 0) return filteredVideos;
+		filteredVideos = this.state.backupProperties;
+		if (searchedText) {
+			filteredVideos = this.state.backupProperties.filter((item) => {
+				const itemData = `${item.name.toUpperCase()} ${item.address.toUpperCase()}`;
+				const textData = searchedText.toUpperCase();
+				return itemData.indexOf(textData) > -1;
+			});
+		}
+		this.setState({ properties: filteredVideos });
+	};
+
 	async componentDidMount() {
 		this.fetchProperties();
 	}
@@ -91,6 +109,25 @@ export default class SellerView extends Component {
 					<ActivityIndicator />
 				) : (
 					<>
+						<SearchBar
+							placeholder="Search by name or location"
+							clearIcon
+							round
+							lightTheme
+							containerStyle={{
+								backgroundColor: "transparent",
+								borderWidth: 0,
+							}}
+							inputContainerStyle={{
+								backgroundColor: "transparent",
+								borderWidth: 0,
+							}}
+							value={this.state.searchQuery}
+							onChangeText={(text) => {
+								this.setState({ searchQuery: text });
+								this.handleSearch(text);
+							}}
+						/>
 						<Text style={{ fontSize: 16, color: "gray", marginLeft: 20 }}>
 							{this.state.properties.length} results in your area, pull to
 							refresh the properties

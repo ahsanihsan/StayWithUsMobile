@@ -42,6 +42,7 @@ export default class index extends Component {
 				} else {
 					this.setState({
 						properties: [],
+						backupProperties: [],
 						isLoading: false,
 						refreshing: false,
 					});
