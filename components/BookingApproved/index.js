@@ -27,30 +27,65 @@ export default class ApprovedRequests extends Component {
 
 	fetch = () => {
 		this.setState({ refreshing: true });
-		Axios({
-			url: URL + "property/booked/" + this.state.userId,
-			method: "GET",
-		})
-			.then((response) => {
-				if (response && response.data) {
-					if (response.data.success) {
-						this.setState({
-							bookings: response.data.message,
-							isLoading: false,
-							refreshing: false,
-						});
-					} else {
-						this.setState({
-							bookings: null,
-							isLoading: false,
-							refreshing: false,
-						});
-					}
-				}
+		if (this.state.userRole === "Seller") {
+			Axios({
+				url: URL + "property/booked/" + this.state.userId,
+				method: "GET",
 			})
-			.catch((error) => {
-				this.setState({ property: null, isLoading: false, refreshing: false });
-			});
+				.then((response) => {
+					if (response && response.data) {
+						if (response.data.success) {
+							this.setState({
+								bookings: response.data.message,
+								isLoading: false,
+								refreshing: false,
+							});
+						} else {
+							this.setState({
+								bookings: null,
+								isLoading: false,
+								refreshing: false,
+							});
+						}
+					}
+				})
+				.catch((error) => {
+					this.setState({
+						property: null,
+						isLoading: false,
+						refreshing: false,
+					});
+				});
+		} else {
+			Axios({
+				url: URL + "property/booked/buyer/" + this.state.userId,
+				method: "GET",
+			})
+				.then((response) => {
+					if (response && response.data) {
+						if (response.data.success) {
+							this.setState({
+								bookings: response.data.message,
+								isLoading: false,
+								refreshing: false,
+							});
+						} else {
+							this.setState({
+								bookings: null,
+								isLoading: false,
+								refreshing: false,
+							});
+						}
+					}
+				})
+				.catch((error) => {
+					this.setState({
+						property: null,
+						isLoading: false,
+						refreshing: false,
+					});
+				});
+		}
 	};
 
 	render() {

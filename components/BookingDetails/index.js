@@ -6,6 +6,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { URL } from "../../Helpers/helper";
 import { Button } from "galio-framework";
 import { ScrollView } from "react-native-gesture-handler";
+import moment from "moment";
 
 export default class BookingDetails extends Component {
 	constructor(props) {
@@ -27,30 +28,65 @@ export default class BookingDetails extends Component {
 
 	fetch = () => {
 		this.setState({ refreshing: true });
-		Axios({
-			url: URL + "property/booking/" + this.state.userId,
-			method: "GET",
-		})
-			.then((response) => {
-				if (response && response.data) {
-					if (response.data.success) {
-						this.setState({
-							bookings: response.data.message,
-							isLoading: false,
-							refreshing: false,
-						});
-					} else {
-						this.setState({
-							bookings: null,
-							isLoading: false,
-							refreshing: false,
-						});
-					}
-				}
+		if (this.state.userRole === "Seller") {
+			Axios({
+				url: URL + "property/booking/" + this.state.userId,
+				method: "GET",
 			})
-			.catch((error) => {
-				this.setState({ property: null, isLoading: false, refreshing: false });
-			});
+				.then((response) => {
+					if (response && response.data) {
+						if (response.data.success) {
+							this.setState({
+								bookings: response.data.message,
+								isLoading: false,
+								refreshing: false,
+							});
+						} else {
+							this.setState({
+								bookings: null,
+								isLoading: false,
+								refreshing: false,
+							});
+						}
+					}
+				})
+				.catch((error) => {
+					this.setState({
+						property: null,
+						isLoading: false,
+						refreshing: false,
+					});
+				});
+		} else {
+			Axios({
+				url: URL + "property/booking/buyer/" + this.state.userId,
+				method: "GET",
+			})
+				.then((response) => {
+					if (response && response.data) {
+						if (response.data.success) {
+							this.setState({
+								bookings: response.data.message,
+								isLoading: false,
+								refreshing: false,
+							});
+						} else {
+							this.setState({
+								bookings: null,
+								isLoading: false,
+								refreshing: false,
+							});
+						}
+					}
+				})
+				.catch((error) => {
+					this.setState({
+						property: null,
+						isLoading: false,
+						refreshing: false,
+					});
+				});
+		}
 	};
 
 	handleApprove = (id) => {
@@ -193,22 +229,72 @@ export default class BookingDetails extends Component {
 											<ActivityIndicator />
 										) : (
 											<>
-												<Button
-													loading={this.state.gettingRequest}
-													style={{ width: "45%" }}
-													color="error"
-													onPress={() => this.handleDecline(item._id)}
-												>
-													Decline
-												</Button>
-												<Button
-													loading={this.state.gettingRequest}
-													style={{ width: "45%" }}
-													color="success"
-													onPress={() => this.handleApprove(item._id)}
-												>
-													Approve
-												</Button>
+												{this.state.userRole === "Buyer" ? (
+													<Button
+														loading={this.state.gettingRequest}
+														style={{ width: "100%" }}
+														color="error"
+														onPress={() => {
+															let createdAt = moment(item.createdAt).add(
+																1,
+																"day"
+															);
+															let currentTime = moment();
+															if (currentTime < createdAt) {
+																Alert.alert(
+																	"Confirmation",
+																	"Are you sure you want to cancel your order?",
+																	[
+																		{ text: "No" },
+																		{
+																			text: "Yes",
+																			onPress: () =>
+																				this.handleDecline(item._id),
+																		},
+																	]
+																);
+															} else {
+																Alert.alert(
+																	"You cannot cancel this request, because 24 hours have passed."
+																);
+															}
+														}}
+													>
+														Cancel Order
+													</Button>
+												) : (
+													<>
+														<Button
+															loading={this.state.gettingRequest}
+															style={{ width: "45%" }}
+															color="error"
+															onPress={() => {
+																let createdAt = moment(item.createdAt).add(
+																	1,
+																	"day"
+																);
+																let currentTime = moment();
+																if (currentTime < createdAt) {
+																	this.handleDecline(item._id);
+																} else {
+																	Alert.alert(
+																		"You cannot cancel this request, because 24 hours have passed."
+																	);
+																}
+															}}
+														>
+															Decline
+														</Button>
+														<Button
+															loading={this.state.gettingRequest}
+															style={{ width: "45%" }}
+															color="success"
+															onPress={() => this.handleApprove(item._id)}
+														>
+															Approve
+														</Button>
+													</>
+												)}
 											</>
 										)}
 									</View>

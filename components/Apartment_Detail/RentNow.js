@@ -127,10 +127,12 @@ export default class RentNow extends Component {
 			.then((response) => {
 				if (response && response.data) {
 					if (response.data.success) {
-						Alert.alert("Success", response.data.message, {
-							text: "OK",
-							onPress: () => this.props.navigation.goBack(),
-						});
+						Alert.alert("Success", response.data.message, [
+							{
+								text: "OK",
+								onPress: () => this.props.navigation.goBack(),
+							},
+						]);
 					} else {
 						Alert.alert("Error", response.data.message, [
 							{

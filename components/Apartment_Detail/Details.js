@@ -242,11 +242,12 @@ export default class Details extends Component {
 										}}
 									>
 										<Rating
-											readonly={this.state.userRole === "Seller" ? true : false}
+											// readonly={this.state.userRole === "Seller" ? true : false}
+											readonly
 											startingValue={this.state.rating}
-											onFinishRating={(rating) => {
-												this.handleRatings(rating);
-											}}
+											// onFinishRating={(rating) => {
+											// 	this.handleRatings(rating);
+											// }}
 											style={{
 												alignSelf: "flex-start",
 												backgroundColor: "transparent",
