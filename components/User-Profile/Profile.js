@@ -136,6 +136,25 @@ export default class Profile extends Component {
 			});
 	};
 
+	handleDeactivate = () => {
+		Axios({
+			method: "GET",
+			url: URL + "users/deactivate/" + this.state.profile._id,
+		})
+			.then((response) => {
+				if (response && response.data) {
+					if (response.data.success) {
+						this.props.navigation.replace("auth");
+					} else {
+						Alert.alert(response.data.message);
+					}
+				}
+			})
+			.catch((error) => {
+				this.setState({ wishList: [], isLoading: false, refreshing: false });
+			});
+	};
+
 	render() {
 		const { profile } = this.state;
 		return (
@@ -174,6 +193,27 @@ export default class Profile extends Component {
 									}}
 								>
 									Edit
+								</Button>
+								<Button
+									color="red"
+									uppercase={true}
+									onPress={() => {
+										Alert.alert(
+											"Confirmation",
+											"Are you sure you want to de activate your account",
+											[
+												{ text: "No" },
+												{ text: "Yes", onPress: () => this.handleDeactivate() },
+											]
+										);
+									}}
+									style={{
+										borderRadius: 5,
+										marginTop: 10,
+										backgroundColor: "white",
+									}}
+								>
+									Deactivate Account
 								</Button>
 								{/* <Button
 									color="red"

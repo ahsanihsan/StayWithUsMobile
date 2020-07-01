@@ -73,9 +73,6 @@ export default class index extends Component {
 						/>
 					</TouchableOpacity>
 					<Text style={styles.mainText}>Find your house</Text>
-					{/* <View style={styles.mainIcons}>
-						<Ionicons name="ios-search" size={32} color="gray" />
-					</View> */}
 				</View>
 				{isLoading ? (
 					<ActivityIndicator />
@@ -150,57 +147,6 @@ export default class index extends Component {
 						</ScrollView>
 					</>
 				)}
-
-				{/* <View style={{ flex: 1, marginHorizontal: 20, marginTop: 40 }}>
-					<Text style={{ fontSize: 28, fontWeight: "bold", marginBottom: 20 }}>
-						Populer
-					</Text>
-					<ScrollView
-						horizontal={true}
-						showsHorizontalScrollIndicator={false}
-						style={{ flex: 1 }}
-					>
-						<Image
-							source={{
-								uri:
-									"https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-							}}
-							style={{
-								width: 200,
-								height: 200,
-								marginRight: 10,
-								borderRadius: 15,
-								resizeMode: "cover",
-							}}
-						/>
-						<Image
-							source={{
-								uri:
-									"https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-							}}
-							style={{
-								width: 200,
-								height: 200,
-								marginRight: 10,
-								borderRadius: 15,
-								resizeMode: "cover",
-							}}
-						/>
-						<Image
-							source={{
-								uri:
-									"https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-							}}
-							style={{
-								width: 200,
-								height: 200,
-								marginRight: 10,
-								borderRadius: 15,
-								resizeMode: "cover",
-							}}
-						/>
-					</ScrollView>
-				</View> */}
 			</View>
 		);
 	}
