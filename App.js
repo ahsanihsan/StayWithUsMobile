@@ -32,6 +32,7 @@ import {
 } from "@react-navigation/drawer";
 import BookingDetails from "./components/BookingDetails";
 import ApprovedRequests from "./components/BookingApproved";
+import ContactUs from "./components/HomeScreen/ContactUs";
 
 const Auth = () => (
 	<AuthStack.Navigator headerMode="none">
@@ -139,27 +140,10 @@ const Drawer = createDrawerNavigator();
 const DrawerStackScreen = () => {
 	return (
 		<Drawer.Navigator initialRouteName="Auth">
-			<Drawer.Screen
-				name="Home"
-				component={HomeTabsScreen}
-				options={{
-					swipeEnabled: false,
-				}}
-			/>
-			<Drawer.Screen
-				name="Booking Requests"
-				component={BookingDetails}
-				options={{
-					swipeEnabled: false,
-				}}
-			/>
-			<Drawer.Screen
-				name="Approved Bookings"
-				component={ApprovedRequests}
-				options={{
-					swipeEnabled: false,
-				}}
-			/>
+			<Drawer.Screen name="Home" component={HomeTabsScreen} />
+			<Drawer.Screen name="Booking Requests" component={BookingDetails} />
+			<Drawer.Screen name="Approved Bookings" component={ApprovedRequests} />
+			<Drawer.Screen name="Contact Us" component={ContactUs} />
 		</Drawer.Navigator>
 	);
 };
