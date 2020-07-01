@@ -151,13 +151,14 @@ export default class Signup extends Component {
 						alignSelf: "center",
 					}}
 				>
-					<Text style={{ fontSize: 17, marginRight: 5 }}>Seller</Text>
+					<Text style={{ fontSize: 17, marginRight: 10 }}>Buyer</Text>
 					<Switch
 						onValueChange={(seller) => {
 							this.setState({ seller });
 						}}
 						value={this.state.seller}
 					/>
+					<Text style={{ fontSize: 17, marginLeft: 10 }}>Seller</Text>
 				</View>
 				<Button
 					icon="account"

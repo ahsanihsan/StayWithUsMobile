@@ -20,8 +20,8 @@ export default class ForgotPassword extends Component {
 			text: "",
 			error: false,
 			loading: false,
-			email: "ahsan.ihsan@outlook.com",
-			password: "ahsan11343",
+			email: "",
+			password: "",
 			isLoading: true,
 			emailSent: false,
 			codeIsCorrect: false,
@@ -400,6 +400,7 @@ export default class ForgotPassword extends Component {
 // Add buyer deactivation
 // Search by name, text location
 // Dummy values clear
+
 // **** NOT APPROVED
 // Push notification
 // Google maps (Nearby Apartment, Map View)

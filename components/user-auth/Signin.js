@@ -19,8 +19,8 @@ export default class Signin extends Component {
 			text: "",
 			error: false,
 			loading: false,
-			email: "buyer@test.com",
-			password: "ahsan11343",
+			email: "",
+			password: "",
 			isLoading: true,
 		};
 	}
