@@ -265,7 +265,7 @@ export default class ForgotPassword extends Component {
 							right
 							rounded
 							style={{ width: "90%", alignSelf: "center" }}
-							password={true}
+							password
 							iconSize={16}
 							iconColor="grey"
 							value={this.state.newPassword}
@@ -396,3 +396,10 @@ export default class ForgotPassword extends Component {
 		return <View />;
 	}
 }
+
+// Add buyer deactivation
+// Search by name, text location
+// Dummy values clear
+// **** NOT APPROVED
+// Push notification
+// Google maps (Nearby Apartment, Map View)
