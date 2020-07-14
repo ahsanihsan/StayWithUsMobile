@@ -11,7 +11,7 @@ import { Text, Input } from "galio-framework";
 import { TextInput, Button, IconButton } from "react-native-paper";
 import * as Animatable from "react-native-animatable";
 import Axios from "axios";
-import { URL } from "../../Helpers/helper";
+import { URL, registerForPushNotificationsAsync } from "../../Helpers/helper";
 export default class Signin extends Component {
 	constructor(props) {
 		super(props);
@@ -23,6 +23,11 @@ export default class Signin extends Component {
 			password: "",
 			isLoading: true,
 		};
+	}
+
+	async componentDidMount() {
+		let token = await registerForPushNotificationsAsync();
+		this.setState({ token });
 	}
 
 	handleSubmit = () => {
@@ -42,6 +47,7 @@ export default class Signin extends Component {
 			data: {
 				email,
 				password,
+				pushNotificationToken: this.state.token,
 			},
 		})
 			.then((response) => {

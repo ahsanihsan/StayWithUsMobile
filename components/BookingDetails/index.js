@@ -269,18 +269,29 @@ export default class BookingDetails extends Component {
 															style={{ width: "45%" }}
 															color="error"
 															onPress={() => {
-																let createdAt = moment(item.createdAt).add(
-																	1,
-																	"day"
+																Alert.alert(
+																	"Confirmation",
+																	"Are you sure you want to cancel your order?",
+																	[
+																		{ text: "No" },
+																		{
+																			text: "Yes",
+																			onPress: () => {
+																				let createdAt = moment(
+																					item.createdAt
+																				).add(1, "day");
+																				let currentTime = moment();
+																				if (currentTime < createdAt) {
+																					this.handleDecline(item._id);
+																				} else {
+																					Alert.alert(
+																						"You cannot cancel this request, because 24 hours have passed."
+																					);
+																				}
+																			},
+																		},
+																	]
 																);
-																let currentTime = moment();
-																if (currentTime < createdAt) {
-																	this.handleDecline(item._id);
-																} else {
-																	Alert.alert(
-																		"You cannot cancel this request, because 24 hours have passed."
-																	);
-																}
 															}}
 														>
 															Decline
@@ -289,7 +300,20 @@ export default class BookingDetails extends Component {
 															loading={this.state.gettingRequest}
 															style={{ width: "45%" }}
 															color="success"
-															onPress={() => this.handleApprove(item._id)}
+															onPress={() => {
+																Alert.alert(
+																	"Confirmation",
+																	"Are you sure you want to cancel your order?",
+																	[
+																		{ text: "No" },
+																		{
+																			text: "Yes",
+																			onPress: () =>
+																				this.handleApprove(item._id),
+																		},
+																	]
+																);
+															}}
 														>
 															Approve
 														</Button>

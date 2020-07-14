@@ -134,6 +134,9 @@ export default class RentNow extends Component {
 							},
 						]);
 					} else {
+						console.log("*******");
+						console.log(response.data);
+						console.log("*******");
 						Alert.alert("Error", response.data.message, [
 							{
 								text: "OK",
@@ -233,11 +236,11 @@ export default class RentNow extends Component {
 									alignItems: "center",
 								}}
 							>
-								<Text style={{ fontSize: 20, fontWeight: "500" }}>
+								<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
 									Avail Breakfast
 								</Text>
 								<Switch
-									style={{ marginLeft: 20 }}
+									style={{ flex: 2 }}
 									value={this.state.breakfast}
 									onValueChange={(breakfast) => this.setState({ breakfast })}
 								/>
@@ -249,11 +252,11 @@ export default class RentNow extends Component {
 									alignItems: "center",
 								}}
 							>
-								<Text style={{ fontSize: 20, fontWeight: "500" }}>
+								<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
 									Avail Lunch
 								</Text>
 								<Switch
-									style={{ marginLeft: 20 }}
+									style={{ flex: 2 }}
 									value={this.state.lunch}
 									onValueChange={(lunch) => this.setState({ lunch })}
 								/>
@@ -265,11 +268,11 @@ export default class RentNow extends Component {
 									alignItems: "center",
 								}}
 							>
-								<Text style={{ fontSize: 20, fontWeight: "500" }}>
+								<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
 									Avail Dinner
 								</Text>
 								<Switch
-									style={{ marginLeft: 20 }}
+									style={{ flex: 2 }}
 									value={this.state.dinner}
 									onValueChange={(dinner) => this.setState({ dinner })}
 								/>
@@ -281,11 +284,11 @@ export default class RentNow extends Component {
 									alignItems: "center",
 								}}
 							>
-								<Text style={{ fontSize: 20, fontWeight: "500" }}>
+								<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
 									Avail Vehicle
 								</Text>
 								<Switch
-									style={{ marginLeft: 20 }}
+									style={{ flex: 2 }}
 									value={this.state.vehicle}
 									onValueChange={(vehicle) => this.setState({ vehicle })}
 								/>
@@ -482,7 +485,21 @@ export default class RentNow extends Component {
 										fontWeight: "bold",
 									}}
 									mode="contained"
-									onPress={() => this.handleConfirmation()}
+									onPress={() => {
+										Alert.alert(
+											"Confirmation",
+											"Are you sure you would like to proceed with the booking?",
+											[
+												{
+													text: "Yes",
+													onPress: () => this.handleConfirmation(),
+												},
+												{
+													text: "No",
+												},
+											]
+										);
+									}}
 								>
 									Confirm order
 								</Button>

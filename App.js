@@ -33,6 +33,7 @@ import {
 import BookingDetails from "./components/BookingDetails";
 import ApprovedRequests from "./components/BookingApproved";
 import ContactUs from "./components/HomeScreen/ContactUs";
+import TermsAndServices from "./components/TermsAndServices";
 
 const Auth = () => (
 	<AuthStack.Navigator headerMode="none">
@@ -144,6 +145,7 @@ const DrawerStackScreen = () => {
 			<Drawer.Screen name="Booking Requests" component={BookingDetails} />
 			<Drawer.Screen name="Approved Bookings" component={ApprovedRequests} />
 			<Drawer.Screen name="Contact Us" component={ContactUs} />
+			<Drawer.Screen name="Terms of Services" component={TermsAndServices} />
 		</Drawer.Navigator>
 	);
 };
