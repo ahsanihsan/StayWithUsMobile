@@ -2,8 +2,9 @@ import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import { Notifications } from "expo";
 import { Alert } from "react-native";
+import Axios from "axios";
 
-export const URL = "http://063569cd652c.ngrok.io/";
+export const URL = "http://025bb3f698cf.ngrok.io/";
 
 export async function registerForPushNotificationsAsync() {
 	let token;
@@ -34,3 +35,17 @@ export async function registerForPushNotificationsAsync() {
 	}
 	return token;
 }
+
+export const sendNotification = (title, body, token) => {
+	Axios({
+		url: URL + "users/notification",
+		method: "POST",
+		data: {
+			title,
+			body,
+			token,
+		},
+	})
+		.then((response) => {})
+		.catch((error) => {});
+};

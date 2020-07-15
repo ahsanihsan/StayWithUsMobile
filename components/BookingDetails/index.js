@@ -36,6 +36,7 @@ export default class BookingDetails extends Component {
 				.then((response) => {
 					if (response && response.data) {
 						if (response.data.success) {
+							console.log(response.data);
 							this.setState({
 								bookings: response.data.message,
 								isLoading: false,
@@ -248,8 +249,12 @@ export default class BookingDetails extends Component {
 																		{ text: "No" },
 																		{
 																			text: "Yes",
-																			onPress: () =>
-																				this.handleDecline(item._id),
+																			onPress: () => {
+																				console.log("*****");
+																				console.log(item);
+																				console.log("*****");
+																				// this.handleDecline(item._id);
+																			},
 																		},
 																	]
 																);

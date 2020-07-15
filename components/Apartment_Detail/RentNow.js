@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { ActivityIndicator, Switch } from "react-native-paper";
 import Header from "../../ReuseableComponents/Header";
-import { URL } from "../../Helpers/helper";
+import { URL, sendNotification } from "../../Helpers/helper";
 import Axios from "axios";
 import Modal from "react-native-modal";
 import { Button } from "galio-framework";
@@ -118,7 +118,9 @@ export default class RentNow extends Component {
 	}
 
 	handleConfirmation = async () => {
-		this.setState({ bill: "" });
+		console.log("*******");
+		console.log(this.state.bill);
+		console.log("*******");
 		Axios({
 			url: URL + "property/booking",
 			method: "POST",
@@ -127,6 +129,14 @@ export default class RentNow extends Component {
 			.then((response) => {
 				if (response && response.data) {
 					if (response.data.success) {
+						let token = this.state.property.seller.pushNotificationToken;
+						sendNotification(
+							"Booking",
+							"You received a request for your property named as " +
+								this.state.property.name +
+								", visit the requests screen to approve or reject",
+							token
+						);
 						Alert.alert("Success", response.data.message, [
 							{
 								text: "OK",
@@ -134,9 +144,6 @@ export default class RentNow extends Component {
 							},
 						]);
 					} else {
-						console.log("*******");
-						console.log(response.data);
-						console.log("*******");
 						Alert.alert("Error", response.data.message, [
 							{
 								text: "OK",
