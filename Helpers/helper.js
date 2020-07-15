@@ -49,3 +49,26 @@ export const sendNotification = (title, body, token) => {
 		.then((response) => {})
 		.catch((error) => {});
 };
+
+const degreeToRadian = (degree) => {
+	var pi = Math.PI;
+	return degree * (pi / 180);
+};
+
+export const getDistance = (latitude1, longitude1, latitude2, longitude2) => {
+	const earth_radius = 6371;
+
+	let dLat = degreeToRadian(latitude2 - latitude1);
+	let dLon = degreeToRadian(longitude2 - longitude1);
+
+	let a =
+		Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+		Math.cos(degreeToRadian(latitude1)) *
+			Math.cos(degreeToRadian(latitude2)) *
+			Math.sin(dLon / 2) *
+			Math.sin(dLon / 2);
+	let c = 2 * Math.asin(Math.sqrt(a));
+	let d = earth_radius * c;
+
+	return d;
+};

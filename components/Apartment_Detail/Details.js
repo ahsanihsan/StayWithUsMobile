@@ -26,6 +26,7 @@ import Modal from "react-native-modal";
 import { Button } from "galio-framework";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Input } from "galio-framework";
+import MapView, { Marker } from "react-native-maps";
 
 export default class Details extends Component {
 	constructor(props) {
@@ -468,6 +469,34 @@ export default class Details extends Component {
 												{property.description}
 											</Text>
 										</View>
+										<Text
+											style={{
+												fontSize: 28,
+												fontWeight: "bold",
+												marginBottom: 10,
+											}}
+										>
+											Location
+										</Text>
+										<MapView
+											initialRegion={{
+												latitude: this.state.property.latitude,
+												longitude: this.state.property.longitude,
+												latitudeDelta: 0.0122,
+												longitudeDelta: 0.0121,
+											}}
+											style={{
+												width: "100%",
+												height: Dimensions.get("window").height / 2,
+											}}
+										>
+											<Marker
+												coordinate={{
+													latitude: this.state.property.latitude,
+													longitude: this.state.property.longitude,
+												}}
+											/>
+										</MapView>
 										<View
 											style={{
 												flexDirection: "row",

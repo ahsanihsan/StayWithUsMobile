@@ -175,19 +175,19 @@ export default class SellerView extends Component {
 														>
 															{item.address}
 														</Text>
-													</View>
-													<Text>
-														<Text
-															style={{
-																fontSize: 25,
-																color: "#0652DD",
-																fontWeight: "bold",
-															}}
-														>
-															{item.rent}
+														<Text style={{ textAlign: "right" }}>
+															<Text
+																style={{
+																	fontSize: 25,
+																	color: "#0652DD",
+																	fontWeight: "bold",
+																}}
+															>
+																{item.rent}
+															</Text>
+															<Text> PKR</Text>
 														</Text>
-														<Text> PKR</Text>
-													</Text>
+													</View>
 												</View>
 											</View>
 										</View>

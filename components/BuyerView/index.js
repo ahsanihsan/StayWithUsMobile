@@ -33,12 +33,19 @@ export default class index extends Component {
 		})
 			.then((response) => {
 				if (response && response.data && response.data.success) {
-					this.setState({
-						properties: response.data.message,
-						backupProperties: response.data.message,
-						isLoading: false,
-						refreshing: false,
+					let properties = response.data.message;
+					properties.map((item) => {
+						let propLat = item.latitude;
+						let propLong = item.longitude;
+						console.log(propLat);
+						console.log(propLong);
 					});
+					// this.setState({
+					// 	properties: response.data.message,
+					// 	backupProperties: response.data.message,
+					// 	isLoading: false,
+					// 	refreshing: false,
+					// });
 				} else {
 					this.setState({
 						properties: [],

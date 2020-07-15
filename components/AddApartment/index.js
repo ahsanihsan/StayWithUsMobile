@@ -17,6 +17,9 @@ import Axios from "axios";
 import { URL } from "../../Helpers/helper";
 import Modal from "react-native-modal";
 import MapView, { Marker } from "react-native-maps";
+import Geocoder from "react-native-geocoding";
+
+Geocoder.init("AIzaSyAlupYU3lnF4YFTMl7sWl9Sv58onHMb4xI");
 
 export default class AddApartment extends Component {
 	constructor(props) {
@@ -57,6 +60,15 @@ export default class AddApartment extends Component {
 			}
 		}
 	}
+
+	getMapCoordinates = (long, lat) => {
+		Geocoder.from({ latitude: lat, longitude: long })
+			.then((json) => {
+				var addressComponent = json.results[0].formatted_address;
+				this.setState({ address: addressComponent });
+			})
+			.catch((error) => console.warn(error));
+	};
 
 	handleSubmit = async () => {
 		const {
@@ -188,12 +200,12 @@ export default class AddApartment extends Component {
 								value={this.state.description}
 								onChangeText={(description) => this.setState({ description })}
 							/>
-							<Input
+							{/* <Input
 								placeholder="Enter apartment address"
 								style={{ alignSelf: "center" }}
 								value={this.state.address}
 								onChangeText={(address) => this.setState({ address })}
-							/>
+							/> */}
 							<Text style={{ paddingTop: 5, paddingBottom: 5, fontSize: 15 }}>
 								Area (Square Feet)
 							</Text>
@@ -316,11 +328,9 @@ export default class AddApartment extends Component {
 								Select Location
 							</Button>
 							<Text style={{ fontSize: 15, marginTop: 20 }}>
-								Coordinates:{" "}
+								Location:{" "}
 								{this.state.coordinates
-									? this.state.coordinates.longitude +
-									  ", " +
-									  this.state.coordinates.latitude
+									? this.state.address
 									: "Please select your location"}
 							</Text>
 							<Button
@@ -408,6 +418,7 @@ export default class AddApartment extends Component {
 								width: "100%",
 								borderRadius: 10,
 								alignSelf: "center",
+								padding: 10,
 							}}
 						>
 							<MapView
@@ -418,7 +429,9 @@ export default class AddApartment extends Component {
 									longitudeDelta: 1.1121,
 								}}
 								onPress={(event) => {
-									this.setState({ coordinates: event.nativeEvent.coordinate });
+									let coor = event.nativeEvent.coordinate;
+									this.setState({ coordinates: coor });
+									this.getMapCoordinates(coor.longitude, coor.latitude);
 								}}
 								style={{
 									width: "100%",
@@ -426,13 +439,16 @@ export default class AddApartment extends Component {
 								}}
 							>
 								{this.state.coordinates ? (
-									<Marker
-										coordinate={this.state.coordinates}
-										// title={marker.title}
-										// description={marker.description}
-									/>
+									<Marker coordinate={this.state.coordinates} />
 								) : undefined}
 							</MapView>
+							<Button
+								color="success"
+								onPress={() => this.setState({ showMapModal: false })}
+								style={{ width: "100%", marginTop: 20 }}
+							>
+								Done
+							</Button>
 						</View>
 					</Modal>
 				</ScrollView>
