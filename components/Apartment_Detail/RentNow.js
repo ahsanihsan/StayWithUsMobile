@@ -6,6 +6,7 @@ import {
 	StyleSheet,
 	AsyncStorage,
 	Alert,
+	Picker,
 } from "react-native";
 import { ActivityIndicator, Switch } from "react-native-paper";
 import Header from "../../ReuseableComponents/Header";
@@ -28,6 +29,7 @@ export default class RentNow extends Component {
 			breakfast: false,
 			dateTextCheckIn: "",
 			dateTextCheckOut: "",
+			paymentMethod: "cash",
 		};
 	}
 
@@ -330,186 +332,270 @@ export default class RentNow extends Component {
 					>
 						{this.state.bill ? (
 							<>
-								<Text
-									style={{
-										textAlign: "center",
-										fontSize: 25,
-										fontWeight: "bold",
-									}}
-								>
-									Your Bill
-								</Text>
-								<View style={{ marginTop: 20, marginBottom: 20 }}>
-									<Text
+								{this.state.showPaymentModal ? (
+									<View
 										style={{
-											fontSize: 15,
-											fontWeight: "600",
-											marginTop: 10,
-											marginBottom: 10,
+											backgroundColor: "#fff",
+											width: "100%",
+											padding: 20,
+											borderRadius: 10,
+											alignSelf: "center",
+											zIndex: 100000,
 										}}
 									>
-										Starting Date:{" "}
-										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-											{moment(bill.checkInDate).format("MMMM Do YYYY")}
-										</Text>
-									</Text>
-									<Text
-										style={{
-											fontSize: 15,
-											fontWeight: "600",
-											marginTop: 10,
-											marginBottom: 10,
-										}}
-									>
-										Ending Date:{" "}
 										<Text
 											style={{
+												textAlign: "center",
 												fontSize: 20,
 												fontWeight: "bold",
 											}}
 										>
-											{moment(bill.checkOutDate).format("MMMM Do YYYY")}
+											How would you like to pay?
 										</Text>
-									</Text>
-									<Text
-										style={{
-											fontSize: 15,
-											fontWeight: "600",
-											marginTop: 10,
-											marginBottom: 10,
-										}}
-									>
-										Total Days:{" "}
+										<Picker
+											selectedValue={this.state.paymentMethod}
+											style={{ height: 200, width: "100%" }}
+											onValueChange={(itemValue, itemIndex) =>
+												this.setState({ paymentMethod: itemValue })
+											}
+										>
+											<Picker.Item label="Cash" value="cash" />
+											<Picker.Item label="Credit / Debit Card" value="credit" />
+										</Picker>
+										<Button
+											style={{
+												padding: 10,
+												borderRadius: 20,
+												backgroundColor: "#0652DD",
+												marginBottom: 10,
+												width: "100%",
+											}}
+											labelStyle={{
+												fontSize: 18,
+												fontWeight: "bold",
+											}}
+											mode="contained"
+											onPress={() => {
+												if (this.state.paymentMethod === "cash") {
+													Alert.alert(
+														"Confirmation",
+														"Are you sure you would like to proceed with the booking?",
+														[
+															{
+																text: "Yes",
+																onPress: () => this.handleConfirmation(),
+															},
+															{
+																text: "No",
+															},
+														]
+													);
+												} else {
+													Alert.alert(
+														"Wait",
+														"We will be bringing credit/debit card option for you soon.",
+														[
+															{
+																text: "Ok",
+															},
+														]
+													);
+												}
+												this.setState({
+													showPaymentModal: true,
+												});
+											}}
+										>
+											Confirm order
+										</Button>
+									</View>
+								) : (
+									<>
 										<Text
 											style={{
-												fontSize: 20,
+												textAlign: "center",
+												fontSize: 25,
 												fontWeight: "bold",
 											}}
 										>
-											{bill.totalDaysStay}
+											Your Bill
 										</Text>
-									</Text>
-									<Text
-										style={{
-											fontSize: 15,
-											fontWeight: "600",
-											marginTop: 10,
-											marginBottom: 10,
-										}}
-									>
-										Rent:{" "}
-										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-											{bill.rentCost}
-										</Text>{" "}
-										PKR
-									</Text>
-									<Text
-										style={{
-											fontSize: 15,
-											fontWeight: "600",
-											marginTop: 10,
-											marginBottom: 10,
-										}}
-									>
-										Breakfast:{" "}
-										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-											{bill.breakfastCost}
-										</Text>{" "}
-										PKR
-									</Text>
-									<Text
-										style={{
-											fontSize: 15,
-											fontWeight: "600",
-											marginTop: 10,
-											marginBottom: 10,
-										}}
-									>
-										Lunch:{" "}
-										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-											{bill.lunchCost}
-										</Text>{" "}
-										PKR
-									</Text>
-									<Text
-										style={{
-											fontSize: 15,
-											fontWeight: "600",
-											marginTop: 10,
-											marginBottom: 10,
-										}}
-									>
-										Dinner:{" "}
-										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-											{bill.dinnerCost}
-										</Text>{" "}
-										PKR
-									</Text>
-									<Text
-										style={{
-											fontSize: 15,
-											fontWeight: "600",
-											marginTop: 10,
-											marginBottom: 10,
-										}}
-									>
-										Vehicle:{" "}
-										<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-											{bill.vehicleCost}
-										</Text>{" "}
-										PKR
-									</Text>
-									<Text
-										style={{
-											fontSize: 15,
-											fontWeight: "600",
-											marginTop: 10,
-											marginBottom: 10,
-											textAlign: "right",
-										}}
-									>
-										Total Bill:{" "}
-										<Text style={{ fontSize: 22, fontWeight: "bold" }}>
-											{bill.dinnerCost +
-												bill.breakfastCost +
-												bill.lunchCost +
-												bill.rentCost +
-												bill.vehicleCost}
-										</Text>{" "}
-										PKR
-									</Text>
-								</View>
-								<Button
-									style={{
-										padding: 10,
-										borderRadius: 20,
-										backgroundColor: "#0652DD",
-										marginBottom: 10,
-										width: "100%",
-									}}
-									labelStyle={{
-										fontSize: 18,
-										fontWeight: "bold",
-									}}
-									mode="contained"
-									onPress={() => {
-										Alert.alert(
-											"Confirmation",
-											"Are you sure you would like to proceed with the booking?",
-											[
-												{
-													text: "Yes",
-													onPress: () => this.handleConfirmation(),
-												},
-												{
-													text: "No",
-												},
-											]
-										);
-									}}
-								>
-									Confirm order
-								</Button>
+										<View style={{ marginTop: 20, marginBottom: 20 }}>
+											<Text
+												style={{
+													fontSize: 15,
+													fontWeight: "600",
+													marginTop: 10,
+													marginBottom: 10,
+												}}
+											>
+												Starting Date:{" "}
+												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+													{moment(bill.checkInDate).format("MMMM Do YYYY")}
+												</Text>
+											</Text>
+											<Text
+												style={{
+													fontSize: 15,
+													fontWeight: "600",
+													marginTop: 10,
+													marginBottom: 10,
+												}}
+											>
+												Ending Date:{" "}
+												<Text
+													style={{
+														fontSize: 20,
+														fontWeight: "bold",
+													}}
+												>
+													{moment(bill.checkOutDate).format("MMMM Do YYYY")}
+												</Text>
+											</Text>
+											<Text
+												style={{
+													fontSize: 15,
+													fontWeight: "600",
+													marginTop: 10,
+													marginBottom: 10,
+												}}
+											>
+												Total Days:{" "}
+												<Text
+													style={{
+														fontSize: 20,
+														fontWeight: "bold",
+													}}
+												>
+													{bill.totalDaysStay}
+												</Text>
+											</Text>
+											<Text
+												style={{
+													fontSize: 15,
+													fontWeight: "600",
+													marginTop: 10,
+													marginBottom: 10,
+												}}
+											>
+												Rent:{" "}
+												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+													{bill.rentCost}
+												</Text>{" "}
+												PKR
+											</Text>
+											<Text
+												style={{
+													fontSize: 15,
+													fontWeight: "600",
+													marginTop: 10,
+													marginBottom: 10,
+												}}
+											>
+												Breakfast:{" "}
+												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+													{bill.breakfastCost}
+												</Text>{" "}
+												PKR
+											</Text>
+											<Text
+												style={{
+													fontSize: 15,
+													fontWeight: "600",
+													marginTop: 10,
+													marginBottom: 10,
+												}}
+											>
+												Lunch:{" "}
+												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+													{bill.lunchCost}
+												</Text>{" "}
+												PKR
+											</Text>
+											<Text
+												style={{
+													fontSize: 15,
+													fontWeight: "600",
+													marginTop: 10,
+													marginBottom: 10,
+												}}
+											>
+												Dinner:{" "}
+												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+													{bill.dinnerCost}
+												</Text>{" "}
+												PKR
+											</Text>
+											<Text
+												style={{
+													fontSize: 15,
+													fontWeight: "600",
+													marginTop: 10,
+													marginBottom: 10,
+												}}
+											>
+												Vehicle:{" "}
+												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+													{bill.vehicleCost}
+												</Text>{" "}
+												PKR
+											</Text>
+											<Text
+												style={{
+													fontSize: 15,
+													fontWeight: "600",
+													marginTop: 10,
+													marginBottom: 10,
+													textAlign: "right",
+												}}
+											>
+												Total Bill:{" "}
+												<Text style={{ fontSize: 22, fontWeight: "bold" }}>
+													{bill.dinnerCost +
+														bill.breakfastCost +
+														bill.lunchCost +
+														bill.rentCost +
+														bill.vehicleCost}
+												</Text>{" "}
+												PKR
+											</Text>
+										</View>
+										<Button
+											style={{
+												padding: 10,
+												borderRadius: 20,
+												backgroundColor: "#0652DD",
+												marginBottom: 10,
+												width: "100%",
+											}}
+											labelStyle={{
+												fontSize: 18,
+												fontWeight: "bold",
+											}}
+											mode="contained"
+											onPress={() => {
+												// Alert.alert(
+												// 	"Confirmation",
+												// 	"Are you sure you would like to proceed with the booking?",
+												// 	[
+												// 		{
+												// 			text: "Yes",
+												// 			onPress: () => this.handleConfirmation(),
+												// 		},
+												// 		{
+												// 			text: "No",
+												// 		},
+												// 	]
+												// );
+												this.setState({
+													showPaymentModal: true,
+												});
+											}}
+										>
+											Confirm order
+										</Button>
+									</>
+								)}
 							</>
 						) : (
 							<ActivityIndicator />

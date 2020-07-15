@@ -3,7 +3,7 @@ import { Text, View, AsyncStorage, RefreshControl, Alert } from "react-native";
 import Header from "../../ReuseableComponents/Header";
 import Axios from "axios";
 import { ActivityIndicator } from "react-native-paper";
-import { URL } from "../../Helpers/helper";
+import { URL, sendNotification } from "../../Helpers/helper";
 import { Button } from "galio-framework";
 import { ScrollView } from "react-native-gesture-handler";
 import moment from "moment";
@@ -36,7 +36,6 @@ export default class BookingDetails extends Component {
 				.then((response) => {
 					if (response && response.data) {
 						if (response.data.success) {
-							console.log(response.data);
 							this.setState({
 								bookings: response.data.message,
 								isLoading: false,
@@ -52,6 +51,7 @@ export default class BookingDetails extends Component {
 					}
 				})
 				.catch((error) => {
+					console.log(error);
 					this.setState({
 						property: null,
 						isLoading: false,
@@ -90,7 +90,7 @@ export default class BookingDetails extends Component {
 		}
 	};
 
-	handleApprove = (id) => {
+	handleApprove = (id, propertyName, token) => {
 		this.setState({ gettingRequest: true });
 		Axios({
 			url: URL + "property/booking/change/" + id,
@@ -102,6 +102,13 @@ export default class BookingDetails extends Component {
 			.then((response) => {
 				if (response && response.data) {
 					if (response.data.success) {
+						sendNotification(
+							"Booking Approved",
+							"Booking request for " +
+								propertyName +
+								" has been approved by the buyer, please visit the approved bookings screen.",
+							token
+						);
 						Alert.alert("Success", response.data.message);
 						this.setState({ gettingRequest: false });
 					} else {
@@ -121,7 +128,7 @@ export default class BookingDetails extends Component {
 			});
 	};
 
-	handleDecline = (id) => {
+	handleDecline = (id, propertyName, token, cat = "Buyer") => {
 		Axios({
 			url: URL + "property/booking/change/" + id,
 			method: "POST",
@@ -132,6 +139,14 @@ export default class BookingDetails extends Component {
 			.then((response) => {
 				if (response && response.data) {
 					if (response.data.success) {
+						sendNotification(
+							"Booking Cancelled",
+							"Booking request for " +
+								propertyName +
+								" has been cancelled by the " +
+								cat,
+							token
+						);
 						Alert.alert("Success", response.data.message);
 						this.setState({ gettingRequest: false });
 					} else {
@@ -250,10 +265,11 @@ export default class BookingDetails extends Component {
 																		{
 																			text: "Yes",
 																			onPress: () => {
-																				console.log("*****");
-																				console.log(item);
-																				console.log("*****");
-																				// this.handleDecline(item._id);
+																				this.handleDecline(
+																					item._id,
+																					item.property.name,
+																					item.seller.pushNotificationToken
+																				);
 																			},
 																		},
 																	]
@@ -287,7 +303,12 @@ export default class BookingDetails extends Component {
 																				).add(1, "day");
 																				let currentTime = moment();
 																				if (currentTime < createdAt) {
-																					this.handleDecline(item._id);
+																					this.handleDecline(
+																						item._id,
+																						item.property.name,
+																						item.seller.pushNotificationToken,
+																						"Seller"
+																					);
 																				} else {
 																					Alert.alert(
 																						"You cannot cancel this request, because 24 hours have passed."
@@ -308,13 +329,17 @@ export default class BookingDetails extends Component {
 															onPress={() => {
 																Alert.alert(
 																	"Confirmation",
-																	"Are you sure you want to cancel your order?",
+																	"Are you sure you want to approve this order?",
 																	[
 																		{ text: "No" },
 																		{
 																			text: "Yes",
 																			onPress: () =>
-																				this.handleApprove(item._id),
+																				this.handleApprove(
+																					item._id,
+																					item.property.name,
+																					item.buyer.pushNotificationToken
+																				),
 																		},
 																	]
 																);

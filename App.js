@@ -152,7 +152,7 @@ const DrawerStackScreen = () => {
 const RootStackScreen = () => {
 	const [user, setUser] = React.useState({});
 	return (
-		<RootStack.Navigator headerMode="none">
+		<RootStack.Navigator headerMode="none" initialRouteName="app">
 			<RootStack.Screen name="auth" component={Auth} />
 			<RootStack.Screen name="app" component={DrawerStackScreen} />
 			<RootStack.Screen

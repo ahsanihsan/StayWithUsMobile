@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Text, View, ScrollView, Alert, AsyncStorage } from "react-native";
+import {
+	Text,
+	View,
+	ScrollView,
+	Alert,
+	AsyncStorage,
+	Dimensions,
+} from "react-native";
 import Header from "../../ReuseableComponents/Header";
 import { Card, Switch } from "react-native-paper";
 import NumericInput from "react-native-numeric-input";
@@ -8,6 +15,8 @@ import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import Axios from "axios";
 import { URL } from "../../Helpers/helper";
+import Modal from "react-native-modal";
+import MapView, { Marker } from "react-native-maps";
 
 export default class AddApartment extends Component {
 	constructor(props) {
@@ -85,6 +94,10 @@ export default class AddApartment extends Component {
 			Alert.alert("Please check there is some data missing");
 			return false;
 		}
+		if (!this.state.coordinates) {
+			Alert.alert("Please select the location of your apartment");
+			return false;
+		}
 		let currentUser = await AsyncStorage.getItem("currentUser");
 		currentUser = JSON.parse(currentUser);
 		let id = currentUser._id;
@@ -107,6 +120,8 @@ export default class AddApartment extends Component {
 				breakfastCost,
 				meals,
 				carParking,
+				longitude: this.state.coordinates.longitude,
+				latitude: this.state.coordinates.latitude,
 			},
 		})
 			.then((response) => {
@@ -294,6 +309,21 @@ export default class AddApartment extends Component {
 								</>
 							) : undefined}
 							<Button
+								color="info"
+								onPress={() => this.setState({ showMapModal: true })}
+								style={{ width: "50%", marginTop: 20 }}
+							>
+								Select Location
+							</Button>
+							<Text style={{ fontSize: 15, marginTop: 20 }}>
+								Coordinates:{" "}
+								{this.state.coordinates
+									? this.state.coordinates.longitude +
+									  ", " +
+									  this.state.coordinates.latitude
+									: "Please select your location"}
+							</Text>
+							<Button
 								color="success"
 								onPress={() => pickImage(1)}
 								style={{ width: "50%", marginTop: 20 }}
@@ -363,6 +393,48 @@ export default class AddApartment extends Component {
 							</Button>
 						</Card.Content>
 					</Card>
+					<Modal
+						isVisible={this.state.showMapModal}
+						onBackButtonPress={() => {
+							this.setState({ showMapModal: false });
+						}}
+						onBackdropPress={() => {
+							this.setState({ showMapModal: false });
+						}}
+					>
+						<View
+							style={{
+								backgroundColor: "#fff",
+								width: "100%",
+								borderRadius: 10,
+								alignSelf: "center",
+							}}
+						>
+							<MapView
+								initialRegion={{
+									latitude: 31.5204,
+									longitude: 74.3587,
+									latitudeDelta: 1.1122,
+									longitudeDelta: 1.1121,
+								}}
+								onPress={(event) => {
+									this.setState({ coordinates: event.nativeEvent.coordinate });
+								}}
+								style={{
+									width: "100%",
+									height: Dimensions.get("window").height / 1.5,
+								}}
+							>
+								{this.state.coordinates ? (
+									<Marker
+										coordinate={this.state.coordinates}
+										// title={marker.title}
+										// description={marker.description}
+									/>
+								) : undefined}
+							</MapView>
+						</View>
+					</Modal>
 				</ScrollView>
 			</View>
 		);
