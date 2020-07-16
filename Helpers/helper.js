@@ -4,7 +4,7 @@ import { Notifications } from "expo";
 import { Alert } from "react-native";
 import Axios from "axios";
 
-export const URL = "http://025bb3f698cf.ngrok.io/";
+export const URL = "http://26ddac07250e.ngrok.io/";
 
 export async function registerForPushNotificationsAsync() {
 	let token;
@@ -55,20 +55,23 @@ const degreeToRadian = (degree) => {
 	return degree * (pi / 180);
 };
 
-export const getDistance = (latitude1, longitude1, latitude2, longitude2) => {
-	const earth_radius = 6371;
+export const getDistance = (point, interest, kms) => {
+	let R = 6371;
+	let deg2rad = (n) => {
+		return n * (Math.PI / 180);
+	};
 
-	let dLat = degreeToRadian(latitude2 - latitude1);
-	let dLon = degreeToRadian(longitude2 - longitude1);
+	let dLat = deg2rad(interest.latitude - point.latitude);
+	let dLon = deg2rad(interest.longitude - point.longitude);
 
 	let a =
 		Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-		Math.cos(degreeToRadian(latitude1)) *
-			Math.cos(degreeToRadian(latitude2)) *
+		Math.cos(deg2rad(point.latitude)) *
+			Math.cos(deg2rad(interest.latitude)) *
 			Math.sin(dLon / 2) *
 			Math.sin(dLon / 2);
 	let c = 2 * Math.asin(Math.sqrt(a));
-	let d = earth_radius * c;
+	let d = R * c;
 
-	return d;
+	return d <= kms;
 };

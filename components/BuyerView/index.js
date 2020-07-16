@@ -12,10 +12,12 @@ import {
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import constants from "expo-constants";
 import { Button, ActivityIndicator } from "react-native-paper";
-import { URL } from "../../Helpers/helper";
+import { URL, getDistance } from "../../Helpers/helper";
 import Axios from "axios";
 import { RefreshControl } from "react-native";
 import { SearchBar } from "react-native-elements";
+
+import * as Location from "expo-location";
 
 export default class index extends Component {
 	constructor(props) {
@@ -25,6 +27,16 @@ export default class index extends Component {
 			backupProperties: [],
 		};
 	}
+
+	fetchCurrentLocation = async () => {
+		let { status } = await Location.requestPermissionsAsync();
+		if (status !== "granted") {
+			this.setState({ error: "Permission to access location was denied" });
+		}
+
+		let location = await Location.getCurrentPositionAsync({});
+		return location;
+	};
 	fetchProperties = async () => {
 		this.setState({ refreshing: true });
 		Axios({
@@ -34,18 +46,27 @@ export default class index extends Component {
 			.then((response) => {
 				if (response && response.data && response.data.success) {
 					let properties = response.data.message;
+					let userLat = this.state.userCurrentLocation.coords.latitude;
+					let userLong = this.state.userCurrentLocation.coords.longitude;
+					let newProperties = [];
 					properties.map((item) => {
 						let propLat = item.latitude;
 						let propLong = item.longitude;
-						console.log(propLat);
-						console.log(propLong);
+						let distance = getDistance(
+							{ longitude: propLong, latitude: propLat },
+							{ longitude: userLong, latitude: userLat },
+							50
+						);
+						if (distance) {
+							newProperties.push(item);
+						}
 					});
-					// this.setState({
-					// 	properties: response.data.message,
-					// 	backupProperties: response.data.message,
-					// 	isLoading: false,
-					// 	refreshing: false,
-					// });
+					this.setState({
+						properties: response.data.message,
+						backupProperties: response.data.message,
+						isLoading: false,
+						refreshing: false,
+					});
 				} else {
 					this.setState({
 						properties: [],
@@ -65,6 +86,8 @@ export default class index extends Component {
 			});
 	};
 	async componentDidMount() {
+		let location = await this.fetchCurrentLocation();
+		this.setState({ userCurrentLocation: location });
 		this.fetchProperties();
 	}
 
@@ -171,19 +194,19 @@ export default class index extends Component {
 															{item.address}
 														</Text>
 													</View>
-													<Text>
-														<Text
-															style={{
-																fontSize: 25,
-																color: "#0652DD",
-																fontWeight: "bold",
-															}}
-														>
-															{item.rent}
-														</Text>
-														<Text> PKR</Text>
-													</Text>
 												</View>
+												<Text>
+													<Text
+														style={{
+															fontSize: 25,
+															color: "#0652DD",
+															fontWeight: "bold",
+														}}
+													>
+														{item.rent}
+													</Text>
+													<Text> PKR</Text>
+												</Text>
 											</View>
 										</View>
 									</TouchableOpacity>
