@@ -49,13 +49,16 @@ export default class index extends Component {
 					let userLat = this.state.userCurrentLocation.coords.latitude;
 					let userLong = this.state.userCurrentLocation.coords.longitude;
 					let newProperties = [];
+					console.log("******");
+					console.log(properties);
+					console.log("******");
 					properties.map((item) => {
 						let propLat = item.latitude;
 						let propLong = item.longitude;
 						let distance = getDistance(
 							{ longitude: propLong, latitude: propLat },
 							{ longitude: userLong, latitude: userLat },
-							50
+							10
 						);
 						if (distance) {
 							newProperties.push(item);

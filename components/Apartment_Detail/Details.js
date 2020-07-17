@@ -380,9 +380,224 @@ export default class Details extends Component {
 												</Text>
 											</View>
 										) : undefined}
+										{property.vehicle ? (
+											<>
+												<Modal
+													isVisible={this.state.vehicleModal}
+													onBackButtonPress={() => {
+														this.setState({ vehicleModal: false });
+													}}
+													onBackdropPress={() => {
+														this.setState({ vehicleModal: false });
+													}}
+												>
+													<View
+														style={{
+															backgroundColor: "#fff",
+															height: 200,
+															borderRadius: 10,
+															alignSelf: "center",
+															justifyContent: "center",
+														}}
+													>
+														<ScrollView
+															horizontal={true}
+															showsHorizontalScrollIndicator={false}
+															scrollEventThrottle={200}
+															decelerationRate="fast"
+															pagingEnabled
+															style={{ flex: 1 }}
+														>
+															{property.vehicleImages.map((item, index) => {
+																if (item) {
+																	return (
+																		<Image
+																			key={index}
+																			source={{
+																				uri: URL + item,
+																			}}
+																			style={{
+																				width: Dimensions.get("window").width,
+																				height: 200,
+																			}}
+																		/>
+																	);
+																}
+															})}
+														</ScrollView>
+													</View>
+												</Modal>
+												<TouchableOpacity
+													style={{
+														width: 160,
+														flexDirection: "row",
+														justifyContent: "space-around",
+														alignItems: "center",
+														borderColor: "gray",
+														borderWidth: 2,
+														margin: 10,
+														padding: 10,
+													}}
+													onPress={() => this.setState({ vehicleModal: true })}
+												>
+													<FontAwesome5 name="car" size={32} color="black" />
+													<View>
+														<Text style={{ fontSize: 16, color: "#333" }}>
+															Vehicle
+														</Text>
+														<Text
+															style={{
+																fontSize: 10,
+																color: "grey",
+															}}
+														>
+															Tap to view images
+														</Text>
+													</View>
+												</TouchableOpacity>
+											</>
+										) : undefined}
 										{property.meals ? (
 											<>
-												<View
+												<Modal
+													isVisible={this.state.breakfastModal}
+													onBackButtonPress={() => {
+														this.setState({ breakfastModal: false });
+													}}
+													onBackdropPress={() => {
+														this.setState({ breakfastModal: false });
+													}}
+												>
+													<View
+														style={{
+															backgroundColor: "#fff",
+															height: 200,
+															borderRadius: 10,
+															alignSelf: "center",
+															justifyContent: "center",
+														}}
+													>
+														<ScrollView
+															horizontal={true}
+															showsHorizontalScrollIndicator={false}
+															scrollEventThrottle={200}
+															decelerationRate="fast"
+															pagingEnabled
+															style={{ flex: 1 }}
+														>
+															{property.breakfastImages.map((item, index) => {
+																if (item) {
+																	return (
+																		<Image
+																			key={index}
+																			source={{
+																				uri: URL + item,
+																			}}
+																			style={{
+																				width: Dimensions.get("window").width,
+																				height: 200,
+																			}}
+																		/>
+																	);
+																}
+															})}
+														</ScrollView>
+													</View>
+												</Modal>
+												<Modal
+													isVisible={this.state.lunchModal}
+													onBackButtonPress={() => {
+														this.setState({ lunchModal: false });
+													}}
+													onBackdropPress={() => {
+														this.setState({ lunchModal: false });
+													}}
+												>
+													<View
+														style={{
+															backgroundColor: "#fff",
+															height: 200,
+															borderRadius: 10,
+															alignSelf: "center",
+															justifyContent: "center",
+														}}
+													>
+														<ScrollView
+															horizontal={true}
+															showsHorizontalScrollIndicator={false}
+															scrollEventThrottle={200}
+															decelerationRate="fast"
+															pagingEnabled
+															style={{ flex: 1 }}
+														>
+															{property.lunchImages.map((item, index) => {
+																if (item) {
+																	return (
+																		<Image
+																			key={index}
+																			source={{
+																				uri: URL + item,
+																			}}
+																			style={{
+																				width: Dimensions.get("window").width,
+																				height: 200,
+																			}}
+																		/>
+																	);
+																}
+															})}
+														</ScrollView>
+													</View>
+												</Modal>
+												<Modal
+													isVisible={this.state.dinnerModal}
+													onBackButtonPress={() => {
+														this.setState({ dinnerModal: false });
+													}}
+													onBackdropPress={() => {
+														this.setState({ dinnerModal: false });
+													}}
+												>
+													<View
+														style={{
+															backgroundColor: "#fff",
+															height: 200,
+															borderRadius: 10,
+															alignSelf: "center",
+															justifyContent: "center",
+														}}
+													>
+														<ScrollView
+															horizontal={true}
+															showsHorizontalScrollIndicator={false}
+															scrollEventThrottle={200}
+															decelerationRate="fast"
+															pagingEnabled
+															style={{ flex: 1 }}
+														>
+															{property.dinnerImages.map((item, index) => {
+																if (item) {
+																	return (
+																		<Image
+																			key={index}
+																			source={{
+																				uri: URL + item,
+																			}}
+																			style={{
+																				width: Dimensions.get("window").width,
+																				height: 200,
+																			}}
+																		/>
+																	);
+																}
+															})}
+														</ScrollView>
+													</View>
+												</Modal>
+												<TouchableOpacity
+													onPress={() =>
+														this.setState({ breakfastModal: true })
+													}
 													style={{
 														width: 160,
 														flexDirection: "row",
@@ -399,11 +614,17 @@ export default class Details extends Component {
 														size={32}
 														color="black"
 													/>
-													<Text style={{ fontSize: 16, color: "#333" }}>
-														{property.breakfastCost} PKR {"\n"}Breakfast
-													</Text>
-												</View>
-												<View
+													<View>
+														<Text style={{ fontSize: 16, color: "#333" }}>
+															{property.breakfastCost} PKR {"\n"}Breakfast
+														</Text>
+														<Text style={{ fontSize: 10, color: "grey" }}>
+															Tap to view images
+														</Text>
+													</View>
+												</TouchableOpacity>
+												<TouchableOpacity
+													onPress={() => this.setState({ lunchModal: true })}
 													style={{
 														width: 160,
 														flexDirection: "row",
@@ -420,11 +641,17 @@ export default class Details extends Component {
 														size={32}
 														color="black"
 													/>
-													<Text style={{ fontSize: 16, color: "#333" }}>
-														{property.lunchCost} PKR {"\n"}Lunch
-													</Text>
-												</View>
-												<View
+													<View>
+														<Text style={{ fontSize: 16, color: "#333" }}>
+															{property.lunchCost} PKR {"\n"}Lunch
+														</Text>
+														<Text style={{ fontSize: 10, color: "grey" }}>
+															Tap to view images
+														</Text>
+													</View>
+												</TouchableOpacity>
+												<TouchableOpacity
+													onPress={() => this.setState({ dinnerModal: true })}
 													style={{
 														width: 160,
 														flexDirection: "row",
@@ -441,10 +668,15 @@ export default class Details extends Component {
 														size={32}
 														color="black"
 													/>
-													<Text style={{ fontSize: 16, color: "#333" }}>
-														{property.dinnerCost} PKR {"\n"}Dinner
-													</Text>
-												</View>
+													<View>
+														<Text style={{ fontSize: 16, color: "#333" }}>
+															{property.dinnerCost} PKR {"\n"}Dinner
+														</Text>
+														<Text style={{ fontSize: 10, color: "grey" }}>
+															Tap to view images
+														</Text>
+													</View>
+												</TouchableOpacity>
 											</>
 										) : undefined}
 									</View>

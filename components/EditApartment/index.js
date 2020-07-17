@@ -58,6 +58,7 @@ export default class EditApartment extends Component {
 							id: property._id,
 							carParking: property.carParking,
 							meals: property.meals,
+							vehicle: property.vehicle,
 							lunchCost: property.lunchCost,
 							breakfastCost: property.breakfastCost,
 							dinnerCost: property.dinnerCost,
@@ -94,6 +95,7 @@ export default class EditApartment extends Component {
 			lunchCost,
 			dinnerCost,
 			breakfastCost,
+			vehicle,
 		} = this.state;
 		if (
 			!(
@@ -131,6 +133,7 @@ export default class EditApartment extends Component {
 				lunchCost,
 				dinnerCost,
 				breakfastCost,
+				vehicle,
 			},
 		})
 			.then((response) => {
@@ -170,7 +173,7 @@ export default class EditApartment extends Component {
 		return (
 			<View>
 				<Header
-					title="Add Apartment"
+					title="Edit Apartment"
 					isBack
 					navigation={this.props.navigation}
 				/>
@@ -279,15 +282,45 @@ export default class EditApartment extends Component {
 										}}
 									>
 										<Text
-											style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+											style={{
+												paddingTop: 10,
+												paddingBottom: 5,
+												fontSize: 15,
+												flex: 3,
+											}}
 										>
 											Car Parking
 										</Text>
 										<Switch
 											value={this.state.carParking}
-											style={{ marginLeft: 10 }}
+											style={{ marginLeft: 10, flex: 5 }}
 											onValueChange={(check) => {
 												this.setState({ carParking: check });
+											}}
+										/>
+									</View>
+									<View
+										style={{
+											flexDirection: "row",
+											alignItems: "center",
+											marginTop: 10,
+										}}
+									>
+										<Text
+											style={{
+												paddingTop: 10,
+												paddingBottom: 5,
+												fontSize: 15,
+												flex: 3,
+											}}
+										>
+											Vehicle
+										</Text>
+										<Switch
+											value={this.state.vehicle}
+											style={{ marginLeft: 10, flex: 5 }}
+											onValueChange={(check) => {
+												this.setState({ vehicle: check });
 											}}
 										/>
 									</View>
@@ -300,12 +333,17 @@ export default class EditApartment extends Component {
 										}}
 									>
 										<Text
-											style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+											style={{
+												paddingTop: 10,
+												paddingBottom: 5,
+												fontSize: 15,
+												flex: 3,
+											}}
 										>
 											Meals
 										</Text>
 										<Switch
-											style={{ marginLeft: 10 }}
+											style={{ marginLeft: 10, flex: 5 }}
 											value={this.state.meals}
 											onValueChange={(check) => {
 												this.setState({ meals: check });

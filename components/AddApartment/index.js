@@ -6,6 +6,7 @@ import {
 	Alert,
 	AsyncStorage,
 	Dimensions,
+	Image,
 } from "react-native";
 import Header from "../../ReuseableComponents/Header";
 import { Card, Switch } from "react-native-paper";
@@ -18,6 +19,8 @@ import { URL } from "../../Helpers/helper";
 import Modal from "react-native-modal";
 import MapView, { Marker } from "react-native-maps";
 import Geocoder from "react-native-geocoding";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 Geocoder.init("AIzaSyAlupYU3lnF4YFTMl7sWl9Sv58onHMb4xI");
 
@@ -47,7 +50,7 @@ export default class AddApartment extends Component {
 			dinnerCost: 0,
 			lunchCost: 0,
 			breakfastCost: 0,
-			meals: false,
+			meals: true,
 			carParking: false,
 		};
 	}
@@ -125,6 +128,27 @@ export default class AddApartment extends Component {
 				bathroom,
 				rent,
 				images: [image1, image2, image3, image4],
+				breakfastImages: [
+					this.state.breakfastImage1,
+					this.state.breakfastImage3,
+					this.state.breakfastImage3,
+				],
+				lunchImages: [
+					this.state.lunchImage1,
+					this.state.lunchImage2,
+					this.state.lunchImage3,
+				],
+				dinnerImages: [
+					this.state.dinnerImage1,
+					this.state.dinnerImage2,
+					this.state.dinnerImage3,
+				],
+				vehicleImages: [
+					this.state.vehicleImage1,
+					this.state.vehicleImage2,
+					this.state.vehicleImage3,
+				],
+				vehicle: this.state.vehicle,
 				area,
 				seller: id,
 				dinnerCost,
@@ -177,6 +201,86 @@ export default class AddApartment extends Component {
 				}
 			}
 		};
+		const pickImageBreakfast = async (imageNo) => {
+			let result = await ImagePicker.launchImageLibraryAsync({
+				mediaTypes: ImagePicker.MediaTypeOptions.Images,
+				allowsEditing: true,
+				aspect: [4, 3],
+				quality: 1,
+				base64: true,
+			});
+
+			if (!result.cancelled) {
+				let fileName = result.uri;
+				if (imageNo === 1) {
+					this.setState({ breakfastImage1: result.base64 });
+				} else if (imageNo === 2) {
+					this.setState({ breakfastImage2: result.base64 });
+				} else if (imageNo === 3) {
+					this.setState({ breakfastImage3: result.base64 });
+				}
+			}
+		};
+		const pickImageLunch = async (imageNo) => {
+			let result = await ImagePicker.launchImageLibraryAsync({
+				mediaTypes: ImagePicker.MediaTypeOptions.Images,
+				allowsEditing: true,
+				aspect: [4, 3],
+				quality: 1,
+				base64: true,
+			});
+
+			if (!result.cancelled) {
+				let fileName = result.uri;
+				if (imageNo === 1) {
+					this.setState({ lunchImage1: result.base64 });
+				} else if (imageNo === 2) {
+					this.setState({ lunchImage2: result.base64 });
+				} else if (imageNo === 3) {
+					this.setState({ lunchImage3: result.base64 });
+				}
+			}
+		};
+		const pickImageDinner = async (imageNo) => {
+			let result = await ImagePicker.launchImageLibraryAsync({
+				mediaTypes: ImagePicker.MediaTypeOptions.Images,
+				allowsEditing: true,
+				aspect: [4, 3],
+				quality: 1,
+				base64: true,
+			});
+
+			if (!result.cancelled) {
+				let fileName = result.uri;
+				if (imageNo === 1) {
+					this.setState({ dinnerImage1: result.base64 });
+				} else if (imageNo === 2) {
+					this.setState({ dinnerImage2: result.base64 });
+				} else if (imageNo === 3) {
+					this.setState({ dinnerImage3: result.base64 });
+				}
+			}
+		};
+		const pickImageVehicle = async (imageNo) => {
+			let result = await ImagePicker.launchImageLibraryAsync({
+				mediaTypes: ImagePicker.MediaTypeOptions.Images,
+				allowsEditing: true,
+				aspect: [4, 3],
+				quality: 1,
+				base64: true,
+			});
+
+			if (!result.cancelled) {
+				let fileName = result.uri;
+				if (imageNo === 1) {
+					this.setState({ vehicleImage1: result.base64 });
+				} else if (imageNo === 2) {
+					this.setState({ vehicleImage2: result.base64 });
+				} else if (imageNo === 3) {
+					this.setState({ vehicleImage3: result.base64 });
+				}
+			}
+		};
 		return (
 			<View>
 				<Header
@@ -206,35 +310,65 @@ export default class AddApartment extends Component {
 								value={this.state.address}
 								onChangeText={(address) => this.setState({ address })}
 							/> */}
-							<Text style={{ paddingTop: 5, paddingBottom: 5, fontSize: 15 }}>
-								Area (Square Feet)
-							</Text>
-							<NumericInput
-								onChange={(area) => this.setState({ area })}
-								step={50}
-								value={this.state.area}
-							/>
-							<Text style={{ paddingTop: 5, paddingBottom: 5, fontSize: 15 }}>
-								Bedrooms (Units)
-							</Text>
-							<NumericInput
-								value={this.state.bedroom}
-								onChange={(bedroom) => this.setState({ bedroom })}
-							/>
-							<Text style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}>
-								Kitchens (Units)
-							</Text>
-							<NumericInput
-								value={this.state.kitchen}
-								onChange={(kitchen) => this.setState({ kitchen })}
-							/>
-							<Text style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}>
-								Bathroom (Units)
-							</Text>
-							<NumericInput
-								value={this.state.bathroom}
-								onChange={(bathroom) => this.setState({ bathroom })}
-							/>
+							<View
+								style={{
+									flexDirection: "row",
+									justifyContent: "space-between",
+								}}
+							>
+								<View>
+									<Text
+										style={{ paddingTop: 5, paddingBottom: 5, fontSize: 15 }}
+									>
+										Area (Square Feet)
+									</Text>
+									<NumericInput
+										onChange={(area) => this.setState({ area })}
+										step={50}
+										value={this.state.area}
+									/>
+								</View>
+								<View>
+									<Text
+										style={{ paddingTop: 5, paddingBottom: 5, fontSize: 15 }}
+									>
+										Bedrooms (Units)
+									</Text>
+									<NumericInput
+										value={this.state.bedroom}
+										onChange={(bedroom) => this.setState({ bedroom })}
+									/>
+								</View>
+							</View>
+							<View
+								style={{
+									flexDirection: "row",
+									justifyContent: "space-between",
+								}}
+							>
+								<View>
+									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Kitchens (Units)
+									</Text>
+									<NumericInput
+										value={this.state.kitchen}
+										onChange={(kitchen) => this.setState({ kitchen })}
+									/>
+								</View>
+								<View>
+									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Bathroom (Units)
+									</Text>
+									<NumericInput
+										value={this.state.bathroom}
+										onChange={(bathroom) => this.setState({ bathroom })}
+									/>
+								</View>
+							</View>
 							<Text style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}>
 								Rent (PKR)
 							</Text>
@@ -251,13 +385,18 @@ export default class AddApartment extends Component {
 								}}
 							>
 								<Text
-									style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									style={{
+										paddingTop: 10,
+										paddingBottom: 5,
+										fontSize: 15,
+										flex: 2,
+									}}
 								>
 									Car Parking
 								</Text>
 								<Switch
 									value={this.state.carParking}
-									style={{ marginLeft: 10 }}
+									style={{ marginLeft: 10, flex: 5 }}
 									onValueChange={(check) => {
 										this.setState({ carParking: check });
 									}}
@@ -268,16 +407,147 @@ export default class AddApartment extends Component {
 									flexDirection: "row",
 									alignItems: "center",
 									marginTop: 10,
+								}}
+							>
+								<Text
+									style={{
+										paddingTop: 10,
+										paddingBottom: 5,
+										fontSize: 15,
+										flex: 2,
+									}}
+								>
+									Vehicle
+								</Text>
+								<Switch
+									value={this.state.vehicle}
+									style={{ marginLeft: 10, flex: 5 }}
+									onValueChange={(check) => {
+										this.setState({ vehicle: check });
+									}}
+								/>
+							</View>
+							{this.state.vehicle ? (
+								<>
+									<Text
+										style={{ fontSize: 20, fontWeight: "600", marginTop: 10 }}
+									>
+										Vehicle Images
+									</Text>
+									<View
+										style={{
+											flexDirection: "row",
+											justifyContent: "space-between",
+											marginTop: 10,
+										}}
+									>
+										{this.state.vehicleImage1 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," + this.state.vehicleImage1,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageVehicle(1)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 1</Text>
+											</TouchableOpacity>
+										)}
+										{this.state.vehicleImage2 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," + this.state.vehicleImage2,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageVehicle(2)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 2</Text>
+											</TouchableOpacity>
+										)}
+										{this.state.vehicleImage3 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," + this.state.vehicleImage3,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageVehicle(3)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 3</Text>
+											</TouchableOpacity>
+										)}
+									</View>
+								</>
+							) : undefined}
+							<View
+								style={{
+									flexDirection: "row",
+									alignItems: "center",
+									marginTop: 10,
 									marginBottom: 10,
 								}}
 							>
 								<Text
-									style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									style={{
+										paddingTop: 10,
+										paddingBottom: 5,
+										fontSize: 15,
+										flex: 2,
+									}}
 								>
 									Meals
 								</Text>
 								<Switch
-									style={{ marginLeft: 10 }}
+									style={{ marginLeft: 10, flex: 5 }}
 									value={this.state.meals}
 									onValueChange={(check) => {
 										this.setState({ meals: check });
@@ -298,6 +568,101 @@ export default class AddApartment extends Component {
 										}
 										step={100}
 									/>
+									<View
+										style={{
+											flexDirection: "row",
+											justifyContent: "space-between",
+											marginTop: 10,
+										}}
+									>
+										{this.state.breakfastImage1 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," +
+														this.state.breakfastImage1,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageBreakfast(1)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 1</Text>
+											</TouchableOpacity>
+										)}
+										{this.state.breakfastImage2 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," +
+														this.state.breakfastImage2,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageBreakfast(2)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 2</Text>
+											</TouchableOpacity>
+										)}
+										{this.state.breakfastImage3 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," +
+														this.state.breakfastImage3,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageBreakfast(3)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 3</Text>
+											</TouchableOpacity>
+										)}
+									</View>
 									<Text
 										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 									>
@@ -308,6 +673,98 @@ export default class AddApartment extends Component {
 										onChange={(lunchCost) => this.setState({ lunchCost })}
 										step={100}
 									/>
+									<View
+										style={{
+											flexDirection: "row",
+											justifyContent: "space-between",
+											marginTop: 10,
+										}}
+									>
+										{this.state.lunchImage1 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," + this.state.lunchImage1,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageLunch(1)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 1</Text>
+											</TouchableOpacity>
+										)}
+										{this.state.lunchImage2 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," + this.state.lunchImage2,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageLunch(2)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 2</Text>
+											</TouchableOpacity>
+										)}
+										{this.state.lunchImage3 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," + this.state.lunchImage3,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageLunch(3)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 3</Text>
+											</TouchableOpacity>
+										)}
+									</View>
 									<Text
 										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 									>
@@ -318,81 +775,239 @@ export default class AddApartment extends Component {
 										onChange={(dinnerCost) => this.setState({ dinnerCost })}
 										step={100}
 									/>
+									<View
+										style={{
+											flexDirection: "row",
+											justifyContent: "space-between",
+											marginTop: 10,
+										}}
+									>
+										{this.state.dinnerImage1 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," + this.state.dinnerImage1,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageDinner(1)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 1</Text>
+											</TouchableOpacity>
+										)}
+										{this.state.dinnerImage2 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," + this.state.dinnerImage2,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageDinner(2)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 2</Text>
+											</TouchableOpacity>
+										)}
+										{this.state.dinnerImage3 ? (
+											<Image
+												source={{
+													uri:
+														"data:image/png;base64," + this.state.dinnerImage3,
+												}}
+												style={{
+													width: 100,
+													height: 100,
+													borderRadius: 10,
+												}}
+											/>
+										) : (
+											<TouchableOpacity
+												onPress={() => pickImageDinner(3)}
+												style={{
+													justifyContent: "center",
+													width: 100,
+													height: 100,
+													backgroundColor: "#e4e4e4",
+													alignItems: "center",
+													borderRadius: 10,
+												}}
+											>
+												<Icon name="plus" />
+												<Text style={{ marginTop: 5 }}>Image 3</Text>
+											</TouchableOpacity>
+										)}
+									</View>
 								</>
 							) : undefined}
+							<Text style={{ fontSize: 20, fontWeight: "600", marginTop: 10 }}>
+								Location
+							</Text>
 							<Button
 								color="info"
 								onPress={() => this.setState({ showMapModal: true })}
 								style={{ width: "50%", marginTop: 20 }}
 							>
-								Select Location
+								Open Maps
 							</Button>
 							<Text style={{ fontSize: 15, marginTop: 20 }}>
-								Location:{" "}
+								Your Location:{" "}
 								{this.state.coordinates
 									? this.state.address
-									: "Please select your location"}
+									: "Please select your location by opening the maps and dropping a pin."}
 							</Text>
-							<Button
-								color="success"
-								onPress={() => pickImage(1)}
-								style={{ width: "50%", marginTop: 20 }}
+							<Text style={{ fontSize: 20, fontWeight: "600", marginTop: 10 }}>
+								Apartment Images
+							</Text>
+							<View
+								style={{
+									flexDirection: "row",
+									justifyContent: "space-between",
+									marginTop: 10,
+								}}
 							>
-								Pick Image 1
-							</Button>
-							<Text style={{ fontSize: 15, marginTop: 20 }}>
-								File Name 1:{" "}
-								{this.state.fileName1
-									? this.state.fileName1.substring(
-											this.state.fileName1.length - 20
-									  )
-									: "Please pick an image"}
-							</Text>
-							<Button
-								color="success"
-								onPress={() => pickImage(2)}
-								style={{ width: "50%", marginTop: 20 }}
-							>
-								Pick Image 2
-							</Button>
-							<Text style={{ fontSize: 15, marginTop: 20 }}>
-								File Name 2:{" "}
-								{this.state.fileName2
-									? this.state.fileName2.substring(
-											this.state.fileName2.length - 20
-									  )
-									: "Please pick an image"}
-							</Text>
-							<Button
-								color="success"
-								onPress={() => pickImage(3)}
-								style={{ width: "50%", marginTop: 20 }}
-							>
-								Pick Image 3
-							</Button>
-							<Text style={{ fontSize: 15, marginTop: 20 }}>
-								File Name 3:{" "}
-								{this.state.fileName3
-									? this.state.fileName3.substring(
-											this.state.fileName3.length - 20
-									  )
-									: "Please pick an image"}
-							</Text>
-							<Button
-								color="success"
-								onPress={() => pickImage(4)}
-								style={{ width: "50%", marginTop: 20 }}
-							>
-								Pick Image 4
-							</Button>
-							<Text style={{ fontSize: 15, marginTop: 20 }}>
-								File Name 4:{" "}
-								{this.state.fileName4
-									? this.state.fileName4.substring(
-											this.state.fileName4.length - 20
-									  )
-									: "Please pick an image"}
-							</Text>
+								{this.state.image1 ? (
+									<Image
+										source={{
+											uri: "data:image/png;base64," + this.state.image1,
+										}}
+										style={{
+											width: 100,
+											height: 100,
+											borderRadius: 10,
+										}}
+									/>
+								) : (
+									<TouchableOpacity
+										onPress={() => pickImage(1)}
+										style={{
+											justifyContent: "center",
+											width: 100,
+											height: 100,
+											backgroundColor: "#e4e4e4",
+											alignItems: "center",
+											borderRadius: 10,
+										}}
+									>
+										<Icon name="plus" />
+										<Text style={{ marginTop: 5 }}>Image 1</Text>
+									</TouchableOpacity>
+								)}
+								{this.state.image2 ? (
+									<Image
+										source={{
+											uri: "data:image/png;base64," + this.state.image2,
+										}}
+										style={{
+											width: 100,
+											height: 100,
+											borderRadius: 10,
+										}}
+									/>
+								) : (
+									<TouchableOpacity
+										onPress={() => pickImage(2)}
+										style={{
+											justifyContent: "center",
+											width: 100,
+											height: 100,
+											backgroundColor: "#e4e4e4",
+											alignItems: "center",
+											borderRadius: 10,
+										}}
+									>
+										<Icon name="plus" />
+										<Text style={{ marginTop: 5 }}>Image 2</Text>
+									</TouchableOpacity>
+								)}
+								{this.state.image3 ? (
+									<Image
+										source={{
+											uri: "data:image/png;base64," + this.state.image3,
+										}}
+										style={{
+											width: 100,
+											height: 100,
+											borderRadius: 10,
+										}}
+									/>
+								) : (
+									<TouchableOpacity
+										onPress={() => pickImage(3)}
+										style={{
+											justifyContent: "center",
+											width: 100,
+											height: 100,
+											backgroundColor: "#e4e4e4",
+											alignItems: "center",
+											borderRadius: 10,
+										}}
+									>
+										<Icon name="plus" />
+										<Text style={{ marginTop: 5 }}>Image 3</Text>
+									</TouchableOpacity>
+								)}
+							</View>
+							{this.state.image4 ? (
+								<Image
+									source={{
+										uri: "data:image/png;base64," + this.state.image4,
+									}}
+									style={{
+										width: 100,
+										height: 100,
+										borderRadius: 10,
+										alignSelf: "center",
+										marginTop: 10,
+									}}
+								/>
+							) : (
+								<TouchableOpacity
+									onPress={() => pickImage(4)}
+									style={{
+										justifyContent: "center",
+										width: 100,
+										height: 100,
+										backgroundColor: "#e4e4e4",
+										alignItems: "center",
+										borderRadius: 10,
+										alignSelf: "center",
+										marginTop: 10,
+									}}
+								>
+									<Icon name="plus" />
+									<Text style={{ marginTop: 5 }}>Image 4</Text>
+								</TouchableOpacity>
+							)}
 							<Button
 								color="info"
 								loading={this.state.loading}
