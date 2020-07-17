@@ -4,7 +4,7 @@ import { Notifications } from "expo";
 import { Alert } from "react-native";
 import Axios from "axios";
 
-export const URL = "http://26ddac07250e.ngrok.io/";
+export const URL = "http://6515a2a65675.ngrok.io/";
 
 export async function registerForPushNotificationsAsync() {
 	let token;
@@ -60,10 +60,8 @@ export const getDistance = (point, interest, kms) => {
 	let deg2rad = (n) => {
 		return n * (Math.PI / 180);
 	};
-
 	let dLat = deg2rad(interest.latitude - point.latitude);
 	let dLon = deg2rad(interest.longitude - point.longitude);
-
 	let a =
 		Math.sin(dLat / 2) * Math.sin(dLat / 2) +
 		Math.cos(deg2rad(point.latitude)) *
@@ -72,6 +70,5 @@ export const getDistance = (point, interest, kms) => {
 			Math.sin(dLon / 2);
 	let c = 2 * Math.asin(Math.sqrt(a));
 	let d = R * c;
-
 	return d <= kms;
 };
