@@ -11,13 +11,16 @@ import {
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import constants from "expo-constants";
-import { Button, ActivityIndicator } from "react-native-paper";
+import { Button, ActivityIndicator, Switch } from "react-native-paper";
 import { URL, getDistance } from "../../Helpers/helper";
 import Axios from "axios";
 import { RefreshControl } from "react-native";
 import { SearchBar } from "react-native-elements";
+import Modal from "react-native-modal";
+import { Button as MyButton } from "galio-framework";
 
 import * as Location from "expo-location";
+import NumericInput from "react-native-numeric-input";
 
 export default class index extends Component {
 	constructor(props) {
@@ -25,6 +28,12 @@ export default class index extends Component {
 		this.state = {
 			properties: [],
 			backupProperties: [],
+			lowerLimit: 1000,
+			upperLimit: 1500,
+			bedroomsNo: 0,
+			carParking: false,
+			meals: false,
+			vehicle: false,
 		};
 	}
 
@@ -36,6 +45,126 @@ export default class index extends Component {
 
 		let location = await Location.getCurrentPositionAsync({});
 		return location;
+	};
+
+	filterContent = () => {
+		const {
+			lowerLimit,
+			upperLimit,
+			bedroomsNo,
+			carParking,
+			meals,
+			vehicle,
+		} = this.state;
+
+		let properties = this.state.backupProperties;
+
+		let newProperties = [];
+		let query = false;
+		if (lowerLimit || upperLimit) {
+			query = true;
+			if (lowerLimit && upperLimit) {
+				properties.map((item) => {
+					if (item.rent <= upperLimit && item.rent >= lowerLimit) {
+						newProperties.push(item);
+					}
+				});
+			} else if (lowerLimit && !upperLimit) {
+				properties.map((item) => {
+					if (item.rent >= lowerLimit) {
+						newProperties.push(item);
+					}
+				});
+			} else if (!lowerLimit && upperLimit) {
+				properties.map((item) => {
+					if (item.rent <= upperLimit) {
+						newProperties.push(item);
+					}
+				});
+			}
+		}
+		if (bedroomsNo) {
+			query = true;
+			if (newProperties.length > 0) {
+				newProperties.map((item) => {
+					if (item.bedroom == bedroomsNo) {
+						newProperties.push(item);
+					}
+				});
+			} else {
+				properties.map((item) => {
+					if (item.bedroom === bedroomsNo) {
+						newProperties.push(item);
+					}
+				});
+			}
+		}
+		if (carParking) {
+			query = true;
+			if (newProperties.length > 0) {
+				newProperties.map((item) => {
+					if (item.carParking) {
+						newProperties.push(item);
+					}
+				});
+			} else {
+				properties.map((item) => {
+					if (item.carParking) {
+						newProperties.push(item);
+					}
+				});
+			}
+		}
+		if (vehicle) {
+			query = true;
+			if (newProperties.length > 0) {
+				newProperties.map((item) => {
+					if (item.vehicle) {
+						newProperties.push(item);
+					}
+				});
+			} else {
+				properties.map((item) => {
+					if (item.vehicle) {
+						newProperties.push(item);
+					}
+				});
+			}
+		}
+		if (meals) {
+			query = true;
+			if (newProperties.length > 0) {
+				newProperties.map((item) => {
+					if (item.meals) {
+						newProperties.push(item);
+					}
+				});
+			} else {
+				properties.map((item) => {
+					if (item.meals) {
+						newProperties.push(item);
+					}
+				});
+			}
+		}
+		let finalProperties = [];
+		newProperties.map((prevItem) => {
+			if (finalProperties.length > 0) {
+				finalProperties.map((newItem) => {
+					if (newItem) {
+						if (prevItem._id != newItem._id) {
+							finalProperties.push(newItem);
+						}
+					}
+				});
+			} else {
+				finalProperties.push(prevItem);
+			}
+		});
+		this.setState({
+			properties: query ? finalProperties : properties,
+			filterModal: false,
+		});
 	};
 	fetchProperties = async () => {
 		this.setState({ refreshing: true });
@@ -49,24 +178,21 @@ export default class index extends Component {
 					let userLat = this.state.userCurrentLocation.coords.latitude;
 					let userLong = this.state.userCurrentLocation.coords.longitude;
 					let newProperties = [];
-					console.log("******");
-					console.log(properties);
-					console.log("******");
 					properties.map((item) => {
 						let propLat = item.latitude;
 						let propLong = item.longitude;
 						let distance = getDistance(
 							{ longitude: propLong, latitude: propLat },
 							{ longitude: userLong, latitude: userLat },
-							10
+							50
 						);
 						if (distance) {
 							newProperties.push(item);
 						}
 					});
 					this.setState({
-						properties: response.data.message,
-						backupProperties: response.data.message,
+						properties: newProperties,
+						backupProperties: newProperties,
 						isLoading: false,
 						refreshing: false,
 					});
@@ -125,6 +251,17 @@ export default class index extends Component {
 						/>
 					</TouchableOpacity>
 					<Text style={styles.mainText}>Find your house</Text>
+					<TouchableOpacity
+						style={{ alignSelf: "flex-end" }}
+						onPress={() => {
+							this.setState({
+								properties: this.state.backupProperties,
+								filterModal: true,
+							});
+						}}
+					>
+						<MaterialCommunityIcons name="filter" size={32} />
+					</TouchableOpacity>
 				</View>
 				{isLoading ? (
 					<ActivityIndicator />
@@ -149,7 +286,14 @@ export default class index extends Component {
 								this.handleSearch(text);
 							}}
 						/>
-						<Text style={{ fontSize: 16, color: "gray", marginLeft: 20 }}>
+						<Text
+							style={{
+								fontSize: 16,
+								color: "gray",
+								marginLeft: 20,
+								marginTop: 10,
+							}}
+						>
 							{this.state.properties.length} results in your area, pull to
 							refresh the properties
 						</Text>
@@ -216,6 +360,163 @@ export default class index extends Component {
 								);
 							})}
 						</ScrollView>
+						<Modal
+							isVisible={this.state.filterModal}
+							onBackButtonPress={() => {
+								this.setState({ filterModal: false });
+							}}
+							onBackdropPress={() => {
+								this.setState({ filterModal: false });
+							}}
+						>
+							<View
+								style={{
+									backgroundColor: "#fff",
+									width: "100%",
+									padding: 20,
+									borderRadius: 10,
+									alignSelf: "center",
+									height: "55%",
+								}}
+							>
+								<Text
+									style={{
+										margin: 10,
+										fontSize: 20,
+										fontWeight: "bold",
+										textAlign: "center",
+									}}
+								>
+									Filter Properties
+								</Text>
+								<View
+									style={{
+										flexDirection: "row",
+										justifyContent: "space-between",
+									}}
+								>
+									<View>
+										<Text
+											style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+										>
+											Lower Price Limit
+										</Text>
+										<NumericInput
+											initValue={this.state.lowerLimit}
+											value={this.state.lowerLimit}
+											onChange={(lowerLimit) => this.setState({ lowerLimit })}
+											step={500}
+										/>
+									</View>
+									<View>
+										<Text
+											style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+										>
+											Upper Price Limit
+										</Text>
+										<NumericInput
+											step={500}
+											initValue={this.state.upperLimit}
+											value={this.state.upperLimit}
+											onChange={(upperLimit) => this.setState({ upperLimit })}
+										/>
+									</View>
+								</View>
+								<Text
+									style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+								>
+									Number of Bedrooms
+								</Text>
+								<NumericInput
+									initValue={this.state.bedroomsNo}
+									value={this.state.bedroomsNo}
+									onChange={(bedroomsNo) => this.setState({ bedroomsNo })}
+								/>
+								<View
+									style={{
+										flexDirection: "row",
+										alignItems: "center",
+										marginTop: 10,
+									}}
+								>
+									<Text
+										style={{
+											paddingTop: 10,
+											paddingBottom: 5,
+											fontSize: 15,
+											flex: 3,
+										}}
+									>
+										Car Parking
+									</Text>
+									<Switch
+										value={this.state.carParking}
+										style={{ marginLeft: 10, flex: 5 }}
+										onValueChange={(check) => {
+											this.setState({ carParking: check });
+										}}
+									/>
+								</View>
+								<View
+									style={{
+										flexDirection: "row",
+										alignItems: "center",
+										marginTop: 10,
+									}}
+								>
+									<Text
+										style={{
+											paddingTop: 10,
+											paddingBottom: 5,
+											fontSize: 15,
+											flex: 3,
+										}}
+									>
+										Meals
+									</Text>
+									<Switch
+										value={this.state.meals}
+										style={{ marginLeft: 10, flex: 5 }}
+										onValueChange={(check) => {
+											this.setState({ meals: check });
+										}}
+									/>
+								</View>
+								<View
+									style={{
+										flexDirection: "row",
+										alignItems: "center",
+										marginTop: 10,
+									}}
+								>
+									<Text
+										style={{
+											paddingTop: 10,
+											paddingBottom: 5,
+											fontSize: 15,
+											flex: 3,
+										}}
+									>
+										Vehicle
+									</Text>
+									<Switch
+										value={this.state.vehicle}
+										style={{ marginLeft: 10, flex: 5 }}
+										onValueChange={(check) => {
+											this.setState({ vehicle: check });
+										}}
+									/>
+								</View>
+								<MyButton
+									color="info"
+									loading={this.state.loading}
+									onPress={() => this.filterContent()}
+									style={{ width: "100%", marginTop: 20 }}
+								>
+									Filter
+								</MyButton>
+							</View>
+						</Modal>
 					</>
 				)}
 			</View>
@@ -237,6 +538,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		padding: 20,
+		justifyContent: "space-between",
 	},
 	mainIcons: {
 		width: "30%",
