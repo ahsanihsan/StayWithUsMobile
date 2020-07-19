@@ -7,6 +7,7 @@ import {
 	AsyncStorage,
 	Alert,
 	Picker,
+	KeyboardAvoidingView,
 } from "react-native";
 import { ActivityIndicator, Switch } from "react-native-paper";
 import Header from "../../ReuseableComponents/Header";
@@ -16,6 +17,11 @@ import Modal from "react-native-modal";
 import { Button } from "galio-framework";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
+
+import {
+	CreditCardInput,
+	LiteCreditCardInput,
+} from "react-native-credit-card-input";
 
 export default class RentNow extends Component {
 	constructor(props) {
@@ -60,7 +66,25 @@ export default class RentNow extends Component {
 		let consumedVehicleCost = this.state.vehicle
 			? totalVehicleCost * totalDaysStay
 			: 0;
-
+		let creditCard = "";
+		if (this.state.property.securityFee) {
+			if (this.state.creditCard) {
+				if (this.state.creditCard.valid) {
+					creditCard =
+						this.state.creditCard.values.number +
+						"-" +
+						this.state.creditCard.values.expiry +
+						"-" +
+						this.state.creditCard.values.cvc;
+				} else {
+					Alert.alert("Please enter valid credit card details.");
+					return false;
+				}
+			} else {
+				Alert.alert("Please enter your credit card details");
+				return false;
+			}
+		}
 		if (!checkIn || !checkOut) {
 			Alert.alert("Please select your check in and check out date.");
 			return false;
@@ -77,6 +101,7 @@ export default class RentNow extends Component {
 			property: this.state.property._id,
 			buyer: this.state.userId,
 			seller: this.state.property.seller._id,
+			creditCard: "",
 		};
 
 		this.setState({ bill: data, showBillModal: true });
@@ -162,7 +187,6 @@ export default class RentNow extends Component {
 
 	render() {
 		const { property, bill } = this.state;
-		console.log(property);
 		return (
 			<View style={{ flex: 1, backgroundColor: "white" }}>
 				<Header
@@ -174,118 +198,82 @@ export default class RentNow extends Component {
 					<ActivityIndicator />
 				) : (
 					<ScrollView showsVerticalScrollIndicator={false}>
-						<View style={{ width: "80%", marginTop: 20, alignSelf: "center" }}>
-							<Text style={{ fontSize: 20, fontWeight: "500" }}>
-								Check in date
-							</Text>
-							<Button
-								style={{ width: "100%", marginTop: 20 }}
-								onPress={() => {
-									this.setState({
-										datePickerCheckIn: true,
-										datePickerCheckOut: false,
-									});
+						<KeyboardAvoidingView behavior="padding">
+							<View
+								style={{
+									flex: 1,
+									width: "80%",
+									marginTop: 20,
+									alignSelf: "center",
+									marginBottom: "10%",
 								}}
 							>
-								{this.state.dateTextCheckIn
-									? this.state.dateTextCheckIn
-									: "Please select check in date"}
-							</Button>
-							{this.state.datePickerCheckIn && (
-								<DateTimePicker
-									value={
-										this.state.checkInDate ? this.state.checkInDate : new Date()
-									}
-									is24Hour={true}
-									display="default"
-									minimumDate={new Date()}
-									onChange={(event, date) => {
-										let dateTextCheckIn = moment(date).format("YYYY-MM-DD");
-										this.setState({ checkInDate: date, dateTextCheckIn });
+								<Text style={{ fontSize: 20, fontWeight: "500" }}>
+									Check in date
+								</Text>
+								<Button
+									style={{ width: "100%", marginTop: 20 }}
+									onPress={() => {
+										this.setState({
+											datePickerCheckIn: true,
+											datePickerCheckOut: false,
+										});
 									}}
-								/>
-							)}
-							<Text style={{ fontSize: 20, fontWeight: "500", marginTop: 10 }}>
-								Check out date
-							</Text>
-							<Button
-								style={{ width: "100%", marginTop: 20 }}
-								onPress={() => {
-									this.setState({
-										datePickerCheckOut: true,
-										datePickerCheckIn: false,
-									});
-								}}
-							>
-								{this.state.dateTextCheckOut
-									? this.state.dateTextCheckOut
-									: "Please select check out date"}
-							</Button>
-							{this.state.datePickerCheckOut && (
-								<DateTimePicker
-									value={
-										this.state.checkOutDate
-											? this.state.checkOutDate
-											: new Date()
-									}
-									is24Hour={true}
-									display="default"
-									// minimumDate={this.state.checkInDate}
-									onChange={(event, date) => {
-										let dateTextCheckOut = moment(date).format("YYYY-MM-DD");
-										this.setState({ checkOutDate: date, dateTextCheckOut });
+								>
+									{this.state.dateTextCheckIn
+										? this.state.dateTextCheckIn
+										: "Please select check in date"}
+								</Button>
+								{this.state.datePickerCheckIn && (
+									<DateTimePicker
+										value={
+											this.state.checkInDate
+												? this.state.checkInDate
+												: new Date()
+										}
+										is24Hour={true}
+										display="default"
+										minimumDate={new Date()}
+										onChange={(event, date) => {
+											let dateTextCheckIn = moment(date).format("YYYY-MM-DD");
+											this.setState({ checkInDate: date, dateTextCheckIn });
+										}}
+									/>
+								)}
+								<Text
+									style={{ fontSize: 20, fontWeight: "500", marginTop: 10 }}
+								>
+									Check out date
+								</Text>
+								<Button
+									style={{ width: "100%", marginTop: 20 }}
+									onPress={() => {
+										this.setState({
+											datePickerCheckOut: true,
+											datePickerCheckIn: false,
+										});
 									}}
-								/>
-							)}
-							<View
-								style={{
-									marginTop: 20,
-									flexDirection: "row",
-									alignItems: "center",
-								}}
-							>
-								<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
-									Avail Breakfast
-								</Text>
-								<Switch
-									style={{ flex: 2 }}
-									value={this.state.breakfast}
-									onValueChange={(breakfast) => this.setState({ breakfast })}
-								/>
-							</View>
-							<View
-								style={{
-									marginTop: 20,
-									flexDirection: "row",
-									alignItems: "center",
-								}}
-							>
-								<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
-									Avail Lunch
-								</Text>
-								<Switch
-									style={{ flex: 2 }}
-									value={this.state.lunch}
-									onValueChange={(lunch) => this.setState({ lunch })}
-								/>
-							</View>
-							<View
-								style={{
-									marginTop: 20,
-									flexDirection: "row",
-									alignItems: "center",
-								}}
-							>
-								<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
-									Avail Dinner
-								</Text>
-								<Switch
-									style={{ flex: 2 }}
-									value={this.state.dinner}
-									onValueChange={(dinner) => this.setState({ dinner })}
-								/>
-							</View>
-							{property.vehicle ? (
+								>
+									{this.state.dateTextCheckOut
+										? this.state.dateTextCheckOut
+										: "Please select check out date"}
+								</Button>
+								{this.state.datePickerCheckOut && (
+									<DateTimePicker
+										value={
+											this.state.checkOutDate
+												? this.state.checkOutDate
+												: new Date()
+										}
+										is24Hour={true}
+										display="default"
+										// minimumDate={this.state.checkInDate}
+										onChange={(event, date) => {
+											let dateTextCheckOut = moment(date).format("YYYY-MM-DD");
+											this.setState({ checkOutDate: date, dateTextCheckOut });
+										}}
+									/>
+								)}
 								<View
 									style={{
 										marginTop: 20,
@@ -294,22 +282,89 @@ export default class RentNow extends Component {
 									}}
 								>
 									<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
-										Avail Vehicle
+										Avail Breakfast
 									</Text>
 									<Switch
 										style={{ flex: 2 }}
-										value={this.state.vehicle}
-										onValueChange={(vehicle) => this.setState({ vehicle })}
+										value={this.state.breakfast}
+										onValueChange={(breakfast) => this.setState({ breakfast })}
 									/>
 								</View>
-							) : undefined}
-							<Button
-								style={{ width: "100%", marginTop: 20 }}
-								onPress={() => this.handleSubmit()}
-							>
-								Book Now
-							</Button>
-						</View>
+								<View
+									style={{
+										marginTop: 20,
+										flexDirection: "row",
+										alignItems: "center",
+									}}
+								>
+									<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
+										Avail Lunch
+									</Text>
+									<Switch
+										style={{ flex: 2 }}
+										value={this.state.lunch}
+										onValueChange={(lunch) => this.setState({ lunch })}
+									/>
+								</View>
+								<View
+									style={{
+										marginTop: 20,
+										flexDirection: "row",
+										alignItems: "center",
+									}}
+								>
+									<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
+										Avail Dinner
+									</Text>
+									<Switch
+										style={{ flex: 2 }}
+										value={this.state.dinner}
+										onValueChange={(dinner) => this.setState({ dinner })}
+									/>
+								</View>
+								{property.vehicle ? (
+									<View
+										style={{
+											marginTop: 20,
+											flexDirection: "row",
+											alignItems: "center",
+										}}
+									>
+										<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
+											Avail Vehicle
+										</Text>
+										<Switch
+											style={{ flex: 2 }}
+											value={this.state.vehicle}
+											onValueChange={(vehicle) => this.setState({ vehicle })}
+										/>
+									</View>
+								) : undefined}
+								<Text
+									style={{ fontSize: 20, fontWeight: "500", marginTop: 20 }}
+								>
+									Enter your credit card number
+								</Text>
+								<Text style={{ fontSize: 10, marginTop: 10, marginBottom: 20 }}>
+									Credit card information will be confidential, only used in
+									case of any problem from your side
+								</Text>
+								{property.securityFee ? (
+									<CreditCardInput
+										style={{ marginLeft: -20 }}
+										onChange={(value) => {
+											this.setState({ creditCard: value });
+										}}
+									/>
+								) : undefined}
+								<Button
+									style={{ width: "100%", marginTop: 20 }}
+									onPress={() => this.handleSubmit()}
+								>
+									Book Now
+								</Button>
+							</View>
+						</KeyboardAvoidingView>
 					</ScrollView>
 				)}
 

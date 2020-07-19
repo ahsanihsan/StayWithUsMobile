@@ -50,7 +50,7 @@ export default class AddApartment extends Component {
 			dinnerCost: 0,
 			lunchCost: 0,
 			breakfastCost: 0,
-			meals: true,
+			meals: false,
 			carParking: false,
 		};
 	}
@@ -91,6 +91,7 @@ export default class AddApartment extends Component {
 			lunchCost,
 			breakfastCost,
 			meals,
+			securityFee,
 			carParking,
 		} = this.state;
 		if (
@@ -132,6 +133,7 @@ export default class AddApartment extends Component {
 				bathroom,
 				rent,
 				images: [image1, image2, image3, image4],
+				securityFee,
 				breakfastImages: [
 					this.state.breakfastImage1,
 					this.state.breakfastImage3,
@@ -403,6 +405,31 @@ export default class AddApartment extends Component {
 									style={{ marginLeft: 10, flex: 5 }}
 									onValueChange={(check) => {
 										this.setState({ carParking: check });
+									}}
+								/>
+							</View>
+							<View
+								style={{
+									flexDirection: "row",
+									alignItems: "center",
+									marginTop: 10,
+								}}
+							>
+								<Text
+									style={{
+										paddingTop: 10,
+										paddingBottom: 5,
+										fontSize: 15,
+										flex: 2,
+									}}
+								>
+									Security Fee
+								</Text>
+								<Switch
+									value={this.state.securityFee}
+									style={{ marginLeft: 10, flex: 5 }}
+									onValueChange={(check) => {
+										this.setState({ securityFee: check });
 									}}
 								/>
 							</View>

@@ -94,6 +94,7 @@ export default class EditApartment extends Component {
 			carParking,
 			lunchCost,
 			dinnerCost,
+			securityFee,
 			breakfastCost,
 			vehicle,
 		} = this.state;
@@ -134,6 +135,7 @@ export default class EditApartment extends Component {
 				dinnerCost,
 				breakfastCost,
 				vehicle,
+				securityFee,
 			},
 		})
 			.then((response) => {
@@ -296,6 +298,31 @@ export default class EditApartment extends Component {
 											style={{ marginLeft: 10, flex: 5 }}
 											onValueChange={(check) => {
 												this.setState({ carParking: check });
+											}}
+										/>
+									</View>
+									<View
+										style={{
+											flexDirection: "row",
+											alignItems: "center",
+											marginTop: 10,
+										}}
+									>
+										<Text
+											style={{
+												paddingTop: 10,
+												paddingBottom: 5,
+												fontSize: 15,
+												flex: 3,
+											}}
+										>
+											Security Fee
+										</Text>
+										<Switch
+											value={this.state.securityFee}
+											style={{ marginLeft: 10, flex: 5 }}
+											onValueChange={(check) => {
+												this.setState({ securityFee: check });
 											}}
 										/>
 									</View>
