@@ -45,7 +45,10 @@ export default class Details extends Component {
 				if (response && response.data) {
 					if (response.data.success) {
 						this.getPropertyRating(response.data.message.rating);
-						this.getSellerRating(response.data.message.seller.rating);
+						this.getSellerRating(
+							response.data.message.seller.rating,
+							response.data.message.seller.averageRate
+						);
 						this.setState({
 							property: response.data.message,
 							isLoading: false,
@@ -165,14 +168,17 @@ export default class Details extends Component {
 		}
 	};
 
-	getSellerRating = (rating) => {
+	getSellerRating = (rating, penalty) => {
 		if (rating && rating instanceof Array && rating.length > 0) {
 			let averageRating = 0;
 			rating.map((item) => {
 				if (item && item.rating) averageRating = averageRating + item.rating;
 			});
 			averageRating = averageRating / rating.length;
-			this.setState({ sellerRatingAverage: averageRating });
+			averageRating = averageRating - penalty;
+			this.setState({
+				sellerRatingAverage: averageRating < 0 ? 0 : averageRating,
+			});
 		} else {
 			this.setState({ sellerRatingAverage: 0 });
 		}

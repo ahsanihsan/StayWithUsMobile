@@ -174,6 +174,9 @@ export default class index extends Component {
 		})
 			.then((response) => {
 				if (response && response.data && response.data.success) {
+					console.log("********");
+					console.log(response.data);
+					console.log("********");
 					let properties = response.data.message;
 					let userLat = this.state.userCurrentLocation.coords.latitude;
 					let userLong = this.state.userCurrentLocation.coords.longitude;
