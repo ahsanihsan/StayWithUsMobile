@@ -27,6 +27,9 @@ export default class Signin extends Component {
 
 	async componentDidMount() {
 		let token = await registerForPushNotificationsAsync();
+		console.log("************");
+		console.log(token);
+		console.log("************");
 		this.setState({ token });
 	}
 

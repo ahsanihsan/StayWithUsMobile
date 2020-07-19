@@ -30,6 +30,7 @@ export default class RentNow extends Component {
 			dateTextCheckIn: "",
 			dateTextCheckOut: "",
 			paymentMethod: "cash",
+			isLoading: true,
 		};
 	}
 
@@ -41,7 +42,7 @@ export default class RentNow extends Component {
 		let totalDaysStay = b.diff(a, "days") + 1;
 		totalDaysStay = totalDaysStay < 0 ? totalDaysStay * -1 : totalDaysStay;
 
-		let totalRentProperty = this.state.property.rent;
+		let totalRentProperty = this.state.property.rent / 30;
 		let totalBreakfastCost = this.state.property.breakfastCost;
 		let totalLunchCost = this.state.property.lunchCost;
 		let totalDinnerCost = this.state.property.dinnerCost;
@@ -99,14 +100,14 @@ export default class RentNow extends Component {
 					} else {
 						this.setState({
 							property: null,
-							isLoading: false,
-							refreshing: false,
+							// isLoading: false,
+							// refreshing: false,
 						});
 					}
 				}
 			})
 			.catch((error) => {
-				this.setState({ property: null, isLoading: false, refreshing: false });
+				// this.setState({ property: null, isLoading: false, refreshing: false });
 			});
 	};
 
@@ -120,9 +121,6 @@ export default class RentNow extends Component {
 	}
 
 	handleConfirmation = async () => {
-		console.log("*******");
-		console.log(this.state.bill);
-		console.log("*******");
 		Axios({
 			url: URL + "property/booking",
 			method: "POST",
@@ -164,6 +162,7 @@ export default class RentNow extends Component {
 
 	render() {
 		const { property, bill } = this.state;
+		console.log(property);
 		return (
 			<View style={{ flex: 1, backgroundColor: "white" }}>
 				<Header
@@ -286,22 +285,24 @@ export default class RentNow extends Component {
 									onValueChange={(dinner) => this.setState({ dinner })}
 								/>
 							</View>
-							<View
-								style={{
-									marginTop: 20,
-									flexDirection: "row",
-									alignItems: "center",
-								}}
-							>
-								<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
-									Avail Vehicle
-								</Text>
-								<Switch
-									style={{ flex: 2 }}
-									value={this.state.vehicle}
-									onValueChange={(vehicle) => this.setState({ vehicle })}
-								/>
-							</View>
+							{property.vehicle ? (
+								<View
+									style={{
+										marginTop: 20,
+										flexDirection: "row",
+										alignItems: "center",
+									}}
+								>
+									<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
+										Avail Vehicle
+									</Text>
+									<Switch
+										style={{ flex: 2 }}
+										value={this.state.vehicle}
+										onValueChange={(vehicle) => this.setState({ vehicle })}
+									/>
+								</View>
+							) : undefined}
 							<Button
 								style={{ width: "100%", marginTop: 20 }}
 								onPress={() => this.handleSubmit()}

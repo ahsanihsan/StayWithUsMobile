@@ -155,6 +155,31 @@ export default class Profile extends Component {
 			});
 	};
 
+	confirmDeactivation = () => {
+		Axios({
+			method: "GET",
+			url: URL + "users/deactivate/confirm/" + this.state.profile._id,
+		})
+			.then((response) => {
+				if (response && response.data) {
+					if (response.data.success) {
+						Alert.alert("Confirmation", response.data.message, [
+							{ text: "No" },
+							{
+								text: "Yes",
+								onPress: () => this.handleDeactivate(),
+							},
+						]);
+					} else {
+						Alert.alert(response.data.message);
+					}
+				}
+			})
+			.catch((error) => {
+				this.setState({ wishList: [], isLoading: false, refreshing: false });
+			});
+	};
+
 	render() {
 		const { profile } = this.state;
 		return (
@@ -198,17 +223,18 @@ export default class Profile extends Component {
 									color="red"
 									uppercase={true}
 									onPress={() => {
-										Alert.alert(
-											"Confirmation",
-											"Are you sure you want to de activate your account",
-											[
-												{ text: "No" },
-												{
-													text: "Yes",
-													onPress: () => this.handleDeactivate(),
-												},
-											]
-										);
+										this.confirmDeactivation();
+										// Alert.alert(
+										// 	"Confirmation",
+										// 	"Are you sure you want to de activate your account",
+										// 	[
+										// 		{ text: "No" },
+										// 		{
+										// 			text: "Yes",
+										// 			onPress: () => this.handleDeactivate(),
+										// 		},
+										// 	]
+										// );
 									}}
 									style={{
 										borderRadius: 5,

@@ -45,6 +45,7 @@ export default class Details extends Component {
 				if (response && response.data) {
 					if (response.data.success) {
 						this.getPropertyRating(response.data.message.rating);
+						this.getSellerRating(response.data.message.seller.rating);
 						this.setState({
 							property: response.data.message,
 							isLoading: false,
@@ -123,20 +124,31 @@ export default class Details extends Component {
 			.then((response) => {
 				this.fetch();
 				this.setState({ ratingModal: false });
-				// if (response.data) {
-				// 	if (response.data.success) {
-				// 		this.setState({
-				// 			alreadyFavourite: !this.state.alreadyFavourite,
-				// 			addingWishList: false,
-				// 		});
-				// 	} else {
-				// 		this.setState({ addingWishList: false });
-				// 	}
-				// }
-				// this.setState({ addingWishList: false });
+			})
+			.catch((error) => {});
+	};
+
+	handleSellerRating = async () => {
+		let currentUser = await AsyncStorage.getItem("currentUser");
+		currentUser = JSON.parse(currentUser);
+		let id = currentUser._id;
+		Axios({
+			method: "POST",
+			url: URL + "users/rate/" + this.state.property.seller._id,
+			data: {
+				user: id,
+				rating: this.state.sellerRating,
+				ratingText: this.state.sellerRatingText,
+			},
+		})
+			.then((response) => {
+				this.fetch();
+				this.setState({ sellerRatingModal: false });
 			})
 			.catch((error) => {
-				// this.setState({ addingWishList: false });
+				console.log("********");
+				console.log(error);
+				console.log("********");
 			});
 	};
 
@@ -150,6 +162,19 @@ export default class Details extends Component {
 			this.setState({ rating: averageRating });
 		} else {
 			this.setState({ rating: 0 });
+		}
+	};
+
+	getSellerRating = (rating) => {
+		if (rating && rating instanceof Array && rating.length > 0) {
+			let averageRating = 0;
+			rating.map((item) => {
+				if (item && item.rating) averageRating = averageRating + item.rating;
+			});
+			averageRating = averageRating / rating.length;
+			this.setState({ sellerRatingAverage: averageRating });
+		} else {
+			this.setState({ sellerRatingAverage: 0 });
 		}
 	};
 	render() {
@@ -242,26 +267,69 @@ export default class Details extends Component {
 											marginBottom: 10,
 										}}
 									>
-										<Rating
-											// readonly={this.state.userRole === "Seller" ? true : false}
-											readonly
-											startingValue={this.state.rating}
-											// onFinishRating={(rating) => {
-											// 	this.handleRatings(rating);
-											// }}
-											style={{
-												alignSelf: "flex-start",
-												backgroundColor: "transparent",
-											}}
-											imageSize={25}
-										/>
-										<Text style={{ fontSize: 15, marginLeft: 5 }}>
-											(
-											{property.rating && property.rating instanceof Array
-												? property.rating.length
-												: 0}
-											)
+										<Text style={{ fontSize: 15, marginLeft: 5, flex: 3 }}>
+											Property Rating: &ensp;
 										</Text>
+										<View
+											style={{
+												flex: 5,
+												flexDirection: "row",
+												alignItems: "center",
+											}}
+										>
+											<Rating
+												readonly
+												startingValue={this.state.rating}
+												style={{
+													alignSelf: "flex-start",
+													backgroundColor: "transparent",
+												}}
+												imageSize={25}
+											/>
+											<Text style={{ fontSize: 15, marginLeft: 5 }}>
+												(
+												{property.rating && property.rating instanceof Array
+													? property.rating.length
+													: 0}
+												)
+											</Text>
+										</View>
+									</View>
+									<View
+										style={{
+											flexDirection: "row",
+											alignItems: "center",
+											marginBottom: 10,
+										}}
+									>
+										<Text style={{ fontSize: 15, marginLeft: 5, flex: 3 }}>
+											Seller Rating: &ensp;
+										</Text>
+										<View
+											style={{
+												flex: 5,
+												flexDirection: "row",
+												alignItems: "center",
+											}}
+										>
+											<Rating
+												readonly
+												startingValue={this.state.sellerRatingAverage}
+												style={{
+													alignSelf: "flex-start",
+													backgroundColor: "transparent",
+												}}
+												imageSize={25}
+											/>
+											<Text style={{ fontSize: 15, marginLeft: 5 }}>
+												(
+												{property.seller.rating &&
+												property.seller.rating instanceof Array
+													? property.seller.rating.length
+													: 0}
+												)
+											</Text>
+										</View>
 									</View>
 									<Text style={{ textAlignVertical: "center", color: "gray" }}>
 										<EvilIcons name="location" size={20} />
@@ -759,6 +827,99 @@ export default class Details extends Component {
 												</TouchableOpacity>
 											) : undefined}
 										</View>
+										<View>
+											{property.rating && property.rating.length > 0 ? (
+												property.rating.map((item) => {
+													return (
+														<View
+															style={{
+																borderWidth: 0.9,
+																borderRadius: 10,
+																borderColor: "grey",
+																alignItems: "flex-start",
+																padding: 20,
+																marginTop: 10,
+															}}
+														>
+															<AirbnbRating
+																readonly
+																defaultRating={item.rating}
+																showRating={false}
+																size={20}
+															/>
+															<Text>{item.ratingText}</Text>
+														</View>
+													);
+												})
+											) : (
+												<Text style={{ textAlign: "justify" }}>
+													There is no rating for the current property yet
+												</Text>
+											)}
+										</View>
+										<View
+											style={{
+												flexDirection: "row",
+												justifyContent: "space-between",
+												alignItems: "center",
+											}}
+										>
+											<Text
+												style={{
+													fontSize: 28,
+													fontWeight: "bold",
+													marginTop: 20,
+													marginBottom: 20,
+												}}
+											>
+												Seller Rating ({property.seller.rating.length})
+											</Text>
+											{this.state.userRole === "Buyer" ? (
+												<TouchableOpacity
+													onPress={() =>
+														this.setState({ sellerRatingModal: true })
+													}
+												>
+													<MaterialCommunityIcons
+														name="plus"
+														size={30}
+														color={"blue"}
+														style={{ padding: 20 }}
+													/>
+												</TouchableOpacity>
+											) : undefined}
+										</View>
+										<View>
+											{property.seller.rating &&
+											property.seller.rating.length > 0 ? (
+												property.seller.rating.map((item) => {
+													return (
+														<View
+															style={{
+																borderWidth: 0.9,
+																borderRadius: 10,
+																borderColor: "grey",
+																alignItems: "flex-start",
+																padding: 20,
+																marginTop: 10,
+															}}
+														>
+															<AirbnbRating
+																readonly
+																defaultRating={item.rating}
+																showRating={false}
+																size={20}
+															/>
+															<Text>{item.ratingText}</Text>
+														</View>
+													);
+												})
+											) : (
+												<Text style={{ textAlign: "justify" }}>
+													There is no rating for the current seller yet
+												</Text>
+											)}
+										</View>
 										<Modal
 											isVisible={this.state.ratingModal}
 											onBackButtonPress={() => {
@@ -828,36 +989,75 @@ export default class Details extends Component {
 												</Button>
 											</View>
 										</Modal>
-										<View>
-											{property.rating && property.rating.length > 0 ? (
-												property.rating.map((item) => {
-													return (
-														<View
-															style={{
-																borderWidth: 0.9,
-																borderRadius: 10,
-																borderColor: "grey",
-																alignItems: "flex-start",
-																padding: 20,
-																marginTop: 10,
-															}}
-														>
-															<AirbnbRating
-																readonly
-																defaultRating={item.rating}
-																showRating={false}
-																size={20}
-															/>
-															<Text>{item.ratingText}</Text>
-														</View>
-													);
-												})
-											) : (
-												<Text style={{ textAlign: "justify" }}>
-													There is no rating for the current property yet
+										<Modal
+											isVisible={this.state.sellerRatingModal}
+											onBackButtonPress={() => {
+												this.setState({ sellerRatingModal: false });
+											}}
+											onBackdropPress={() => {
+												this.setState({ sellerRatingModal: false });
+											}}
+										>
+											<View
+												style={{
+													backgroundColor: "#fff",
+													width: "100%",
+													padding: 20,
+													borderRadius: 10,
+													alignSelf: "center",
+												}}
+											>
+												<Text
+													style={{
+														fontSize: 16,
+														marginTop: 5,
+														marginBottom: 10,
+													}}
+												>
+													Rating:
 												</Text>
-											)}
-										</View>
+												<Rating
+													onFinishRating={(rating) => {
+														this.setState({ sellerRating: rating });
+													}}
+													style={{
+														alignSelf: "flex-start",
+														backgroundColor: "transparent",
+													}}
+													imageSize={25}
+												/>
+												<Input
+													placeholder="Enter your review about the seller"
+													rounded
+													style={{
+														width: "100%",
+														alignSelf: "center",
+														marginTop: 10,
+													}}
+													value={this.state.sellerRatingText}
+													onChangeText={(sellerRatingText) =>
+														this.setState({ sellerRatingText })
+													}
+												/>
+												<Button
+													style={{
+														padding: 10,
+														borderRadius: 20,
+														backgroundColor: "#0652DD",
+														marginBottom: 10,
+														width: "100%",
+													}}
+													labelStyle={{
+														fontSize: 18,
+														fontWeight: "bold",
+													}}
+													mode="contained"
+													onPress={() => this.handleSellerRating()}
+												>
+													Submit
+												</Button>
+											</View>
+										</Modal>
 									</View>
 									{this.state.userRole === "Seller" ? undefined : (
 										<Button

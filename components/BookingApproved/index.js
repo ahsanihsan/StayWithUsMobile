@@ -33,6 +33,9 @@ export default class ApprovedRequests extends Component {
 				method: "GET",
 			})
 				.then((response) => {
+					console.log("**********");
+					console.log(response.data);
+					console.log("**********");
 					if (response && response.data) {
 						if (response.data.success) {
 							this.setState({

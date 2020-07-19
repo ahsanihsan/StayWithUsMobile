@@ -109,6 +109,10 @@ export default class AddApartment extends Component {
 			Alert.alert("Please check there is some data missing");
 			return false;
 		}
+		if (meals && (dinnerCost <= 0 || lunchCost <= 0 || breakfastCost <= 0)) {
+			Alert.alert("Please enter meals price");
+			return false;
+		}
 		if (!this.state.coordinates) {
 			Alert.alert("Please select the location of your apartment");
 			return false;
