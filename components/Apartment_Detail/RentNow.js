@@ -340,22 +340,26 @@ export default class RentNow extends Component {
 										/>
 									</View>
 								) : undefined}
-								<Text
-									style={{ fontSize: 20, fontWeight: "500", marginTop: 20 }}
-								>
-									Enter your credit card number
-								</Text>
-								<Text style={{ fontSize: 10, marginTop: 10, marginBottom: 20 }}>
-									Credit card information will be confidential, only used in
-									case of any problem from your side
-								</Text>
 								{property.securityFee ? (
-									<CreditCardInput
-										style={{ marginLeft: -20 }}
-										onChange={(value) => {
-											this.setState({ creditCard: value });
-										}}
-									/>
+									<>
+										<Text
+											style={{ fontSize: 20, fontWeight: "500", marginTop: 20 }}
+										>
+											Enter your credit card number
+										</Text>
+										<Text
+											style={{ fontSize: 10, marginTop: 10, marginBottom: 20 }}
+										>
+											Credit card information will be confidential, only used in
+											case of any problem from your side
+										</Text>
+										<CreditCardInput
+											style={{ marginLeft: -20 }}
+											onChange={(value) => {
+												this.setState({ creditCard: value });
+											}}
+										/>
+									</>
 								) : undefined}
 								<Button
 									style={{ width: "100%", marginTop: 20 }}

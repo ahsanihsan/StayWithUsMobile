@@ -192,7 +192,6 @@ export default class Details extends Component {
 					<ActivityIndicator />
 				) : (
 					<ScrollView
-						// style={{ marginBottom: 10 }}
 						refreshControl={
 							<RefreshControl
 								onRefresh={() => this.fetch()}
@@ -519,14 +518,17 @@ export default class Details extends Component {
 														<Text style={{ fontSize: 16, color: "#333" }}>
 															Vehicle
 														</Text>
-														<Text
-															style={{
-																fontSize: 10,
-																color: "grey",
-															}}
-														>
-															Tap to view images
-														</Text>
+														{property.vehicleImages &&
+														property.vehicleImages.length > 0 ? (
+															<Text
+																style={{
+																	fontSize: 10,
+																	color: "grey",
+																}}
+															>
+																Tap to view images
+															</Text>
+														) : undefined}
 													</View>
 												</TouchableOpacity>
 											</>
@@ -692,9 +694,12 @@ export default class Details extends Component {
 														<Text style={{ fontSize: 16, color: "#333" }}>
 															{property.breakfastCost} PKR {"\n"}Breakfast
 														</Text>
-														<Text style={{ fontSize: 10, color: "grey" }}>
-															Tap to view images
-														</Text>
+														{property.breakfastImages &&
+														property.breakfastImages.length > 0 ? (
+															<Text style={{ fontSize: 10, color: "grey" }}>
+																Tap to view images
+															</Text>
+														) : undefined}
 													</View>
 												</TouchableOpacity>
 												<TouchableOpacity
@@ -719,9 +724,12 @@ export default class Details extends Component {
 														<Text style={{ fontSize: 16, color: "#333" }}>
 															{property.lunchCost} PKR {"\n"}Lunch
 														</Text>
-														<Text style={{ fontSize: 10, color: "grey" }}>
-															Tap to view images
-														</Text>
+														{property.lunchImages &&
+														property.lunchImages.length > 0 ? (
+															<Text style={{ fontSize: 10, color: "grey" }}>
+																Tap to view images
+															</Text>
+														) : undefined}
 													</View>
 												</TouchableOpacity>
 												<TouchableOpacity
@@ -746,9 +754,12 @@ export default class Details extends Component {
 														<Text style={{ fontSize: 16, color: "#333" }}>
 															{property.dinnerCost} PKR {"\n"}Dinner
 														</Text>
-														<Text style={{ fontSize: 10, color: "grey" }}>
-															Tap to view images
-														</Text>
+														{property.dinnerImages &&
+														property.dinnerImages.length > 0 ? (
+															<Text style={{ fontSize: 10, color: "grey" }}>
+																Tap to view images
+															</Text>
+														) : undefined}
 													</View>
 												</TouchableOpacity>
 											</>

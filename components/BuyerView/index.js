@@ -28,8 +28,8 @@ export default class index extends Component {
 		this.state = {
 			properties: [],
 			backupProperties: [],
-			lowerLimit: 1000,
-			upperLimit: 1500,
+			lowerLimit: 0,
+			upperLimit: 0,
 			bedroomsNo: 0,
 			carParking: false,
 			meals: false,
@@ -42,7 +42,6 @@ export default class index extends Component {
 		if (status !== "granted") {
 			this.setState({ error: "Permission to access location was denied" });
 		}
-
 		let location = await Location.getCurrentPositionAsync({});
 		return location;
 	};
