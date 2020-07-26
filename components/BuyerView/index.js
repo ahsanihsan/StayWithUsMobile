@@ -146,22 +146,26 @@ export default class index extends Component {
 				});
 			}
 		}
-		let finalProperties = [];
-		newProperties.map((prevItem) => {
-			if (finalProperties.length > 0) {
-				finalProperties.map((newItem) => {
-					if (newItem) {
-						if (prevItem._id != newItem._id) {
-							finalProperties.push(newItem);
-						}
-					}
-				});
-			} else {
-				finalProperties.push(prevItem);
-			}
-		});
+		// let finalProperties = [];
+		// newProperties.map((prevItem) => {
+		// 	if (finalProperties.length > 0) {
+		// 		finalProperties.map((newItem) => {
+		// 			if (newItem) {
+		// 				console.log("*************");
+		// 				console.log(prevItem._id);
+		// 				console.log(newItem._id);
+		// 				console.log("*************");
+		// 				if (prevItem._id != newItem._id) {
+		// 					finalProperties.push(newItem);
+		// 				}
+		// 			}
+		// 		});
+		// 	} else {
+		// 		finalProperties.push(prevItem);
+		// 	}
+		// });
 		this.setState({
-			properties: query ? finalProperties : properties,
+			properties: query ? newProperties : properties,
 			filterModal: false,
 		});
 	};
