@@ -236,7 +236,11 @@ export default class RentNow extends Component {
 										minimumDate={new Date()}
 										onChange={(event, date) => {
 											let dateTextCheckIn = moment(date).format("YYYY-MM-DD");
-											this.setState({ checkInDate: date, dateTextCheckIn });
+											this.setState({
+												checkInDate: date,
+												dateTextCheckIn,
+												datePickerCheckIn: false,
+											});
 										}}
 									/>
 								)}
@@ -270,7 +274,11 @@ export default class RentNow extends Component {
 										// minimumDate={this.state.checkInDate}
 										onChange={(event, date) => {
 											let dateTextCheckOut = moment(date).format("YYYY-MM-DD");
-											this.setState({ checkOutDate: date, dateTextCheckOut });
+											this.setState({
+												checkOutDate: date,
+												dateTextCheckOut,
+												datePickerCheckIn: false,
+											});
 										}}
 									/>
 								)}
