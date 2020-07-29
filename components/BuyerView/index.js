@@ -82,70 +82,70 @@ export default class index extends Component {
 				});
 			}
 		}
-		if (bedroomsNo) {
-			query = true;
-			if (newProperties.length > 0) {
-				newProperties.map((item) => {
-					if (item.bedroom == bedroomsNo) {
-						newProperties.push(item);
-					}
-				});
-			} else {
-				properties.map((item) => {
-					if (item.bedroom === bedroomsNo) {
-						newProperties.push(item);
-					}
-				});
-			}
-		}
-		if (carParking) {
-			query = true;
-			if (newProperties.length > 0) {
-				newProperties.map((item) => {
-					if (item.carParking) {
-						newProperties.push(item);
-					}
-				});
-			} else {
-				properties.map((item) => {
-					if (item.carParking) {
-						newProperties.push(item);
-					}
-				});
-			}
-		}
-		if (vehicle) {
-			query = true;
-			if (newProperties.length > 0) {
-				newProperties.map((item) => {
-					if (item.vehicle) {
-						newProperties.push(item);
-					}
-				});
-			} else {
-				properties.map((item) => {
-					if (item.vehicle) {
-						newProperties.push(item);
-					}
-				});
-			}
-		}
-		if (meals) {
-			query = true;
-			if (newProperties.length > 0) {
-				newProperties.map((item) => {
-					if (item.meals) {
-						newProperties.push(item);
-					}
-				});
-			} else {
-				properties.map((item) => {
-					if (item.meals) {
-						newProperties.push(item);
-					}
-				});
-			}
-		}
+		// if (bedroomsNo) {
+		// 	query = true;
+		// 	if (newProperties.length > 0) {
+		// 		newProperties.map((item) => {
+		// 			if (item.bedroom == bedroomsNo) {
+		// 				newProperties.push(item);
+		// 			}
+		// 		});
+		// 	} else {
+		// 		properties.map((item) => {
+		// 			if (item.bedroom === bedroomsNo) {
+		// 				newProperties.push(item);
+		// 			}
+		// 		});
+		// 	}
+		// }
+		// if (carParking) {
+		// 	query = true;
+		// 	if (newProperties.length > 0) {
+		// 		newProperties.map((item) => {
+		// 			if (item.carParking) {
+		// 				newProperties.push(item);
+		// 			}
+		// 		});
+		// 	} else {
+		// 		properties.map((item) => {
+		// 			if (item.carParking) {
+		// 				newProperties.push(item);
+		// 			}
+		// 		});
+		// 	}
+		// }
+		// if (vehicle) {
+		// 	query = true;
+		// 	if (newProperties.length > 0) {
+		// 		newProperties.map((item) => {
+		// 			if (item.vehicle) {
+		// 				newProperties.push(item);
+		// 			}
+		// 		});
+		// 	} else {
+		// 		properties.map((item) => {
+		// 			if (item.vehicle) {
+		// 				newProperties.push(item);
+		// 			}
+		// 		});
+		// 	}
+		// }
+		// if (meals) {
+		// 	query = true;
+		// 	if (newProperties.length > 0) {
+		// 		newProperties.map((item) => {
+		// 			if (item.meals) {
+		// 				newProperties.push(item);
+		// 			}
+		// 		});
+		// 	} else {
+		// 		properties.map((item) => {
+		// 			if (item.meals) {
+		// 				newProperties.push(item);
+		// 			}
+		// 		});
+		// 	}
+		// }
 		// let finalProperties = [];
 		// newProperties.map((prevItem) => {
 		// 	if (finalProperties.length > 0) {
@@ -379,7 +379,6 @@ export default class index extends Component {
 									padding: 20,
 									borderRadius: 10,
 									alignSelf: "center",
-									height: "55%",
 								}}
 							>
 								<Text
@@ -425,7 +424,7 @@ export default class index extends Component {
 										/>
 									</View>
 								</View>
-								<Text
+								{/* <Text
 									style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 								>
 									Number of Bedrooms
@@ -509,7 +508,7 @@ export default class index extends Component {
 											this.setState({ vehicle: check });
 										}}
 									/>
-								</View>
+								</View> */}
 								<MyButton
 									color="info"
 									loading={this.state.loading}
