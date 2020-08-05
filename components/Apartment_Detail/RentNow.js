@@ -277,7 +277,7 @@ export default class RentNow extends Component {
 											this.setState({
 												checkOutDate: date,
 												dateTextCheckOut,
-												datePickerCheckIn: false,
+												datePickerCheckOut: false,
 											});
 										}}
 									/>
@@ -528,7 +528,7 @@ export default class RentNow extends Component {
 													marginBottom: 10,
 												}}
 											>
-												Total Days:{" "}
+												Total Days Stay:{" "}
 												<Text
 													style={{
 														fontSize: 20,
@@ -546,9 +546,23 @@ export default class RentNow extends Component {
 													marginBottom: 10,
 												}}
 											>
-												Rent:{" "}
+												Total rent per day:{" "}
 												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-													{bill.rentCost}
+													{Math.round(this.state.property.rent / 30, 10)}
+												</Text>{" "}
+												PKR
+											</Text>
+											<Text
+												style={{
+													fontSize: 15,
+													fontWeight: "600",
+													marginTop: 10,
+													marginBottom: 10,
+												}}
+											>
+												Total rent for stay:{" "}
+												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+													{Math.round(bill.rentCost, 10)}
 												</Text>{" "}
 												PKR
 											</Text>
@@ -619,11 +633,13 @@ export default class RentNow extends Component {
 											>
 												Total Bill:{" "}
 												<Text style={{ fontSize: 22, fontWeight: "bold" }}>
-													{bill.dinnerCost +
-														bill.breakfastCost +
-														bill.lunchCost +
-														bill.rentCost +
-														bill.vehicleCost}
+													{Math.round(
+														bill.dinnerCost +
+															bill.breakfastCost +
+															bill.lunchCost +
+															bill.rentCost +
+															bill.vehicleCost
+													)}
 												</Text>{" "}
 												PKR
 											</Text>

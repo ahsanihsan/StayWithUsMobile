@@ -117,9 +117,11 @@ export default class SellerView extends Component {
 							containerStyle={{
 								backgroundColor: "transparent",
 								borderWidth: 0,
+								height: 50,
 							}}
 							inputContainerStyle={{
 								backgroundColor: "transparent",
+								height: 50,
 								borderWidth: 0,
 							}}
 							value={this.state.searchQuery}
@@ -129,8 +131,8 @@ export default class SellerView extends Component {
 							}}
 						/>
 						<Text style={{ fontSize: 16, color: "gray", marginLeft: 20 }}>
-							{this.state.properties.length} results in your area, pull to
-							refresh the properties
+							{this.state.properties.length} nearby apartments found in your
+							area
 						</Text>
 						<ScrollView
 							refreshControl={
@@ -142,12 +144,7 @@ export default class SellerView extends Component {
 						>
 							{properties.map((item) => {
 								return (
-									<TouchableOpacity
-										onPress={() =>
-											this.props.navigation.push("Details", { id: item._id })
-										}
-										style={styles.outerContainer}
-									>
+									<View style={styles.outerContainer}>
 										<Image
 											source={{
 												uri: URL + item.images[0],
@@ -175,23 +172,42 @@ export default class SellerView extends Component {
 														>
 															{item.address}
 														</Text>
-														<Text style={{ textAlign: "right" }}>
-															<Text
-																style={{
-																	fontSize: 25,
-																	color: "#0652DD",
-																	fontWeight: "bold",
-																}}
-															>
-																{item.rent}
+														<View
+															style={{
+																flexDirection: "row",
+																justifyContent: "space-between",
+																alignItems: "center",
+															}}
+														>
+															<Text>
+																<Text
+																	style={{
+																		fontSize: 25,
+																		color: "#0652DD",
+																		fontWeight: "bold",
+																	}}
+																>
+																	{item.rent}
+																</Text>
+																<Text> PKR</Text>
 															</Text>
-															<Text> PKR</Text>
-														</Text>
+															<TouchableOpacity
+																onPress={() =>
+																	this.props.navigation.push("Details", {
+																		id: item._id,
+																	})
+																}
+															>
+																<Text style={{ color: "blue", padding: 10 }}>
+																	Show Details
+																</Text>
+															</TouchableOpacity>
+														</View>
 													</View>
 												</View>
 											</View>
 										</View>
-									</TouchableOpacity>
+									</View>
 								);
 							})}
 						</ScrollView>

@@ -4,7 +4,7 @@ import { Notifications } from "expo";
 import { Alert } from "react-native";
 import Axios from "axios";
 
-export const URL = "http://313533819c2a.ngrok.io/";
+export const URL = "http://0d8e12d21da5.ngrok.io/";
 
 export async function registerForPushNotificationsAsync() {
 	let token;
@@ -25,14 +25,14 @@ export async function registerForPushNotificationsAsync() {
 	} else {
 		Alert.alert("Must use physical device for Push Notifications");
 	}
-	if (Platform.OS === "android") {
-		Notifications.setNotificationChannelAsync("default", {
-			name: "default",
-			importance: Notifications.AndroidImportance.MAX,
-			vibrationPattern: [0, 250, 250, 250],
-			lightColor: "#FF231F7C",
-		});
-	}
+	// if (Platform.OS === "android") {
+	// 	Notifications.setNotificationChannelAsync("default", {
+	// 		name: "default",
+	// 		importance: Notifications.AndroidImportance.MAX,
+	// 		vibrationPattern: [0, 250, 250, 250],
+	// 		lightColor: "#FF231F7C",
+	// 	});
+	// }
 	return token;
 }
 

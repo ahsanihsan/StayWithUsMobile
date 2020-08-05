@@ -38,12 +38,12 @@ export default class index extends Component {
 	}
 
 	fetchCurrentLocation = async () => {
-		let { status } = await Location.requestPermissionsAsync();
-		if (status !== "granted") {
-			this.setState({ error: "Permission to access location was denied" });
-		}
-		let location = await Location.getCurrentPositionAsync({});
-		return location;
+		// let { status } = await Location.requestPermissionsAsync();
+		// if (status !== "granted") {
+		// 	this.setState({ error: "Permission to access location was denied" });
+		// }
+		// let location = await Location.getCurrentPositionAsync({});
+		// return location;
 	};
 
 	filterContent = () => {
@@ -178,24 +178,27 @@ export default class index extends Component {
 			.then((response) => {
 				if (response && response.data && response.data.success) {
 					let properties = response.data.message;
-					let userLat = this.state.userCurrentLocation.coords.latitude;
-					let userLong = this.state.userCurrentLocation.coords.longitude;
-					let newProperties = [];
-					properties.map((item) => {
-						let propLat = item.latitude;
-						let propLong = item.longitude;
-						let distance = getDistance(
-							{ longitude: propLong, latitude: propLat },
-							{ longitude: userLong, latitude: userLat },
-							50
-						);
-						if (distance) {
-							newProperties.push(item);
-						}
-					});
+					console.log("**********");
+					console.log(properties);
+					console.log("**********");
+					// let userLat = this.state.userCurrentLocation.coords.latitude;
+					// let userLong = this.state.userCurrentLocation.coords.longitude;
+					// let newProperties = [];
+					// properties.map((item) => {
+					// 	let propLat = item.latitude;
+					// 	let propLong = item.longitude;
+					// 	let distance = getDistance(
+					// 		{ longitude: propLong, latitude: propLat },
+					// 		{ longitude: userLong, latitude: userLat },
+					// 		50
+					// 	);
+					// 	if (distance) {
+					// 		newProperties.push(item);
+					// 	}
+					// });
 					this.setState({
-						properties: newProperties,
-						backupProperties: newProperties,
+						properties: properties,
+						backupProperties: properties,
 						isLoading: false,
 						refreshing: false,
 					});
@@ -218,8 +221,8 @@ export default class index extends Component {
 			});
 	};
 	async componentDidMount() {
-		let location = await this.fetchCurrentLocation();
-		this.setState({ userCurrentLocation: location });
+		// let location = await this.fetchCurrentLocation();
+		// this.setState({ userCurrentLocation: location });
 		this.fetchProperties();
 	}
 
@@ -253,7 +256,7 @@ export default class index extends Component {
 							style={{ marginRight: 20 }}
 						/>
 					</TouchableOpacity>
-					<Text style={styles.mainText}>Find your house</Text>
+					<Text style={styles.mainText}>Home</Text>
 					<TouchableOpacity
 						style={{ alignSelf: "flex-end" }}
 						onPress={() => {
@@ -278,10 +281,12 @@ export default class index extends Component {
 							containerStyle={{
 								backgroundColor: "transparent",
 								borderWidth: 0,
+								height: 50,
 							}}
 							inputContainerStyle={{
 								backgroundColor: "transparent",
 								borderWidth: 0,
+								height: 50,
 							}}
 							value={this.state.searchQuery}
 							onChangeText={(text) => {
@@ -297,8 +302,8 @@ export default class index extends Component {
 								marginTop: 10,
 							}}
 						>
-							{this.state.properties.length} results in your area, pull to
-							refresh the properties
+							{this.state.properties.length} nearby apartments found in your
+							area
 						</Text>
 						<ScrollView
 							refreshControl={
@@ -310,12 +315,7 @@ export default class index extends Component {
 						>
 							{properties.map((item) => {
 								return (
-									<TouchableOpacity
-										onPress={() =>
-											this.props.navigation.push("Details", { id: item._id })
-										}
-										style={styles.outerContainer}
-									>
+									<View style={styles.outerContainer}>
 										<Image
 											source={{
 												uri: URL + item.images[0],
@@ -345,21 +345,40 @@ export default class index extends Component {
 														</Text>
 													</View>
 												</View>
-												<Text>
-													<Text
-														style={{
-															fontSize: 25,
-															color: "#0652DD",
-															fontWeight: "bold",
-														}}
-													>
-														{item.rent}
+												<View
+													style={{
+														flexDirection: "row",
+														justifyContent: "space-between",
+														alignItems: "center",
+													}}
+												>
+													<Text>
+														<Text
+															style={{
+																fontSize: 25,
+																color: "#0652DD",
+																fontWeight: "bold",
+															}}
+														>
+															{item.rent}
+														</Text>
+														<Text> PKR</Text>
 													</Text>
-													<Text> PKR</Text>
-												</Text>
+													<TouchableOpacity
+														onPress={() =>
+															this.props.navigation.push("Details", {
+																id: item._id,
+															})
+														}
+													>
+														<Text style={{ color: "blue", padding: 10 }}>
+															Show Details
+														</Text>
+													</TouchableOpacity>
+												</View>
 											</View>
 										</View>
-									</TouchableOpacity>
+									</View>
 								);
 							})}
 						</ScrollView>

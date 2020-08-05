@@ -768,7 +768,6 @@ export default class Details extends Component {
 									<View
 										style={{
 											flex: 1,
-											marginVertical: 20,
 											paddingHorizontal: 10,
 										}}
 									>
@@ -823,13 +822,13 @@ export default class Details extends Component {
 										>
 											<Text
 												style={{
-													fontSize: 28,
+													fontSize: 25,
 													fontWeight: "bold",
 													marginTop: 20,
 													marginBottom: 20,
 												}}
 											>
-												Rating ({property.rating.length})
+												Property Rating ({property.rating.length})
 											</Text>
 											{this.state.userRole === "Buyer" ? (
 												<TouchableOpacity
@@ -883,7 +882,7 @@ export default class Details extends Component {
 										>
 											<Text
 												style={{
-													fontSize: 28,
+													fontSize: 25,
 													fontWeight: "bold",
 													marginTop: 20,
 													marginBottom: 20,
@@ -1083,6 +1082,8 @@ export default class Details extends Component {
 												borderRadius: 20,
 												backgroundColor: "#0652DD",
 												marginBottom: 10,
+												marginTop: 10,
+												alignSelf: "center",
 											}}
 											contentStyle={{}}
 											labelStyle={{ fontSize: 18, fontWeight: "bold" }}

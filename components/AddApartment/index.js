@@ -155,6 +155,7 @@ export default class AddApartment extends Component {
 					this.state.vehicleImage3,
 				],
 				vehicle: this.state.vehicle,
+				vehiclePrice: this.state.vehiclePrice,
 				area,
 				seller: id,
 				dinnerCost,
@@ -461,6 +462,16 @@ export default class AddApartment extends Component {
 							{this.state.vehicle ? (
 								<>
 									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Vehicle Price (PKR)
+									</Text>
+									<NumericInput
+										value={this.state.vehiclePrice}
+										onChange={(vehiclePrice) => this.setState({ vehiclePrice })}
+										step={500}
+									/>
+									<Text
 										style={{ fontSize: 20, fontWeight: "600", marginTop: 10 }}
 									>
 										Vehicle Images
@@ -473,17 +484,20 @@ export default class AddApartment extends Component {
 										}}
 									>
 										{this.state.vehicleImage1 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," + this.state.vehicleImage1,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageVehicle(1)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," +
+															this.state.vehicleImage1,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageVehicle(1)}
@@ -501,17 +515,20 @@ export default class AddApartment extends Component {
 											</TouchableOpacity>
 										)}
 										{this.state.vehicleImage2 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," + this.state.vehicleImage2,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageVehicle(2)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," +
+															this.state.vehicleImage2,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageVehicle(2)}
@@ -529,17 +546,20 @@ export default class AddApartment extends Component {
 											</TouchableOpacity>
 										)}
 										{this.state.vehicleImage3 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," + this.state.vehicleImage3,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageVehicle(3)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," +
+															this.state.vehicleImage3,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageVehicle(3)}
@@ -607,18 +627,20 @@ export default class AddApartment extends Component {
 										}}
 									>
 										{this.state.breakfastImage1 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," +
-														this.state.breakfastImage1,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageBreakfast(1)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," +
+															this.state.breakfastImage1,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageBreakfast(1)}
@@ -636,18 +658,20 @@ export default class AddApartment extends Component {
 											</TouchableOpacity>
 										)}
 										{this.state.breakfastImage2 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," +
-														this.state.breakfastImage2,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageBreakfast(2)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," +
+															this.state.breakfastImage2,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageBreakfast(2)}
@@ -665,18 +689,20 @@ export default class AddApartment extends Component {
 											</TouchableOpacity>
 										)}
 										{this.state.breakfastImage3 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," +
-														this.state.breakfastImage3,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageBreakfast(3)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," +
+															this.state.breakfastImage3,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageBreakfast(3)}
@@ -712,17 +738,19 @@ export default class AddApartment extends Component {
 										}}
 									>
 										{this.state.lunchImage1 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," + this.state.lunchImage1,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageLunch(1)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," + this.state.lunchImage1,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageLunch(1)}
@@ -740,17 +768,19 @@ export default class AddApartment extends Component {
 											</TouchableOpacity>
 										)}
 										{this.state.lunchImage2 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," + this.state.lunchImage2,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageLunch(2)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," + this.state.lunchImage2,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageLunch(2)}
@@ -768,17 +798,19 @@ export default class AddApartment extends Component {
 											</TouchableOpacity>
 										)}
 										{this.state.lunchImage3 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," + this.state.lunchImage3,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageLunch(3)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," + this.state.lunchImage3,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageLunch(3)}
@@ -814,17 +846,20 @@ export default class AddApartment extends Component {
 										}}
 									>
 										{this.state.dinnerImage1 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," + this.state.dinnerImage1,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageDinner(1)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," +
+															this.state.dinnerImage1,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageDinner(1)}
@@ -842,17 +877,20 @@ export default class AddApartment extends Component {
 											</TouchableOpacity>
 										)}
 										{this.state.dinnerImage2 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," + this.state.dinnerImage2,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageDinner(2)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," +
+															this.state.dinnerImage2,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageDinner(2)}
@@ -870,17 +908,20 @@ export default class AddApartment extends Component {
 											</TouchableOpacity>
 										)}
 										{this.state.dinnerImage3 ? (
-											<Image
-												source={{
-													uri:
-														"data:image/png;base64," + this.state.dinnerImage3,
-												}}
-												style={{
-													width: 100,
-													height: 100,
-													borderRadius: 10,
-												}}
-											/>
+											<TouchableOpacity onPress={() => pickImageDinner(3)}>
+												<Image
+													source={{
+														uri:
+															"data:image/png;base64," +
+															this.state.dinnerImage3,
+													}}
+													style={{
+														width: 100,
+														height: 100,
+														borderRadius: 10,
+													}}
+												/>
+											</TouchableOpacity>
 										) : (
 											<TouchableOpacity
 												onPress={() => pickImageDinner(3)}
@@ -927,16 +968,18 @@ export default class AddApartment extends Component {
 								}}
 							>
 								{this.state.image1 ? (
-									<Image
-										source={{
-											uri: "data:image/png;base64," + this.state.image1,
-										}}
-										style={{
-											width: 100,
-											height: 100,
-											borderRadius: 10,
-										}}
-									/>
+									<TouchableOpacity onPress={() => pickImage(1)}>
+										<Image
+											source={{
+												uri: "data:image/png;base64," + this.state.image1,
+											}}
+											style={{
+												width: 100,
+												height: 100,
+												borderRadius: 10,
+											}}
+										/>
+									</TouchableOpacity>
 								) : (
 									<TouchableOpacity
 										onPress={() => pickImage(1)}
@@ -954,16 +997,18 @@ export default class AddApartment extends Component {
 									</TouchableOpacity>
 								)}
 								{this.state.image2 ? (
-									<Image
-										source={{
-											uri: "data:image/png;base64," + this.state.image2,
-										}}
-										style={{
-											width: 100,
-											height: 100,
-											borderRadius: 10,
-										}}
-									/>
+									<TouchableOpacity onPress={() => pickImage(2)}>
+										<Image
+											source={{
+												uri: "data:image/png;base64," + this.state.image2,
+											}}
+											style={{
+												width: 100,
+												height: 100,
+												borderRadius: 10,
+											}}
+										/>
+									</TouchableOpacity>
 								) : (
 									<TouchableOpacity
 										onPress={() => pickImage(2)}
@@ -981,16 +1026,18 @@ export default class AddApartment extends Component {
 									</TouchableOpacity>
 								)}
 								{this.state.image3 ? (
-									<Image
-										source={{
-											uri: "data:image/png;base64," + this.state.image3,
-										}}
-										style={{
-											width: 100,
-											height: 100,
-											borderRadius: 10,
-										}}
-									/>
+									<TouchableOpacity onPress={() => pickImage(3)}>
+										<Image
+											source={{
+												uri: "data:image/png;base64," + this.state.image3,
+											}}
+											style={{
+												width: 100,
+												height: 100,
+												borderRadius: 10,
+											}}
+										/>
+									</TouchableOpacity>
 								) : (
 									<TouchableOpacity
 										onPress={() => pickImage(3)}
@@ -1009,18 +1056,20 @@ export default class AddApartment extends Component {
 								)}
 							</View>
 							{this.state.image4 ? (
-								<Image
-									source={{
-										uri: "data:image/png;base64," + this.state.image4,
-									}}
-									style={{
-										width: 100,
-										height: 100,
-										borderRadius: 10,
-										alignSelf: "center",
-										marginTop: 10,
-									}}
-								/>
+								<TouchableOpacity onPress={() => pickImage(4)}>
+									<Image
+										source={{
+											uri: "data:image/png;base64," + this.state.image4,
+										}}
+										style={{
+											width: 100,
+											height: 100,
+											borderRadius: 10,
+											alignSelf: "center",
+											marginTop: 10,
+										}}
+									/>
+								</TouchableOpacity>
 							) : (
 								<TouchableOpacity
 									onPress={() => pickImage(4)}
