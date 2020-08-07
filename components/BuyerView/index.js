@@ -47,47 +47,74 @@ export default class index extends Component {
 	};
 
 	filterContent = () => {
-		const {
-			lowerLimit,
-			upperLimit,
-			bedroomsNo,
-			carParking,
-			meals,
-			vehicle,
-		} = this.state;
+		const { lowerLimit, upperLimit, carParking, meals, vehicle } = this.state;
 
 		let properties = this.state.backupProperties;
 
 		let newProperties = [];
-		let query = false;
-		if (lowerLimit || upperLimit) {
-			query = true;
-			if (lowerLimit && upperLimit) {
-				properties.map((item) => {
-					if (item.rent <= upperLimit && item.rent >= lowerLimit) {
-						newProperties.push(item);
-					}
-				});
-			} else if (lowerLimit && !upperLimit) {
-				properties.map((item) => {
-					if (item.rent >= lowerLimit) {
-						newProperties.push(item);
-					}
-				});
-			} else if (!lowerLimit && upperLimit) {
-				properties.map((item) => {
-					if (item.rent <= upperLimit) {
-						newProperties.push(item);
-					}
-				});
+
+		properties.map((item) => {
+			if (
+				(item.rent >= lowerLimit && item.rent <= upperLimit) ||
+				item.vehicle == vehicle ||
+				item.meals == meals ||
+				item.carParking == carParking
+			) {
+				newProperties.push(item);
 			}
-		}
+		});
+
+		// let newProperties = [];
+		// let query = false;
+		// if (lowerLimit || upperLimit || carParking || meals || vehicle) {
+		// 	query = true;
+		// 	if (lowerLimit && upperLimit) {
+		// 		properties.map((item) => {
+		// 			let carParkingNeeded = carParking;
+		// 			let vehicleNeeded = vehicle
+		// 			let mealsNeeded = meals
+
+		// 			if (carParkingNeeded) {
+		// 				if (
+		// 					item.rent <= upperLimit &&
+		// 					item.rent >= lowerLimit &&
+		// 					item.carParking
+		// 				) {
+		// 					newProperties.push(item);
+		// 				}
+		// 			} else {
+		// 				if (item.rent <= upperLimit && item.rent >= lowerLimit) {
+		// 					newProperties.push(item);
+		// 				}
+		// 			}
+		// 		});
+		// 	} else if (lowerLimit && !upperLimit) {
+		// 		properties.map((item) => {
+		// 			if (item.rent >= lowerLimit) {
+		// 				newProperties.push(item);
+		// 			}
+		// 		});
+		// 	} else if (!lowerLimit && upperLimit) {
+		// 		properties.map((item) => {
+		// 			if (item.rent <= upperLimit) {
+		// 				newProperties.push(item);
+		// 			}
+		// 		});
+		// 	}
+		// }
+
 		// if (bedroomsNo) {
 		// 	query = true;
 		// 	if (newProperties.length > 0) {
 		// 		newProperties.map((item) => {
 		// 			if (item.bedroom == bedroomsNo) {
-		// 				newProperties.push(item);
+		// 				let shouldPush = false;
+		// 				newProperties.map((newItem) => {
+		// 					if (newItem._id == item._id) shouldPush = true;
+		// 				});
+		// 				if (shouldPush) {
+		// 					newProperties.push(item);
+		// 				}
 		// 			}
 		// 		});
 		// 	} else {
@@ -98,12 +125,19 @@ export default class index extends Component {
 		// 		});
 		// 	}
 		// }
+
 		// if (carParking) {
 		// 	query = true;
 		// 	if (newProperties.length > 0) {
 		// 		newProperties.map((item) => {
 		// 			if (item.carParking) {
-		// 				newProperties.push(item);
+		// 				let shouldPush = false;
+		// 				newProperties.map((newItem) => {
+		// 					if (newItem._id == item._id) shouldPush = true;
+		// 				});
+		// 				if (shouldPush) {
+		// 					newProperties.push(item);
+		// 				}
 		// 			}
 		// 		});
 		// 	} else {
@@ -119,7 +153,13 @@ export default class index extends Component {
 		// 	if (newProperties.length > 0) {
 		// 		newProperties.map((item) => {
 		// 			if (item.vehicle) {
-		// 				newProperties.push(item);
+		// 				let shouldPush = false;
+		// 				newProperties.map((newItem) => {
+		// 					if (newItem._id == item._id) shouldPush = true;
+		// 				});
+		// 				if (shouldPush) {
+		// 					newProperties.push(item);
+		// 				}
 		// 			}
 		// 		});
 		// 	} else {
@@ -135,7 +175,13 @@ export default class index extends Component {
 		// 	if (newProperties.length > 0) {
 		// 		newProperties.map((item) => {
 		// 			if (item.meals) {
-		// 				newProperties.push(item);
+		// 				let shouldPush = false;
+		// 				newProperties.map((newItem) => {
+		// 					if (newItem._id == item._id) shouldPush = true;
+		// 				});
+		// 				if (shouldPush) {
+		// 					newProperties.push(item);
+		// 				}
 		// 			}
 		// 		});
 		// 	} else {
@@ -165,7 +211,7 @@ export default class index extends Component {
 		// 	}
 		// });
 		this.setState({
-			properties: query ? newProperties : properties,
+			properties: newProperties,
 			filterModal: false,
 		});
 	};
@@ -440,7 +486,7 @@ export default class index extends Component {
 										/>
 									</View>
 								</View>
-								<Text
+								{/* <Text
 									style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 								>
 									Number of Bedrooms
@@ -449,7 +495,7 @@ export default class index extends Component {
 									initValue={this.state.bedroomsNo}
 									value={this.state.bedroomsNo}
 									onChange={(bedroomsNo) => this.setState({ bedroomsNo })}
-								/>
+								/> */}
 								<View
 									style={{
 										flexDirection: "row",
