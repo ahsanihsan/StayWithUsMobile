@@ -62,6 +62,7 @@ export default class EditApartment extends Component {
 							lunchCost: property.lunchCost,
 							breakfastCost: property.breakfastCost,
 							dinnerCost: property.dinnerCost,
+							vehiclePrice: property.vehiclePrice,
 							isLoading: false,
 						});
 					} else {
@@ -136,6 +137,7 @@ export default class EditApartment extends Component {
 				breakfastCost,
 				vehicle,
 				securityFee,
+				vehiclePrice: this.state.vehiclePrice,
 			},
 		})
 			.then((response) => {
@@ -351,6 +353,26 @@ export default class EditApartment extends Component {
 											}}
 										/>
 									</View>
+									{this.state.vehicle ? (
+										<>
+											<Text
+												style={{
+													paddingTop: 10,
+													paddingBottom: 5,
+													fontSize: 15,
+												}}
+											>
+												Vehicle Price (PKR)
+											</Text>
+											<NumericInput
+												value={this.state.vehiclePrice}
+												onChange={(vehiclePrice) =>
+													this.setState({ vehiclePrice })
+												}
+												step={500}
+											/>
+										</>
+									) : undefined}
 									<View
 										style={{
 											flexDirection: "row",

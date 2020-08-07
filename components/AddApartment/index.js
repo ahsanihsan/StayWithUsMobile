@@ -377,12 +377,14 @@ export default class AddApartment extends Component {
 								</View>
 							</View>
 							<Text style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}>
-								Rent (PKR)
+								Rent / month (PKR)
 							</Text>
 							<NumericInput
 								value={this.state.rent}
 								onChange={(rent) => this.setState({ rent })}
 								step={500}
+								inputStyle={{ width: 100 }}
+								containerStyle={{ width: 200 }}
 							/>
 							<View
 								style={{
@@ -464,7 +466,7 @@ export default class AddApartment extends Component {
 									<Text
 										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 									>
-										Vehicle Price (PKR)
+										Vehicle Price / month (PKR)
 									</Text>
 									<NumericInput
 										value={this.state.vehiclePrice}
@@ -610,7 +612,7 @@ export default class AddApartment extends Component {
 									<Text
 										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 									>
-										Breakfast Price (PKR)
+										Breakfast Price / meal (PKR)
 									</Text>
 									<NumericInput
 										value={this.state.breakfastCost}
@@ -723,7 +725,7 @@ export default class AddApartment extends Component {
 									<Text
 										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 									>
-										Lunch Price (PKR)
+										Lunch Price / meal (PKR)
 									</Text>
 									<NumericInput
 										value={this.state.lunchCost}
@@ -831,7 +833,7 @@ export default class AddApartment extends Component {
 									<Text
 										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 									>
-										Dinner Price (PKR)
+										Dinner Price / meal (PKR)
 									</Text>
 									<NumericInput
 										value={this.state.dinnerCost}

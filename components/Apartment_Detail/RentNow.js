@@ -18,10 +18,7 @@ import { Button } from "galio-framework";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 
-import {
-	CreditCardInput,
-	LiteCreditCardInput,
-} from "react-native-credit-card-input";
+import { CreditCardInput } from "react-native-credit-card-input";
 
 export default class RentNow extends Component {
 	constructor(props) {
@@ -52,7 +49,7 @@ export default class RentNow extends Component {
 		let totalBreakfastCost = this.state.property.breakfastCost;
 		let totalLunchCost = this.state.property.lunchCost;
 		let totalDinnerCost = this.state.property.dinnerCost;
-		let totalVehicleCost = 0;
+		let totalVehicleCost = this.state.property.vehiclePrice / 30;
 
 		let consumedRent = totalRentProperty * totalDaysStay;
 		let consumedBreakFast = this.state.breakfast
@@ -282,54 +279,66 @@ export default class RentNow extends Component {
 										}}
 									/>
 								)}
-								<View
-									style={{
-										marginTop: 20,
-										flexDirection: "row",
-										alignItems: "center",
-									}}
-								>
-									<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
-										Avail Breakfast
-									</Text>
-									<Switch
-										style={{ flex: 2 }}
-										value={this.state.breakfast}
-										onValueChange={(breakfast) => this.setState({ breakfast })}
-									/>
-								</View>
-								<View
-									style={{
-										marginTop: 20,
-										flexDirection: "row",
-										alignItems: "center",
-									}}
-								>
-									<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
-										Avail Lunch
-									</Text>
-									<Switch
-										style={{ flex: 2 }}
-										value={this.state.lunch}
-										onValueChange={(lunch) => this.setState({ lunch })}
-									/>
-								</View>
-								<View
-									style={{
-										marginTop: 20,
-										flexDirection: "row",
-										alignItems: "center",
-									}}
-								>
-									<Text style={{ fontSize: 20, fontWeight: "500", flex: 2 }}>
-										Avail Dinner
-									</Text>
-									<Switch
-										style={{ flex: 2 }}
-										value={this.state.dinner}
-										onValueChange={(dinner) => this.setState({ dinner })}
-									/>
-								</View>
+								{property.meals ? (
+									<>
+										<View
+											style={{
+												marginTop: 20,
+												flexDirection: "row",
+												alignItems: "center",
+											}}
+										>
+											<Text
+												style={{ fontSize: 20, fontWeight: "500", flex: 2 }}
+											>
+												Avail Breakfast
+											</Text>
+											<Switch
+												style={{ flex: 2 }}
+												value={this.state.breakfast}
+												onValueChange={(breakfast) =>
+													this.setState({ breakfast })
+												}
+											/>
+										</View>
+										<View
+											style={{
+												marginTop: 20,
+												flexDirection: "row",
+												alignItems: "center",
+											}}
+										>
+											<Text
+												style={{ fontSize: 20, fontWeight: "500", flex: 2 }}
+											>
+												Avail Lunch
+											</Text>
+											<Switch
+												style={{ flex: 2 }}
+												value={this.state.lunch}
+												onValueChange={(lunch) => this.setState({ lunch })}
+											/>
+										</View>
+										<View
+											style={{
+												marginTop: 20,
+												flexDirection: "row",
+												alignItems: "center",
+											}}
+										>
+											<Text
+												style={{ fontSize: 20, fontWeight: "500", flex: 2 }}
+											>
+												Avail Dinner
+											</Text>
+											<Switch
+												style={{ flex: 2 }}
+												value={this.state.dinner}
+												onValueChange={(dinner) => this.setState({ dinner })}
+											/>
+										</View>
+									</>
+								) : undefined}
 								{property.vehicle ? (
 									<View
 										style={{
@@ -566,62 +575,68 @@ export default class RentNow extends Component {
 												</Text>{" "}
 												PKR
 											</Text>
-											<Text
-												style={{
-													fontSize: 15,
-													fontWeight: "600",
-													marginTop: 10,
-													marginBottom: 10,
-												}}
-											>
-												Breakfast:{" "}
-												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-													{bill.breakfastCost}
-												</Text>{" "}
-												PKR
-											</Text>
-											<Text
-												style={{
-													fontSize: 15,
-													fontWeight: "600",
-													marginTop: 10,
-													marginBottom: 10,
-												}}
-											>
-												Lunch:{" "}
-												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-													{bill.lunchCost}
-												</Text>{" "}
-												PKR
-											</Text>
-											<Text
-												style={{
-													fontSize: 15,
-													fontWeight: "600",
-													marginTop: 10,
-													marginBottom: 10,
-												}}
-											>
-												Dinner:{" "}
-												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-													{bill.dinnerCost}
-												</Text>{" "}
-												PKR
-											</Text>
-											<Text
-												style={{
-													fontSize: 15,
-													fontWeight: "600",
-													marginTop: 10,
-													marginBottom: 10,
-												}}
-											>
-												Vehicle:{" "}
-												<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-													{bill.vehicleCost}
-												</Text>{" "}
-												PKR
-											</Text>
+											{property.meals ? (
+												<>
+													<Text
+														style={{
+															fontSize: 15,
+															fontWeight: "600",
+															marginTop: 10,
+															marginBottom: 10,
+														}}
+													>
+														Breakfast:{" "}
+														<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+															{bill.breakfastCost}
+														</Text>{" "}
+														PKR
+													</Text>
+													<Text
+														style={{
+															fontSize: 15,
+															fontWeight: "600",
+															marginTop: 10,
+															marginBottom: 10,
+														}}
+													>
+														Lunch:{" "}
+														<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+															{bill.lunchCost}
+														</Text>{" "}
+														PKR
+													</Text>
+													<Text
+														style={{
+															fontSize: 15,
+															fontWeight: "600",
+															marginTop: 10,
+															marginBottom: 10,
+														}}
+													>
+														Dinner:{" "}
+														<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+															{bill.dinnerCost}
+														</Text>{" "}
+														PKR
+													</Text>
+												</>
+											) : undefined}
+											{property.vehicle ? (
+												<Text
+													style={{
+														fontSize: 15,
+														fontWeight: "600",
+														marginTop: 10,
+														marginBottom: 10,
+													}}
+												>
+													Vehicle:{" "}
+													<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+														{bill.vehicleCost}
+													</Text>{" "}
+													PKR
+												</Text>
+											) : undefined}
 											<Text
 												style={{
 													fontSize: 15,

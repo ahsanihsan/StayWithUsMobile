@@ -4,7 +4,7 @@ import { Notifications } from "expo";
 import { Alert } from "react-native";
 import Axios from "axios";
 
-export const URL = "http://0d8e12d21da5.ngrok.io/";
+export const URL = "http://52c00a78d1f7.ngrok.io/";
 
 export async function registerForPushNotificationsAsync() {
 	let token;

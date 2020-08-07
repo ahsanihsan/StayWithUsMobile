@@ -38,12 +38,12 @@ export default class index extends Component {
 	}
 
 	fetchCurrentLocation = async () => {
-		// let { status } = await Location.requestPermissionsAsync();
-		// if (status !== "granted") {
-		// 	this.setState({ error: "Permission to access location was denied" });
-		// }
-		// let location = await Location.getCurrentPositionAsync({});
-		// return location;
+		let { status } = await Location.requestPermissionsAsync();
+		if (status !== "granted") {
+			this.setState({ error: "Permission to access location was denied" });
+		}
+		let location = await Location.getCurrentPositionAsync({});
+		return location;
 	};
 
 	filterContent = () => {
@@ -178,27 +178,24 @@ export default class index extends Component {
 			.then((response) => {
 				if (response && response.data && response.data.success) {
 					let properties = response.data.message;
-					console.log("**********");
-					console.log(properties);
-					console.log("**********");
-					// let userLat = this.state.userCurrentLocation.coords.latitude;
-					// let userLong = this.state.userCurrentLocation.coords.longitude;
-					// let newProperties = [];
-					// properties.map((item) => {
-					// 	let propLat = item.latitude;
-					// 	let propLong = item.longitude;
-					// 	let distance = getDistance(
-					// 		{ longitude: propLong, latitude: propLat },
-					// 		{ longitude: userLong, latitude: userLat },
-					// 		50
-					// 	);
-					// 	if (distance) {
-					// 		newProperties.push(item);
-					// 	}
-					// });
+					let userLat = this.state.userCurrentLocation.coords.latitude;
+					let userLong = this.state.userCurrentLocation.coords.longitude;
+					let newProperties = [];
+					properties.map((item) => {
+						let propLat = item.latitude;
+						let propLong = item.longitude;
+						let distance = getDistance(
+							{ longitude: propLong, latitude: propLat },
+							{ longitude: userLong, latitude: userLat },
+							50
+						);
+						if (distance) {
+							newProperties.push(item);
+						}
+					});
 					this.setState({
-						properties: properties,
-						backupProperties: properties,
+						properties: newProperties,
+						backupProperties: newProperties,
 						isLoading: false,
 						refreshing: false,
 					});
@@ -221,8 +218,8 @@ export default class index extends Component {
 			});
 	};
 	async componentDidMount() {
-		// let location = await this.fetchCurrentLocation();
-		// this.setState({ userCurrentLocation: location });
+		let location = await this.fetchCurrentLocation();
+		this.setState({ userCurrentLocation: location });
 		this.fetchProperties();
 	}
 
@@ -362,7 +359,7 @@ export default class index extends Component {
 														>
 															{item.rent}
 														</Text>
-														<Text> PKR</Text>
+														<Text> PKR / month</Text>
 													</Text>
 													<TouchableOpacity
 														onPress={() =>
@@ -443,7 +440,7 @@ export default class index extends Component {
 										/>
 									</View>
 								</View>
-								{/* <Text
+								<Text
 									style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
 								>
 									Number of Bedrooms
@@ -527,7 +524,7 @@ export default class index extends Component {
 											this.setState({ vehicle: check });
 										}}
 									/>
-								</View> */}
+								</View>
 								<MyButton
 									color="info"
 									loading={this.state.loading}

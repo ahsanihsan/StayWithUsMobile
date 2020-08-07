@@ -189,7 +189,7 @@ export default class SellerView extends Component {
 																>
 																	{item.rent}
 																</Text>
-																<Text> PKR</Text>
+																<Text> PKR / month</Text>
 															</Text>
 															<TouchableOpacity
 																onPress={() =>
