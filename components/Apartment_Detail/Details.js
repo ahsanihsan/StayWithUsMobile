@@ -467,7 +467,7 @@ export default class Details extends Component {
 													<View
 														style={{
 															backgroundColor: "#fff",
-															height: 200,
+															height: 250,
 															borderRadius: 10,
 															alignSelf: "center",
 															justifyContent: "center",
@@ -498,6 +498,9 @@ export default class Details extends Component {
 																}
 															})}
 														</ScrollView>
+														<Text style={{ margin: 20 }}>
+															{property.vehicleDescription}
+														</Text>
 													</View>
 												</Modal>
 												<TouchableOpacity
@@ -547,7 +550,7 @@ export default class Details extends Component {
 													<View
 														style={{
 															backgroundColor: "#fff",
-															height: 200,
+															height: 250,
 															borderRadius: 10,
 															alignSelf: "center",
 															justifyContent: "center",
@@ -578,6 +581,9 @@ export default class Details extends Component {
 																}
 															})}
 														</ScrollView>
+														<Text style={{ margin: 20 }}>
+															{property.breakfastDescription}
+														</Text>
 													</View>
 												</Modal>
 												<Modal
@@ -592,7 +598,7 @@ export default class Details extends Component {
 													<View
 														style={{
 															backgroundColor: "#fff",
-															height: 200,
+															height: 250,
 															borderRadius: 10,
 															alignSelf: "center",
 															justifyContent: "center",
@@ -623,6 +629,9 @@ export default class Details extends Component {
 																}
 															})}
 														</ScrollView>
+														<Text style={{ margin: 20 }}>
+															{property.lunchDescription}
+														</Text>
 													</View>
 												</Modal>
 												<Modal
@@ -637,7 +646,7 @@ export default class Details extends Component {
 													<View
 														style={{
 															backgroundColor: "#fff",
-															height: 200,
+															height: 250,
 															borderRadius: 10,
 															alignSelf: "center",
 															justifyContent: "center",
@@ -668,6 +677,9 @@ export default class Details extends Component {
 																}
 															})}
 														</ScrollView>
+														<Text style={{ margin: 20 }}>
+															{property.dinnerDescription}
+														</Text>
 													</View>
 												</Modal>
 												<TouchableOpacity

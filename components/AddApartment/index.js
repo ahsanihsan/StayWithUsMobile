@@ -154,6 +154,10 @@ export default class AddApartment extends Component {
 					this.state.vehicleImage2,
 					this.state.vehicleImage3,
 				],
+				breakfastDescription: this.state.breakfastDescription,
+				lunchDescription: this.state.lunchDescription,
+				dinnerDescription: this.state.dinnerDescription,
+				vehicleDescription: this.state.vehicleDescription,
 				vehicle: this.state.vehicle,
 				vehiclePrice: this.state.vehiclePrice,
 				area,
@@ -474,6 +478,19 @@ export default class AddApartment extends Component {
 										step={500}
 									/>
 									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Vehicle Description
+									</Text>
+									<Input
+										placeholder="Enter vehicle description"
+										style={{ alignSelf: "center" }}
+										value={this.state.vehicleDescription}
+										onChangeText={(vehicleDescription) =>
+											this.setState({ vehicleDescription })
+										}
+									/>
+									<Text
 										style={{ fontSize: 20, fontWeight: "600", marginTop: 10 }}
 									>
 										Vehicle Images
@@ -621,6 +638,20 @@ export default class AddApartment extends Component {
 										}
 										step={100}
 									/>
+
+									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Breakfast Description
+									</Text>
+									<Input
+										placeholder="Enter breakfast description"
+										style={{ alignSelf: "center" }}
+										value={this.state.breakfastDescription}
+										onChangeText={(breakfastDescription) =>
+											this.setState({ breakfastDescription })
+										}
+									/>
 									<View
 										style={{
 											flexDirection: "row",
@@ -732,6 +763,19 @@ export default class AddApartment extends Component {
 										onChange={(lunchCost) => this.setState({ lunchCost })}
 										step={100}
 									/>
+									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Lunch Description
+									</Text>
+									<Input
+										placeholder="Enter lunch description"
+										style={{ alignSelf: "center" }}
+										value={this.state.lunchDescription}
+										onChangeText={(lunchDescription) =>
+											this.setState({ lunchDescription })
+										}
+									/>
 									<View
 										style={{
 											flexDirection: "row",
@@ -839,6 +883,19 @@ export default class AddApartment extends Component {
 										value={this.state.dinnerCost}
 										onChange={(dinnerCost) => this.setState({ dinnerCost })}
 										step={100}
+									/>
+									<Text
+										style={{ paddingTop: 10, paddingBottom: 5, fontSize: 15 }}
+									>
+										Dinner Description
+									</Text>
+									<Input
+										placeholder="Enter dinner description"
+										style={{ alignSelf: "center" }}
+										value={this.state.dinnerDescription}
+										onChangeText={(dinnerDescription) =>
+											this.setState({ dinnerDescription })
+										}
 									/>
 									<View
 										style={{
