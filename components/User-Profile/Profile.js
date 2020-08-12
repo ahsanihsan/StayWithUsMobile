@@ -276,72 +276,76 @@ export default class Profile extends Component {
 				</View>
 				<View style={styles.userDataContainer}>
 					<View style={{ flex: 1, marginHorizontal: 20, marginTop: 10 }}>
-						<Text
-							style={{ fontSize: 28, fontWeight: "bold", marginBottom: 20 }}
-						>
-							My Wishlist
-						</Text>
-						<ScrollView
-							refreshControl={
-								<RefreshControl
-									refreshing={this.state.refreshing}
-									onRefresh={() => this.fetchWishList()}
-								/>
-							}
-						>
-							{this.state.isLoading ? (
-								<ActivityIndicator />
-							) : this.state.wishList.length > 0 ? (
-								this.state.wishList.map((item) => {
-									return (
-										<TouchableOpacity
-											style={styles.outerContainer}
-											onPress={() =>
-												this.props.navigation.navigate("Details", {
-													id: item._id,
-												})
-											}
-										>
-											<Image
-												source={{
-													uri: URL + item._id + ".jpg",
-												}}
-												style={{
-													width: "100%",
-													height: 150,
-													borderTopLeftRadius: 10,
-													borderTopRightRadius: 10,
-												}}
-											/>
-											<View style={styles.mainCard}>
-												<View style={styles.mainCardImage}>
-													<View style={styles.mainCardText}>
-														<View>
-															<Text
-																style={{ fontSize: 22, fontWeight: "bold" }}
-															>
-																{item.name}
-															</Text>
-															<Text
-																style={{
-																	fontSize: 16,
-																	color: "gray",
-																	marginTop: 5,
-																}}
-															>
-																{item.address}
-															</Text>
+						{profile.userType === "Buyer" ? (
+							<>
+								<Text
+									style={{ fontSize: 28, fontWeight: "bold", marginBottom: 20 }}
+								>
+									My Wishlist
+								</Text>
+								<ScrollView
+									refreshControl={
+										<RefreshControl
+											refreshing={this.state.refreshing}
+											onRefresh={() => this.fetchWishList()}
+										/>
+									}
+								>
+									{this.state.isLoading ? (
+										<ActivityIndicator />
+									) : this.state.wishList.length > 0 ? (
+										this.state.wishList.map((item) => {
+											return (
+												<TouchableOpacity
+													style={styles.outerContainer}
+													onPress={() =>
+														this.props.navigation.navigate("Details", {
+															id: item._id,
+														})
+													}
+												>
+													<Image
+														source={{
+															uri: URL + item._id + ".jpg",
+														}}
+														style={{
+															width: "100%",
+															height: 150,
+															borderTopLeftRadius: 10,
+															borderTopRightRadius: 10,
+														}}
+													/>
+													<View style={styles.mainCard}>
+														<View style={styles.mainCardImage}>
+															<View style={styles.mainCardText}>
+																<View>
+																	<Text
+																		style={{ fontSize: 22, fontWeight: "bold" }}
+																	>
+																		{item.name}
+																	</Text>
+																	<Text
+																		style={{
+																			fontSize: 16,
+																			color: "gray",
+																			marginTop: 5,
+																		}}
+																	>
+																		{item.address}
+																	</Text>
+																</View>
+															</View>
 														</View>
 													</View>
-												</View>
-											</View>
-										</TouchableOpacity>
-									);
-								})
-							) : (
-								<Text>There are no items in your wishlist</Text>
-							)}
-						</ScrollView>
+												</TouchableOpacity>
+											);
+										})
+									) : (
+										<Text>There are no items in your wishlist</Text>
+									)}
+								</ScrollView>
+							</>
+						) : undefined}
 					</View>
 				</View>
 

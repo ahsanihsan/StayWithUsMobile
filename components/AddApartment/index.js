@@ -943,6 +943,7 @@ export default class AddApartment extends Component {
 									</View>
 								</>
 							) : undefined}
+
 							<Text style={{ fontSize: 20, fontWeight: "600", marginTop: 10 }}>
 								Location
 							</Text>

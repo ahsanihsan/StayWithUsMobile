@@ -41,6 +41,7 @@ export default class index extends Component {
 		let { status } = await Location.requestPermissionsAsync();
 		if (status !== "granted") {
 			this.setState({ error: "Permission to access location was denied" });
+			return;
 		}
 		let location = await Location.getCurrentPositionAsync({});
 		return location;
@@ -51,57 +52,58 @@ export default class index extends Component {
 
 		let properties = this.state.backupProperties;
 
-		let newProperties = [];
-
-		properties.map((item) => {
-			if (
-				(item.rent >= lowerLimit && item.rent <= upperLimit) ||
-				item.vehicle == vehicle ||
-				item.meals == meals ||
-				item.carParking == carParking
-			) {
-				newProperties.push(item);
-			}
-		});
-
 		// let newProperties = [];
-		// let query = false;
-		// if (lowerLimit || upperLimit || carParking || meals || vehicle) {
-		// 	query = true;
-		// 	if (lowerLimit && upperLimit) {
-		// 		properties.map((item) => {
-		// 			let carParkingNeeded = carParking;
-		// 			let vehicleNeeded = vehicle
-		// 			let mealsNeeded = meals
 
-		// 			if (carParkingNeeded) {
-		// 				if (
-		// 					item.rent <= upperLimit &&
-		// 					item.rent >= lowerLimit &&
-		// 					item.carParking
-		// 				) {
-		// 					newProperties.push(item);
-		// 				}
-		// 			} else {
-		// 				if (item.rent <= upperLimit && item.rent >= lowerLimit) {
-		// 					newProperties.push(item);
-		// 				}
-		// 			}
-		// 		});
-		// 	} else if (lowerLimit && !upperLimit) {
-		// 		properties.map((item) => {
-		// 			if (item.rent >= lowerLimit) {
-		// 				newProperties.push(item);
-		// 			}
-		// 		});
-		// 	} else if (!lowerLimit && upperLimit) {
-		// 		properties.map((item) => {
-		// 			if (item.rent <= upperLimit) {
-		// 				newProperties.push(item);
-		// 			}
-		// 		});
+		// properties.map((item) => {
+		// 	if (
+		// 		item.rent >= lowerLimit &&
+		// 		item.rent <= upperLimit &&
+		// 		(item.vehicle == vehicle ||
+		// 			item.meals == meals ||
+		// 			item.carParking == carParking)
+		// 	) {
+		// 		newProperties.push(item);
 		// 	}
-		// }
+		// });
+
+		let newProperties = [];
+		let query = false;
+		if (lowerLimit || upperLimit || carParking || meals || vehicle) {
+			query = true;
+			if (lowerLimit && upperLimit) {
+				properties.map((item) => {
+					let carParkingNeeded = carParking;
+					let vehicleNeeded = vehicle;
+					let mealsNeeded = meals;
+
+					if (carParkingNeeded) {
+						if (
+							item.rent <= upperLimit &&
+							item.rent >= lowerLimit &&
+							item.carParking
+						) {
+							newProperties.push(item);
+						}
+					} else {
+						if (item.rent <= upperLimit && item.rent >= lowerLimit) {
+							newProperties.push(item);
+						}
+					}
+				});
+			} else if (lowerLimit && !upperLimit) {
+				properties.map((item) => {
+					if (item.rent >= lowerLimit) {
+						newProperties.push(item);
+					}
+				});
+			} else if (!lowerLimit && upperLimit) {
+				properties.map((item) => {
+					if (item.rent <= upperLimit) {
+						newProperties.push(item);
+					}
+				});
+			}
+		}
 
 		// if (bedroomsNo) {
 		// 	query = true;
@@ -211,7 +213,7 @@ export default class index extends Component {
 		// 	}
 		// });
 		this.setState({
-			properties: newProperties,
+			properties: query ? newProperties : properties,
 			filterModal: false,
 		});
 	};
