@@ -63,6 +63,10 @@ export default class EditApartment extends Component {
 							breakfastCost: property.breakfastCost,
 							dinnerCost: property.dinnerCost,
 							vehiclePrice: property.vehiclePrice,
+							dinnerDescription: property.dinnerDescription,
+							lunchDescription: property.lunchDescription,
+							breakfastDescription: property.breakfastDescription,
+							vehicleDescription: property.vehicleDescription,
 							isLoading: false,
 						});
 					} else {
@@ -98,6 +102,10 @@ export default class EditApartment extends Component {
 			securityFee,
 			breakfastCost,
 			vehicle,
+			breakfastDescription,
+			lunchDescription,
+			dinnerDescription,
+			vehicleDescription,
 		} = this.state;
 		if (
 			!(
@@ -137,6 +145,10 @@ export default class EditApartment extends Component {
 				breakfastCost,
 				vehicle,
 				securityFee,
+				breakfastDescription,
+				lunchDescription,
+				dinnerDescription,
+				vehicleDescription,
 				vehiclePrice: this.state.vehiclePrice,
 			},
 		})
@@ -371,6 +383,24 @@ export default class EditApartment extends Component {
 												}
 												step={500}
 											/>
+											<Text
+												style={{
+													paddingTop: 10,
+													paddingBottom: 5,
+													fontSize: 15,
+												}}
+											>
+												Vehicle Description
+											</Text>
+
+											<Input
+												placeholder="Enter vehicle description"
+												style={{ alignSelf: "center" }}
+												value={this.state.vehicleDescription}
+												onChangeText={(vehicleDescription) =>
+													this.setState({ vehicleDescription })
+												}
+											/>
 										</>
 									) : undefined}
 									<View
@@ -425,6 +455,24 @@ export default class EditApartment extends Component {
 													fontSize: 15,
 												}}
 											>
+												Breakfast Description
+											</Text>
+
+											<Input
+												placeholder="Enter Breakfast description"
+												style={{ alignSelf: "center" }}
+												value={this.state.breakfastDescription}
+												onChangeText={(breakfastDescription) =>
+													this.setState({ breakfastDescription })
+												}
+											/>
+											<Text
+												style={{
+													paddingTop: 10,
+													paddingBottom: 5,
+													fontSize: 15,
+												}}
+											>
 												Lunch Price (PKR)
 											</Text>
 											<NumericInput
@@ -439,12 +487,48 @@ export default class EditApartment extends Component {
 													fontSize: 15,
 												}}
 											>
+												Lunch Description
+											</Text>
+
+											<Input
+												placeholder="Enter lunch description"
+												style={{ alignSelf: "center" }}
+												value={this.state.lunchDescription}
+												onChangeText={(lunchDescription) =>
+													this.setState({ lunchDescription })
+												}
+											/>
+											<Text
+												style={{
+													paddingTop: 10,
+													paddingBottom: 5,
+													fontSize: 15,
+												}}
+											>
 												Dinner Price (PKR)
 											</Text>
 											<NumericInput
 												value={this.state.dinnerCost}
 												onChange={(dinnerCost) => this.setState({ dinnerCost })}
 												step={100}
+											/>
+											<Text
+												style={{
+													paddingTop: 10,
+													paddingBottom: 5,
+													fontSize: 15,
+												}}
+											>
+												Dinner Description
+											</Text>
+
+											<Input
+												placeholder="Enter dinner description"
+												style={{ alignSelf: "center" }}
+												value={this.state.dinnerDescription}
+												onChangeText={(dinnerDescription) =>
+													this.setState({ dinnerDescription })
+												}
 											/>
 										</>
 									) : undefined}
